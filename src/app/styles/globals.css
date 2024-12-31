@@ -1,0 +1,14 @@
+/* src/styles/globals.css */
+:root {
+    --navy-blue: #001f3f;
+    --warm-tan: #d2b48c;
+    --bright-red: #ff4136;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--navy-blue);
+    color: var(--warm-tan);
+  }
+  

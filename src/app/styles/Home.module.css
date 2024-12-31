@@ -1,0 +1,347 @@
+.container {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--navy-blue);
+  color: var(--warm-tan);
+  scroll-behavior: smooth;
+}
+
+/* Navbar Styling */
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem;
+  background-color: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.dynamicNavbar.scrolled {
+  background-color: var(--navy-blue);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a {
+  color: var(--warm-tan);
+  margin-left: 1.5rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.navbar a:hover {
+  color: var(--bright-red);
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+  animation: gradientBackground 6s infinite;
+}
+
+@keyframes gradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.heroContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.heroImage {
+  border-radius: 50%;
+  border: 5px solid var(--warm-tan); /* Added warm-tan border */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.heroImage:hover {
+  transform: scale(1.1);
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: var(--warm-tan);
+}
+
+.heroSubtitle {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--warm-tan);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Rotating Titles */
+.rotatingTitles {
+  margin-top: 1rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: var(--warm-tan);
+  height: 2.5rem; /* Fixed height to prevent layout shifting */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  line-height: 1.5;
+}
+
+.title {
+  position: absolute;
+  opacity: 0;
+  animation: rotateTitles 8s infinite;
+}
+
+.title:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.title:nth-child(2) {
+  animation-delay: 2s;
+}
+
+.title:nth-child(3) {
+  animation-delay: 4s;
+}
+
+.title:nth-child(4) {
+  animation-delay: 6s;
+}
+
+@keyframes rotateTitles {
+  0%, 25% {
+    opacity: 0;
+  }
+  25%, 50% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+/* CTA Button */
+.ctaButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  margin-top: 1rem;
+  color: white;
+  background-color: var(--bright-red);
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #ff4c4c;
+  transform: scale(1.05);
+}
+
+.section {
+  padding: 4rem 2rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInSlideUp 0.8s forwards ease-out;
+}
+
+/* Skills Grid */
+/* Section Title */
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: var(--warm-tan);
+}
+
+/* Skills Container */
+/* Skills Section */
+.skillsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.skillCard {
+  background-color: var(--warm-tan);
+  color: var(--navy-blue);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 280px; /* Adjust size as needed */
+}
+
+.skillCard:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.skillIcon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.skillCard:hover .skillIcon {
+  transform: scale(1.2);
+}
+
+.skillList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.skillList li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.skillSubIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.5rem;
+}
+
+/* Projects Section */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.projectCard {
+  background-color: var(--warm-tan);
+  color: var(--navy-blue);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.projectCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.projectImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.projectContent {
+  padding: 1.5rem;
+}
+
+.projectContent h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--bright-red);
+}
+
+.projectContent p {
+  margin: 0.5rem 0;
+  color: var(--navy-blue);
+}
+
+.githubLink {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  color: white;
+  background-color: var(--bright-red);
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.githubLink:hover {
+  background-color: #ff4c4c;
+}
+
+/* Social Section */
+/* Social Section */
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.socialLinks a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--warm-tan);
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.socialLinks a:hover {
+  color: var(--bright-red);
+  transform: scale(1.1);
+}
+
+.socialIcon {
+  width: 30px;
+  height: 30px;
+  margin-right: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.socialLinks a:hover .socialIcon {
+  transform: rotate(10deg);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--navy-blue);
+  color: var(--warm-tan);
+}
+
+/* Animations */
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
