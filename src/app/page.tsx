@@ -41,7 +41,7 @@ export default function Home() {
                 <span className={styles.title}>Full Stack Developer</span>
                 <span className={styles.title}>Software Engineer</span>
               </p>
-              <a href="/resume.pdf" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
+              <a href="/Resume.pdf" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
                 My Resume
               </a>
             </div>
