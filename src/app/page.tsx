@@ -150,6 +150,9 @@ export default function Home() {
               <li>
                 <img src="/neo4j.png" alt="Neo4j Icon" className={styles.skillSubIcon} /> Neo4j
               </li>
+              <li>
+                <img src="/postgresql.png" alt="Neo4j Icon" className={styles.skillSubIcon} /> PostgreSQL
+              </li>
             </ul>
           </div>
 
