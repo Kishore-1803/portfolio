@@ -29,8 +29,8 @@ export default function Home() {
             <Image
               src="/me.png"
               alt="Kishore"
-              width={200}
-              height={200}
+              width={400}
+              height={400}
               className={styles.heroImage}
             />
             <div>
