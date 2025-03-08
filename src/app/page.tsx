@@ -193,7 +193,7 @@ export default function Home() {
           {/* Project 1 */}
           <div className={styles.projectCard}>
             <img
-              src="/19197351.jpg"
+              src="/AI_Resume.png"
               alt="Project 1 Preview"
               className={styles.projectImage}
             />
