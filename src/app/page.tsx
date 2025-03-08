@@ -234,7 +234,7 @@ export default function Home() {
            {/* Project 3 */}
           <div className={styles.projectCard}>
             <img
-              src="/Network.jpg"
+              src="/Fraud.jpg"
               alt="Project 3 Preview"
               className={styles.projectImage}
             />
@@ -242,7 +242,7 @@ export default function Home() {
               <h3>Fraud Detection in Financial Networks</h3>
               <p>A project to detect fraudulent transactions in financial networks using Logistic Regression.</p>
               <a
-                href="https://github.com/username/portfolio-website"
+                href="https://github.com/Kishore-1803/Fraud-Detection-in-Financial-Networks"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.githubLink}
