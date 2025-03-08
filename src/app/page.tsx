@@ -198,10 +198,10 @@ export default function Home() {
               className={styles.projectImage}
             />
             <div className={styles.projectContent}>
-              <h3>Fintrack</h3>
-              <p>A Stock Website with User Friendly UI Made with HTML,CSS,Javascript.</p>
+              <h3>PerspectAI</h3>
+              <p>An AI Powered Resume Analyzer which provides insights of your Resume.</p>
               <a
-                href="https://github.com/Kishore-1803/Fintrack-Stock-Website"
+                href="https://github.com/Kishore-1803/PerspectAI"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.githubLink}
@@ -239,8 +239,8 @@ export default function Home() {
               className={styles.projectImage}
             />
             <div className={styles.projectContent}>
-              <h3>Network Traffic Monitoring and Analysis</h3>
-              <p>A project analyzing network traffic using Wireshark to monitor and extract meaningful insights using Python.</p>
+              <h3>Fraud Detection in Financial Networks</h3>
+              <p>A project to detect fraudulent transactions in financial networks using Logistic Regression.</p>
               <a
                 href="https://github.com/username/portfolio-website"
                 target="_blank"
