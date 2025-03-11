@@ -56,7 +56,7 @@ export default function Home() {
         <div className={styles.hero}>
           <div className={styles.heroContent}>
             <Image
-              src="/me.jpg"
+              src="/me.png"
               alt="Kishore"
               width={300}
               height={300}
