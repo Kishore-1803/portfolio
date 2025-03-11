@@ -1,10 +1,31 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "./styles/Home.module.css";
 
 export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Effect for navbar scroll animation
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <div className={styles.container}>
@@ -18,14 +39,17 @@ export default function Home() {
 
       {/* Navbar */}
       <header>
-        <nav className={`${styles.navbar} ${styles.dynamicNavbar}`}>
+        <nav className={`${styles.navbar} ${styles.dynamicNavbar} ${isScrolled ? styles.scrolled : ""}`}>
           <div className={styles.logo}>KB</div>
           <div className={`${styles.navLinks} ${menuOpen ? styles.open : ""}`}>
-            <a href="#about">About</a>
-            <a href="#skills">Skills</a>
-            <a href="#projects">Projects</a>
-            <a href="#social">Connect</a>
+            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
+            <a href="#skills" onClick={() => setMenuOpen(false)}>Skills</a>
+            <a href="#projects" onClick={() => setMenuOpen(false)}>Projects</a>
+            <a href="#social" onClick={() => setMenuOpen(false)}>Connect</a>
           </div>
+          <button className={styles.menuButton} onClick={toggleMenu}>
+            {menuOpen ? "✕" : "☰"}
+          </button>
         </nav>
 
         {/* Hero Section */}
@@ -34,8 +58,8 @@ export default function Home() {
             <Image
               src="/me.jpg"
               alt="Kishore"
-              width={400}
-              height={400}
+              width={300}
+              height={300}
               className={styles.heroImage}
               priority
             />
@@ -55,10 +79,9 @@ export default function Home() {
         </div>
       </header>
 
-
       {/* About Section */}
       <section id="about" className={styles.section}>
-        <h2 className={styles.sectionTitle}About Me</h2>
+        <h2 className={styles.sectionTitle}>About Me</h2>
         <p>
           Hi, I'm Kishore B, a 4th-semester B.Tech student specializing in Computer Science and Artificial Intelligence. 
           Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
@@ -74,30 +97,30 @@ export default function Home() {
         <h2 className={styles.sectionTitle}>My Skills</h2>
         <div className={styles.skillsContainer}>
           {/* Languages */}
-            <div className={styles.skillCard}>
+          <div className={styles.skillCard}>
             <img
               src="/programming.png"
               alt="Languages Icon"
               className={styles.skillIcon}
-              width={40}
-              height={40}
+              width={60}
+              height={60}
             />
             <h3>Languages</h3>
             <ul className={styles.skillList}>
               <li>
-              <img src="/java.png" alt="Java Icon" className={styles.skillSubIcon} width={20} height={20} /> Java
+                <img src="/java.png" alt="Java Icon" className={styles.skillSubIcon} width={24} height={24} /> Java
               </li>
               <li>
-              <img src="/python.png" alt="Python Icon" className={styles.skillSubIcon} width={20} height={20} /> Python
+                <img src="/python.png" alt="Python Icon" className={styles.skillSubIcon} width={24} height={24} /> Python
               </li>
               <li>
-              <img src="/c.png" alt="C Icon" className={styles.skillSubIcon} width={20} height={20} /> C
+                <img src="/c.png" alt="C Icon" className={styles.skillSubIcon} width={24} height={24} /> C
               </li>
               <li>
-              <img src="/c-.png" alt="C++ Icon" className={styles.skillSubIcon} width={20} height={20} /> C++
+                <img src="/c-.png" alt="C++ Icon" className={styles.skillSubIcon} width={24} height={24} /> C++
               </li>
             </ul>
-            </div>
+          </div>
 
           {/* Frontend */}
           <div className={styles.skillCard}>
@@ -105,23 +128,25 @@ export default function Home() {
               src="/frontend.png"
               alt="Frontend Icon"
               className={styles.skillIcon}
+              width={60}
+              height={60}
             />
             <h3>Frontend</h3>
             <ul className={styles.skillList}>
               <li>
-                <img src="/html-5.png" alt="HTML Icon" className={styles.skillSubIcon} /> HTML5
+                <img src="/html-5.png" alt="HTML Icon" className={styles.skillSubIcon} width={24} height={24} /> HTML5
               </li>
               <li>
-                <img src="/css-3.png" alt="CSS Icon" className={styles.skillSubIcon} /> CSS3
+                <img src="/css-3.png" alt="CSS Icon" className={styles.skillSubIcon} width={24} height={24} /> CSS3
               </li>
               <li>
-                <img src="/js.png" alt="JavaScript Icon" className={styles.skillSubIcon} /> JavaScript
+                <img src="/js.png" alt="JavaScript Icon" className={styles.skillSubIcon} width={24} height={24} /> JavaScript
               </li>
               <li>
-                <img src="/react.png" alt="React Icon" className={styles.skillSubIcon} /> React.js
+                <img src="/react.png" alt="React Icon" className={styles.skillSubIcon} width={24} height={24} /> React.js
               </li>
               <li>
-                <img src="/nextjs.png" alt="Next Icon" className={styles.skillSubIcon} /> Next.js
+                <img src="/nextjs.png" alt="Next Icon" className={styles.skillSubIcon} width={24} height={24} /> Next.js
               </li>
             </ul>
           </div>
@@ -132,14 +157,16 @@ export default function Home() {
               src="/backend.png"
               alt="Backend Icon"
               className={styles.skillIcon}
+              width={60}
+              height={60}
             />
             <h3>Backend</h3>
             <ul className={styles.skillList}>
               <li>
-                <img src="/node.png" alt="Node.js Icon" className={styles.skillSubIcon} /> Node.js
+                <img src="/node.png" alt="Node.js Icon" className={styles.skillSubIcon} width={24} height={24} /> Node.js
               </li>
               <li>
-                <img src="/express.png" alt="Express Icon" className={styles.skillSubIcon} /> Express.js
+                <img src="/express.png" alt="Express Icon" className={styles.skillSubIcon} width={24} height={24} /> Express.js
               </li>
             </ul>
           </div>
@@ -150,20 +177,22 @@ export default function Home() {
               src="/database.png"
               alt="Database Icon"
               className={styles.skillIcon}
+              width={60}
+              height={60}
             />
             <h3>Database</h3>
             <ul className={styles.skillList}>
               <li>
-                <img src="/sql.png" alt="MySQL Icon" className={styles.skillSubIcon} /> MySQL
+                <img src="/sql.png" alt="MySQL Icon" className={styles.skillSubIcon} width={24} height={24} /> MySQL
               </li>
               <li>
-                <img src="/mongodb.png" alt="MongoDB Icon" className={styles.skillSubIcon} /> MongoDB
+                <img src="/mongodb.png" alt="MongoDB Icon" className={styles.skillSubIcon} width={24} height={24} /> MongoDB
               </li>
               <li>
-                <img src="/neo4j.png" alt="Neo4j Icon" className={styles.skillSubIcon} /> Neo4j
+                <img src="/neo4j.png" alt="Neo4j Icon" className={styles.skillSubIcon} width={24} height={24} /> Neo4j
               </li>
               <li>
-                <img src="/postgresql.png" alt="Neo4j Icon" className={styles.skillSubIcon} /> PostgreSQL
+                <img src="/postgresql.png" alt="PostgreSQL Icon" className={styles.skillSubIcon} width={24} height={24} /> PostgreSQL
               </li>
             </ul>
           </div>
@@ -174,23 +203,25 @@ export default function Home() {
               src="/aiml.png"
               alt="AI/ML Icon"
               className={styles.skillIcon}
+              width={60}
+              height={60}
             />
             <h3>AI/ML Frameworks</h3>
             <ul className={styles.skillList}>
               <li>
-                <img src="/tensorflow.png" alt="TensorFlow Icon" className={styles.skillSubIcon} /> TensorFlow
+                <img src="/tensorflow.png" alt="TensorFlow Icon" className={styles.skillSubIcon} width={24} height={24} /> TensorFlow
               </li>
               <li>
-                <img src="/pytorch.png" alt="PyTorch Icon" className={styles.skillSubIcon} /> PyTorch
+                <img src="/pytorch.png" alt="PyTorch Icon" className={styles.skillSubIcon} width={24} height={24} /> PyTorch
               </li>
               <li>
-                <img src="/classifiers.png" alt="Classifiers Icon" className={styles.skillSubIcon} /> Classifiers
+                <img src="/classifiers.png" alt="Classifiers Icon" className={styles.skillSubIcon} width={24} height={24} /> Classifiers
               </li>
               <li>
-                <img src="/regressors.png" alt="Regressors Icon" className={styles.skillSubIcon} /> Regressors
+                <img src="/regressors.png" alt="Regressors Icon" className={styles.skillSubIcon} width={24} height={24} /> Regressors
               </li>
               <li>
-                <img src="/neural network.png" alt="Neural Networks Icon" className={styles.skillSubIcon} /> Neural Networks
+                <img src="/neural network.png" alt="Neural Networks Icon" className={styles.skillSubIcon} width={24} height={24} /> Neural Networks
               </li>
             </ul>
           </div>
