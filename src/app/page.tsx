@@ -20,10 +20,12 @@ export default function Home() {
       <header>
         <nav className={`${styles.navbar} ${styles.dynamicNavbar}`}>
           <div className={styles.logo}>KB</div>
-          <a href="#about">About</a>
-          <a href="#skills">Skills</a>
-          <a href="#projects">Projects</a>
-          <a href="#social">Social</a>
+          <div className={`${styles.navLinks} ${menuOpen ? styles.open : ""}`}>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#social">Connect</a>
+          </div>
         </nav>
 
         {/* Hero Section */}
