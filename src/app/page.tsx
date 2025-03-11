@@ -30,20 +30,21 @@ export default function Home() {
         <div className={styles.hero}>
           <div className={styles.heroContent}>
             <Image
-              src="/me.png"
+              src="/me.jpg"
               alt="Kishore"
               width={400}
               height={400}
               className={styles.heroImage}
+              priority
             />
             <div>
               <h1 className={styles.heroTitle}>Hi 👋, I am Kishore B</h1>
-              <p className={styles.rotatingTitles}>
+              <div className={styles.rotatingTitles}>
                 <span className={styles.title}>Student</span>
                 <span className={styles.title}>AI Engineer</span>
                 <span className={styles.title}>Full Stack Developer</span>
                 <span className={styles.title}>Software Engineer</span>
-              </p>
+              </div>
               <a href="/Resume.pdf" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
                 My Resume
               </a>
@@ -52,11 +53,17 @@ export default function Home() {
         </div>
       </header>
 
+
       {/* About Section */}
       <section id="about" className={styles.section}>
-        <h2>About</h2>
+        <h2 className={styles.sectionTitle}About Me</h2>
         <p>
-        Hi, I’m Kishore B, a 4th-semester B.Tech student specializing in Computer Science and Artificial Intelligence. Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, I’m excited to shape a future where technology and creativity come together to make an impact.
+          Hi, I'm Kishore B, a 4th-semester B.Tech student specializing in Computer Science and Artificial Intelligence. 
+          Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
+          and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts 
+          and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source 
+          projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, 
+          I'm excited to shape a future where technology and creativity come together to make an impact.
         </p>
       </section>
 
