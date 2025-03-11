@@ -10,13 +10,16 @@ export default function Home() {
     <div className={styles.container}>
       <Head>
         <title>Kishore's Portfolio</title>
-        <meta name="description" content="Portfolio of Kishore" />
+        <meta name="description" content="Portfolio of Kishore B - AI Engineer, Full Stack Developer, and Software Engineer" />
+        <meta name="keywords" content="portfolio, web development, AI, software engineer, full stack" />
         <link rel="icon" href="/favicon.ico" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
 
       {/* Navbar */}
       <header>
         <nav className={`${styles.navbar} ${styles.dynamicNavbar}`}>
+          <div className={styles.logo}>KB</div>
           <a href="#about">About</a>
           <a href="#skills">Skills</a>
           <a href="#projects">Projects</a>
