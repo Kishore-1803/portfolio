@@ -9,13 +9,29 @@
 /* Navbar Styling */
 .navbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* Changed from flex-end to add logo space */
+  align-items: center;
   padding: 1rem 2rem;
-  background-color: transparent;
-  position: sticky;
+  background-color: rgba(0, 31, 63, 0.8); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Glass effect */
+  position: fixed; /* Changed from sticky to fixed for better UX */
+  width: 100%;
   top: 0;
+  left: 0;
   z-index: 1000;
-  transition: background-color 0.3s, box-shadow 0.3s;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--warm-tan);
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
 }
 
 .dynamicNavbar.scrolled {
@@ -25,13 +41,29 @@
 
 .navbar a {
   color: var(--warm-tan);
-  margin-left: 1.5rem;
   text-decoration: none;
   font-size: 1.2rem;
+  position: relative;
+  transition: color 0.3s;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--bright-red);
+  transition: width 0.3s;
 }
 
 .navbar a:hover {
   color: var(--bright-red);
+}
+
+.navbar a:hover::after {
+  width: 100%;
 }
 
 /* Hero Section */
@@ -58,48 +90,37 @@
   }
 }
 
-.heroContent {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-}
-
-.heroImage {
-  border-radius: 50%;
-  border: 5px solid var(--warm-tan); /* Added warm-tan border */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
-}
-
 .heroImage:hover {
-  transform: scale(1.1);
+  transform: scale(1.05) rotate(5deg);
+  border-color: var(--bright-red);
 }
 
 .heroTitle {
   font-size: 3.5rem;
   font-weight: bold;
   color: var(--warm-tan);
+  margin-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
 }
 
-.heroSubtitle {
-  margin-top: 1rem;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--warm-tan);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+.heroTitle::after {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 3px;
+  background-color: var(--bright-red);
+  bottom: -10px;
+  left: 25%;
 }
 
 /* Rotating Titles */
 .rotatingTitles {
-  margin-top: 1rem;
+  margin: 2rem 0;
   font-size: 1.8rem;
   font-weight: 500;
   color: var(--warm-tan);
-  height: 2.5rem; /* Fixed height to prevent layout shifting */
+  height: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,6 +133,8 @@
   position: absolute;
   opacity: 0;
   animation: rotateTitles 8s infinite;
+  transform: translateY(20px);
+  transition: transform 0.5s, opacity 0.5s;
 }
 
 .title:nth-child(1) {
@@ -131,14 +154,17 @@
 }
 
 @keyframes rotateTitles {
-  0%, 25% {
+  0%, 20% {
     opacity: 0;
+    transform: translateY(20px);
   }
-  25%, 50% {
+  25%, 45% {
     opacity: 1;
+    transform: translateY(0);
   }
   50%, 100% {
     opacity: 0;
+    transform: translateY(-20px);
   }
 }
 
@@ -146,20 +172,40 @@
 .ctaButton {
   display: inline-block;
   padding: 1rem 2rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   color: white;
   background-color: var(--bright-red);
-  border-radius: 8px;
+  border-radius: 30px; /* Rounded corners */
   text-decoration: none;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 65, 54, 0.3);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.ctaButton:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.6s;
+  z-index: -1;
 }
 
 .ctaButton:hover {
   background-color: #ff4c4c;
-  transform: scale(1.05);
+  transform: translateY(-5px);
+  box-shadow: 0 7px 20px rgba(255, 65, 54, 0.4);
 }
 
+.ctaButton:hover:before {
+  left: 100%;
+}
 .section {
   padding: 4rem 2rem;
   text-align: center;
