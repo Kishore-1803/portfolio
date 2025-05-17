@@ -1,21 +1,38 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "./styles/Home.module.css";
 
 export default function Home() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
+  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
+  
+  // Register section refs
+  const registerSection = (id: string, ref: HTMLElement | null) => {
+    sectionsRef.current[id] = ref;
+  };
 
-  // Effect for navbar scroll animation
+  // Handle intersection observer for sections
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
+      const scrollPosition = window.scrollY + 300;
+      
+      // Find which section is currently visible
+      for (const section in sectionsRef.current) {
+        const element = sectionsRef.current[section];
+        if (!element) continue;
+        
+        const offsetTop = element.offsetTop;
+        const offsetHeight = element.offsetHeight;
+        
+        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+          setActiveSection(section);
+          break;
+        }
       }
     };
 
@@ -23,325 +40,547 @@ export default function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
       <Head>
         <title>Kishore's Portfolio</title>
         <meta name="description" content="Portfolio of Kishore B - AI Engineer, Full Stack Developer, and Software Engineer" />
         <meta name="keywords" content="portfolio, web development, AI, software engineer, full stack" />
         <link rel="icon" href="/favicon.ico" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </Head>
 
-      {/* Navbar */}
-      <header>
-        <nav className={`${styles.navbar} ${styles.dynamicNavbar} ${isScrolled ? styles.scrolled : ""}`}>
-          <div className={styles.logo}>KB</div>
-          <div className={`${styles.navLinks} ${menuOpen ? styles.open : ""}`}>
-            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
-            <a href="#skills" onClick={() => setMenuOpen(false)}>Skills</a>
-            <a href="#projects" onClick={() => setMenuOpen(false)}>Projects</a>
-            <a href="#social" onClick={() => setMenuOpen(false)}>Connect</a>
-          </div>
-          <button className={styles.menuButton} onClick={toggleMenu}>
+      {/* Side Navigation */}
+      <nav className={styles.sideNav}>
+        <div className={styles.themeToggle} onClick={toggleTheme}>
+          {isDarkMode ? "☀️" : "🌙"}
+        </div>
+        
+        <div className={styles.navItems}>
+          <a 
+            href="#home" 
+            className={`${styles.navItem} ${activeSection === "home" ? styles.active : ""}`}
+            aria-label="Home"
+          >
+            <span className={styles.navIcon}>🏠</span>
+            <span className={styles.navText}>Home</span>
+          </a>
+          <a 
+            href="#about" 
+            className={`${styles.navItem} ${activeSection === "about" ? styles.active : ""}`}
+            aria-label="About"
+          >
+            <span className={styles.navIcon}>👤</span>
+            <span className={styles.navText}>About</span>
+          </a>
+          <a 
+            href="#skills" 
+            className={`${styles.navItem} ${activeSection === "skills" ? styles.active : ""}`}
+            aria-label="Skills"
+          >
+            <span className={styles.navIcon}>🛠️</span>
+            <span className={styles.navText}>Skills</span>
+          </a>
+          <a 
+            href="#projects" 
+            className={`${styles.navItem} ${activeSection === "projects" ? styles.active : ""}`}
+            aria-label="Projects"
+          >
+            <span className={styles.navIcon}>📂</span>
+            <span className={styles.navText}>Projects</span>
+          </a>
+          <a 
+            href="#social" 
+            className={`${styles.navItem} ${activeSection === "social" ? styles.active : ""}`}
+            aria-label="Connect"
+          >
+            <span className={styles.navIcon}>🔗</span>
+            <span className={styles.navText}>Connect</span>
+          </a>
+        </div>
+      </nav>
+
+      {/* Mobile Navigation */}
+      <div className={styles.mobileNav}>
+        <div className={styles.mobileNavHeader}>
+          <span className={styles.mobileLogo}>KB</span>
+          <button 
+            className={styles.mobileMenuBtn}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
             {menuOpen ? "✕" : "☰"}
           </button>
-        </nav>
+        </div>
+        
+        {menuOpen && (
+          <div className={styles.mobileMenu}>
+            <a href="#home" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Home</a>
+            <a href="#about" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>About</a>
+            <a href="#skills" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Skills</a>
+            <a href="#projects" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Projects</a>
+            <a href="#social" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Connect</a>
+            <button className={styles.themeToggleBtn} onClick={toggleTheme}>
+              {isDarkMode ? "Switch to Light Mode ☀️" : "Switch to Dark Mode 🌙"}
+            </button>
+          </div>
+        )}
+      </div>
 
+      <main className={styles.content}>
         {/* Hero Section */}
-        <div className={styles.hero}>
+        <section 
+          id="home" 
+          className={styles.hero}
+          ref={(el) => registerSection("home", el)}
+        >
           <div className={styles.heroContent}>
-            <Image
-              src="/me.png"
-              alt="Kishore"
-              width={300}
-              height={300}
-              className={styles.heroImage}
-              priority
-            />
-            <div>
-              <h1 className={styles.heroTitle}>Hi 👋, I am Kishore B</h1>
-              <div className={styles.rotatingTitles}>
-                <span className={styles.title}>Student</span>
-                <span className={styles.title}>AI Engineer</span>
-                <span className={styles.title}>Full Stack Developer</span>
-                <span className={styles.title}>Software Engineer</span>
+            <div className={styles.heroLeft}>
+              <div className={styles.heroGreeting}>Hello, World!</div>
+              <h1 className={styles.heroTitle}>I'm <span className={styles.highlight}>Kishore B</span></h1>
+              <div className={styles.roleWrapper}>
+                <div className={styles.roleSlider}>
+                  <div className={styles.role}>Student</div>
+                  <div className={styles.role}>AI Engineer</div>
+                  <div className={styles.role}>Full Stack Developer</div>
+                </div>
               </div>
-              <a href="/Resume.pdf" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
-                My Resume
-              </a>
+              <div className={styles.heroCTA}>
+                <a href="/Resume.pdf" className={styles.primaryBtn} target="_blank" rel="noopener noreferrer">
+                  Download Resume
+                </a>
+                <a href="#projects" className={styles.secondaryBtn}>
+                  View Projects
+                </a>
+              </div>
+            </div>
+            <div className={styles.heroRight}>
+              <div className={styles.profileImgContainer}>
+                <Image
+                  src="/me.png"
+                  alt="Kishore"
+                  width={320}
+                  height={320}
+                  className={styles.profileImg}
+                  priority
+                />
+                <div className={styles.profileImgShape}></div>
+                <div className={styles.profileImgDecoration}></div>
+              </div>
             </div>
           </div>
-        </div>
-      </header>
-
-      {/* About Section */}
-      <section id="about" className={styles.section}>
-        <h2 className={styles.sectionTitle}>About Me</h2>
-        <p>
-          Hi, I'm Kishore B, a 4th-semester B.Tech student specializing in Computer Science and Artificial Intelligence. 
-          Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
-          and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts 
-          and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source 
-          projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, 
-          I'm excited to shape a future where technology and creativity come together to make an impact.
-        </p>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className={styles.section}>
-        <h2 className={styles.sectionTitle}>My Skills</h2>
-        <div className={styles.skillsContainer}>
-          {/* Languages */}
-          <div className={styles.skillCard}>
-            <img
-              src="/programming.png"
-              alt="Languages Icon"
-              className={styles.skillIcon}
-              width={60}
-              height={60}
-            />
-            <h3>Languages</h3>
-            <ul className={styles.skillList}>
-              <li>
-                <img src="/java.png" alt="Java Icon" className={styles.skillSubIcon} width={24} height={24} /> Java
-              </li>
-              <li>
-                <img src="/python.png" alt="Python Icon" className={styles.skillSubIcon} width={24} height={24} /> Python
-              </li>
-              <li>
-                <img src="/c.png" alt="C Icon" className={styles.skillSubIcon} width={24} height={24} /> C
-              </li>
-              <li>
-                <img src="/c-.png" alt="C++ Icon" className={styles.skillSubIcon} width={24} height={24} /> C++
-              </li>
-            </ul>
+          <div className={styles.scrollIndicator}>
+            <div className={styles.mouse}>
+              <div className={styles.wheel}></div>
+            </div>
+            <div className={styles.scrollText}>Scroll Down</div>
           </div>
+        </section>
 
-          {/* Frontend */}
-          <div className={styles.skillCard}>
-            <img
-              src="/frontend.png"
-              alt="Frontend Icon"
-              className={styles.skillIcon}
-              width={60}
-              height={60}
-            />
-            <h3>Frontend</h3>
-            <ul className={styles.skillList}>
-              <li>
-                <img src="/html-5.png" alt="HTML Icon" className={styles.skillSubIcon} width={24} height={24} /> HTML5
-              </li>
-              <li>
-                <img src="/css-3.png" alt="CSS Icon" className={styles.skillSubIcon} width={24} height={24} /> CSS3
-              </li>
-              <li>
-                <img src="/js.png" alt="JavaScript Icon" className={styles.skillSubIcon} width={24} height={24} /> JavaScript
-              </li>
-              <li>
-                <img src="/react.png" alt="React Icon" className={styles.skillSubIcon} width={24} height={24} /> React.js
-              </li>
-              <li>
-                <img src="/nextjs.png" alt="Next Icon" className={styles.skillSubIcon} width={24} height={24} /> Next.js
-              </li>
-            </ul>
+        {/* About Section */}
+        <section 
+          id="about" 
+          className={`${styles.section} ${styles.about}`}
+          ref={(el) => registerSection("about", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>Who Am I</span>
+            <h2 className={styles.sectionTitle}>About Me</h2>
+            <div className={styles.sectionDivider}></div>
           </div>
-
-          {/* Backend */}
-          <div className={styles.skillCard}>
-            <img
-              src="/backend.png"
-              alt="Backend Icon"
-              className={styles.skillIcon}
-              width={60}
-              height={60}
-            />
-            <h3>Backend</h3>
-            <ul className={styles.skillList}>
-              <li>
-                <img src="/node.png" alt="Node.js Icon" className={styles.skillSubIcon} width={24} height={24} /> Node.js
-              </li>
-              <li>
-                <img src="/express.png" alt="Express Icon" className={styles.skillSubIcon} width={24} height={24} /> Express.js
-              </li>
-            </ul>
-          </div>
-
-          {/* Database */}
-          <div className={styles.skillCard}>
-            <img
-              src="/database.png"
-              alt="Database Icon"
-              className={styles.skillIcon}
-              width={60}
-              height={60}
-            />
-            <h3>Database</h3>
-            <ul className={styles.skillList}>
-              <li>
-                <img src="/sql.png" alt="MySQL Icon" className={styles.skillSubIcon} width={24} height={24} /> MySQL
-              </li>
-              <li>
-                <img src="/mongodb.png" alt="MongoDB Icon" className={styles.skillSubIcon} width={24} height={24} /> MongoDB
-              </li>
-              <li>
-                <img src="/neo4j.png" alt="Neo4j Icon" className={styles.skillSubIcon} width={24} height={24} /> Neo4j
-              </li>
-              <li>
-                <img src="/postgresql.png" alt="PostgreSQL Icon" className={styles.skillSubIcon} width={24} height={24} /> PostgreSQL
-              </li>
-            </ul>
-          </div>
-
-          {/* AI/ML Frameworks */}
-          <div className={styles.skillCard}>
-            <img
-              src="/aiml.png"
-              alt="AI/ML Icon"
-              className={styles.skillIcon}
-              width={60}
-              height={60}
-            />
-            <h3>AI/ML Frameworks</h3>
-            <ul className={styles.skillList}>
-              <li>
-                <img src="/tensorflow.png" alt="TensorFlow Icon" className={styles.skillSubIcon} width={24} height={24} /> TensorFlow
-              </li>
-              <li>
-                <img src="/pytorch.png" alt="PyTorch Icon" className={styles.skillSubIcon} width={24} height={24} /> PyTorch
-              </li>
-              <li>
-                <img src="/classifiers.png" alt="Classifiers Icon" className={styles.skillSubIcon} width={24} height={24} /> Classifiers
-              </li>
-              <li>
-                <img src="/regressors.png" alt="Regressors Icon" className={styles.skillSubIcon} width={24} height={24} /> Regressors
-              </li>
-              <li>
-                <img src="/neural network.png" alt="Neural Networks Icon" className={styles.skillSubIcon} width={24} height={24} /> Neural Networks
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-
-      {/* Projects Section */}
-      <section id="projects" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Projects</h2>
-        <div className={styles.projectsGrid}>
-          {/* Project 1 */}
-          <div className={styles.projectCard}>
-            <img
-              src="/AI_Resume.png"
-              alt="Project 1 Preview"
-              className={styles.projectImage}
-            />
-            <div className={styles.projectContent}>
-              <h3>PerspectAI</h3>
-              <p>An AI Powered Resume Analyzer which provides insights of your Resume.</p>
-              <a
-                href="https://github.com/Kishore-1803/PerspectAI"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.githubLink}
-              >
-                View on GitHub
-              </a>
+          
+          <div className={styles.aboutContent}>
+            <p className={styles.aboutText}>
+              Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
+              and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts 
+              and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source 
+              projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, 
+              I'm excited to shape a future where technology and creativity come together to make an impact.
+            </p>
+            <div className={styles.aboutStats}>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>5th</div>
+                <div className={styles.statLabel}>Semester</div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>B.Tech</div>
+                <div className={styles.statLabel}>Degree</div>
+              </div>
+              <div className={styles.statItem}>
+                <div className={styles.statNumber}>CSE(AI)</div>
+                <div className={styles.statLabel}>Specialization</div>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Project 2 */}
-          <div className={styles.projectCard}>
-            <img
-              src="/podcast.jpg"
-              alt="Project 2 Preview"
-              className={styles.projectImage}
-            />
-            <div className={styles.projectContent}>
-              <h3>AudioAura</h3>
-                <p>A Podcast Generator That Provides News And Weather Updates Using APIs. The Frontend is Built With React, The Backend with Express, and MongoDB is Used For The Database.</p>
-              <a
-                href="https://github.com/Kishore-1803/AudioAura"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.githubLink}
-              >
-                View on GitHub
-              </a>
+        {/* Skills Section */}
+        <section 
+          id="skills" 
+          className={`${styles.section} ${styles.skills}`}
+          ref={(el) => registerSection("skills", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>What I Know</span>
+            <h2 className={styles.sectionTitle}>My Skills</h2>
+            <div className={styles.sectionDivider}></div>
+          </div>
+          
+          <div className={styles.skillsGrid}>
+            {/* Languages */}
+            <div className={styles.skillCategory}>
+              <div className={styles.skillCategoryHeader}>
+                <div className={styles.categoryIcon}>
+                  <img
+                    src="/programming.png"
+                    alt="Languages Icon"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className={styles.skillCategoryTitle}>Languages</h3>
+              </div>
+              <div className={styles.skillItems}>
+                <div className={styles.skillItem}>
+                  <img src="/java.png" alt="Java Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Java</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/python.png" alt="Python Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Python</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/c.png" alt="C Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>C</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/c-.png" alt="C++ Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>C++</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Frontend */}
+            <div className={styles.skillCategory}>
+              <div className={styles.skillCategoryHeader}>
+                <div className={styles.categoryIcon}>
+                  <img
+                    src="/frontend.png"
+                    alt="Frontend Icon"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className={styles.skillCategoryTitle}>Frontend</h3>
+              </div>
+              <div className={styles.skillItems}>
+                <div className={styles.skillItem}>
+                  <img src="/html-5.png" alt="HTML Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>HTML5</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/css-3.png" alt="CSS Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>CSS3</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/js.png" alt="JavaScript Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>JavaScript</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/react.png" alt="React Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>React.js</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/nextjs.png" alt="Next Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Next.js</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Backend */}
+            <div className={styles.skillCategory}>
+              <div className={styles.skillCategoryHeader}>
+                <div className={styles.categoryIcon}>
+                  <img
+                    src="/backend.png"
+                    alt="Backend Icon"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className={styles.skillCategoryTitle}>Backend</h3>
+              </div>
+              <div className={styles.skillItems}>
+                <div className={styles.skillItem}>
+                  <img src="/node.png" alt="Node.js Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Node.js</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/express.png" alt="Express Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Express.js</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Database */}
+            <div className={styles.skillCategory}>
+              <div className={styles.skillCategoryHeader}>
+                <div className={styles.categoryIcon}>
+                  <img
+                    src="/database.png"
+                    alt="Database Icon"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className={styles.skillCategoryTitle}>Database</h3>
+              </div>
+              <div className={styles.skillItems}>
+                <div className={styles.skillItem}>
+                  <img src="/sql.png" alt="MySQL Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>MySQL</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/mongodb.png" alt="MongoDB Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>MongoDB</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/neo4j.png" alt="Neo4j Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Neo4j</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/postgresql.png" alt="PostgreSQL Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>PostgreSQL</span>
+                </div>
+              </div>
+            </div>
+
+            {/* AI/ML Frameworks */}
+            <div className={styles.skillCategory}>
+              <div className={styles.skillCategoryHeader}>
+                <div className={styles.categoryIcon}>
+                  <img
+                    src="/aiml.png"
+                    alt="AI/ML Icon"
+                    width={40}
+                    height={40}
+                  />
+                </div>
+                <h3 className={styles.skillCategoryTitle}>AI/ML Frameworks</h3>
+              </div>
+              <div className={styles.skillItems}>
+                <div className={styles.skillItem}>
+                  <img src="/tensorflow.png" alt="TensorFlow Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>TensorFlow</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/pytorch.png" alt="PyTorch Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>PyTorch</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/classifiers.png" alt="Classifiers Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Classifiers</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/regressors.png" alt="Regressors Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Regressors</span>
+                </div>
+                <div className={styles.skillItem}>
+                  <img src="/neural network.png" alt="Neural Networks Icon" width={24} height={24} className={styles.skillItemImg} />
+                  <span>Neural Networks</span>
+                </div>
+              </div>
             </div>
           </div>
-           {/* Project 3 */}
-          <div className={styles.projectCard}>
-            <img
-              src="/Fraud.jpg"
-              alt="Project 3 Preview"
-              className={styles.projectImage}
-            />
-            <div className={styles.projectContent}>
-              <h3>Fraud Detection in Financial Networks</h3>
-              <p>A project to detect fraudulent transactions in financial networks using Logistic Regression.</p>
-              <a
-                href="https://github.com/Kishore-1803/Fraud-Detection-in-Financial-Networks"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.githubLink}
-              >
-                View on GitHub
-              </a>
+        </section>
+
+        {/* Projects Section */}
+        <section 
+          id="projects" 
+          className={`${styles.section} ${styles.projects}`}
+          ref={(el) => registerSection("projects", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>What I've Built</span>
+            <h2 className={styles.sectionTitle}>Projects</h2>
+            <div className={styles.sectionDivider}></div>
+          </div>
+          
+          <div className={styles.projectsContainer}>
+            {/* Project 1 */}
+            <div className={styles.projectCard}>
+              <div className={styles.projectImage}>
+                <img 
+                  src="/AI_Resume.png" 
+                  alt="PerspectAI Project" 
+                  className={styles.projectImg}
+                />
+                <div className={styles.projectOverlay}>
+                  <a
+                    href="https://github.com/Kishore-1803/PerspectAI"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.projectLink}
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3 className={styles.projectTitle}>PerspectAI</h3>
+                <p className={styles.projectDesc}>
+                  An AI Powered Resume Analyzer which provides insights of your Resume.
+                </p>
+                <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>AI</span>
+                  <span className={styles.projectTag}>NLP</span>
+                  <span className={styles.projectTag}>Analytics</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 2 */}
+            <div className={styles.projectCard}>
+              <div className={styles.projectImage}>
+                <img 
+                  src="/podcast.jpg" 
+                  alt="AudioAura Project"
+                  className={styles.projectImg}
+                />
+                <div className={styles.projectOverlay}>
+                  <a
+                    href="https://github.com/Kishore-1803/AudioAura"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.projectLink}
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3 className={styles.projectTitle}>AudioAura</h3>
+                <p className={styles.projectDesc}>
+                  A Podcast Generator That Provides News And Weather Updates Using APIs. The Frontend is Built With React, The Backend with Express, and MongoDB is Used For The Database.
+                </p>
+                <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>React</span>
+                  <span className={styles.projectTag}>Express</span>
+                  <span className={styles.projectTag}>MongoDB</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Project 3 */}
+            <div className={styles.projectCard}>
+              <div className={styles.projectImage}>
+                <img 
+                  src="/Fraud.jpg" 
+                  alt="Fraud Detection Project"
+                  className={styles.projectImg}
+                />
+                <div className={styles.projectOverlay}>
+                  <a
+                    href="https://github.com/Kishore-1803/Fraud-Detection-in-Financial-Networks"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.projectLink}
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3 className={styles.projectTitle}>Fraud Detection in Financial Networks</h3>
+                <p className={styles.projectDesc}>
+                  A project to detect fraudulent transactions in financial networks using Logistic Regression.
+                </p>
+                <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>ML</span>
+                  <span className={styles.projectTag}>Finance</span>
+                  <span className={styles.projectTag}>Regression</span>
+                </div>
+              </div>
             </div>
           </div>
-          {/* Add more project cards as needed */}
-        </div>
-      </section>
+        </section>
 
-
-     {/* Social Section */}
-      <section id="social" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Connect With Me</h2>
-        <div className={styles.socialLinks}>
-          <a
-            href="https://www.facebook.com/profile.php?id=100017656030709"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/facebook.png" alt="Facebook" className={styles.socialIcon} />
-            Facebook
-          </a>
-          <a
-            href="https://www.instagram.com/kishore_balaji_03/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/instagram.png" alt="Instagram" className={styles.socialIcon} />
-            Instagram
-          </a>
-          <a
-            href="https://www.linkedin.com/in/kishore-balaji-081168292/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/linkedin.png" alt="LinkedIn" className={styles.socialIcon} />
-            LinkedIn
-          </a>
-          <a
-            href="https://github.com/Kishore-1803"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="/github (1).png" alt="GitHub" className={styles.socialIcon} />
-            GitHub
-          </a>
-        </div>
-      </section>
-
+        {/* Social Connect Section */}
+        <section 
+          id="social" 
+          className={`${styles.section} ${styles.social}`}
+          ref={(el) => registerSection("social", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>Get In Touch</span>
+            <h2 className={styles.sectionTitle}>Connect With Me</h2>
+            <div className={styles.sectionDivider}></div>
+          </div>
+          
+          <div className={styles.connectGrid}>
+            <a
+              href="https://www.facebook.com/profile.php?id=100017656030709"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCard}
+            >
+              <div className={styles.socialIconWrap}>
+                <img src="/facebook.png" alt="Facebook" className={styles.socialIcon} />
+              </div>
+              <span>Facebook</span>
+            </a>
+            
+            <a
+              href="https://www.instagram.com/kishore_balaji_03/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCard}
+            >
+              <div className={styles.socialIconWrap}>
+                <img src="/instagram.png" alt="Instagram" className={styles.socialIcon} />
+              </div>
+              <span>Instagram</span>
+            </a>
+            
+            <a
+              href="https://www.linkedin.com/in/kishore-balaji-081168292/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCard}
+            >
+              <div className={styles.socialIconWrap}>
+                <img src="/linkedin.png" alt="LinkedIn" className={styles.socialIcon} />
+              </div>
+              <span>LinkedIn</span>
+            </a>
+            
+            <a
+              href="https://github.com/Kishore-1803"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.socialCard}
+            >
+              <div className={styles.socialIconWrap}>
+                <img src="/github.png" alt="GitHub" className={styles.socialIcon} />
+              </div>
+              <span>GitHub</span>
+            </a>
+          </div>
+        </section>
+      </main>
 
       {/* Footer */}
       <footer className={styles.footer}>
-        <p>© 2024 Kishore. All rights reserved.</p>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLogo}>
+            <span>KB</span>
+          </div>
+          <p className={styles.footerCopyright}>© 2024 Kishore. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );
