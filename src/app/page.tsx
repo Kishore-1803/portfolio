@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "./styles/Home.module.css";
-import './styles/globals.css';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("home");
@@ -162,7 +161,7 @@ export default function Home() {
             <div className={styles.heroRight}>
               <div className={styles.profileImgContainer}>
                 <Image
-                  src="/me.png"
+                  src="/me.jpg"
                   alt="Kishore"
                   width={320}
                   height={320}
@@ -466,9 +465,10 @@ export default function Home() {
               <div className={styles.projectInfo}>
                 <h3 className={styles.projectTitle}>AudioAura</h3>
                 <p className={styles.projectDesc}>
-                  A Podcast Generator That Provides News And Weather Updates Using APIs. The Frontend is Built With React, The Backend with Express, and MongoDB is Used For The Database.
+                  An AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.
                 </p>
                 <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>AI</span>
                   <span className={styles.projectTag}>React</span>
                   <span className={styles.projectTag}>Express</span>
                   <span className={styles.projectTag}>MongoDB</span>
@@ -480,13 +480,13 @@ export default function Home() {
             <div className={styles.projectCard}>
               <div className={styles.projectImage}>
                 <img 
-                  src="/Fraud.jpg" 
-                  alt="Fraud Detection Project"
+                  src="/Xendrix.jpg" 
+                  alt="XendrixAI"
                   className={styles.projectImg}
                 />
                 <div className={styles.projectOverlay}>
                   <a
-                    href="https://github.com/Kishore-1803/Fraud-Detection-in-Financial-Networks"
+                    href="https://github.com/Kishore-1803/XendrixAI"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.projectLink}
@@ -496,14 +496,19 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>Fraud Detection in Financial Networks</h3>
+                <h3 className={styles.projectTitle}>XendrixAI</h3>
                 <p className={styles.projectDesc}>
-                  A project to detect fraudulent transactions in financial networks using Logistic Regression.
+                   An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful interactive assistant.
                 </p>
                 <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>ML</span>
-                  <span className={styles.projectTag}>Finance</span>
-                  <span className={styles.projectTag}>Regression</span>
+                  <span className={styles.projectTag}>AI</span>
+                  <span className={styles.projectTag}>Multimodal</span>
+                  <span className={styles.projectTag}>NLP</span>
+                  <span className={styles.projectTag}>Data Visualization</span>
+                  <span className={styles.projectTag}>Image Generation</span>
+                  <span className={styles.projectTag}>Conversational AI</span>
+                  <span className={styles.projectTag}>Python</span>
+                  <span className={styles.projectTag}>Next.js</span>
                 </div>
               </div>
             </div>
