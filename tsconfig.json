@@ -20,8 +20,12 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
+<<<<<<< HEAD
     },
     "types": ["node"]  // Keep only what's needed
+=======
+    }
+>>>>>>> 3e9fc125375a17d2d7eb6c72edc7bfb5c7ab929c
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
