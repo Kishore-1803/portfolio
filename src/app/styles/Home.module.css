@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* Modern Techy Color Scheme */
 :root {
   --primary-dark: #121212;
@@ -16,8 +15,6 @@
 }
 
 /* Basic Reset and Container */
-=======
->>>>>>> 3e9fc125375a17d2d7eb6c72edc7bfb5c7ab929c
 .container {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -985,8 +982,4 @@
   .connectGrid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3e9fc125375a17d2d7eb6c72edc7bfb5c7ab929c
