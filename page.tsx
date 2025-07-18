@@ -520,8 +520,44 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            <div className={styles.projectCard}>
+              <div className={styles.projectImage}>
+                <img 
+                  src="/SyngenX.jpg" 
+                  alt="SyngenX"
+                  className={styles.projectImg}
+                />
+                <div className={styles.projectOverlay}>
+                  <a
+                    href="https://github.com/Kishore-1803/SyngenX"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.projectLink}
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3 className={styles.projectTitle}>SyngenX</h3>
+                <p className={styles.projectDesc}>
+                  An AI-powered developer performance analytics system. SyngenX connects to GitHub, Linear, and Zoho to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality handling — visualized through charts and timelines using data from real contributions.
+                </p>
+                <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>GenAI</span>
+                  <span className={styles.projectTag}>Developer Analytics</span>
+                  <span className={styles.projectTag}>FastAPI</span>
+                  <span className={styles.projectTag}>Next.js</span>
+                  <span className={styles.projectTag}>Supabase</span>
+                  <span className={styles.projectTag}>Data Visualization</span>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
+
+        
 
         {/* Social Connect Section */}
         <section 
