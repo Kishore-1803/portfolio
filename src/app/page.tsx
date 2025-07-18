@@ -542,7 +542,7 @@ export default function Home() {
               <div className={styles.projectInfo}>
                 <h3 className={styles.projectTitle}>SyngenX</h3>
                 <p className={styles.projectDesc}>
-                  An AI-powered developer performance analytics system. SyngenX connects to GitHub, Linear, and Zoho to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality handling — visualized through charts and timelines using data from real contributions.
+                  An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality handling using data from real contributions.
                 </p>
                 <div className={styles.projectTags}>
                   <span className={styles.projectTag}>GenAI</span>
