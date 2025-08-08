@@ -808,6 +808,47 @@
 .socialCard:hover .socialIcon {
   transform: scale(1.2);
 }
+.contactCTA {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contactText {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin: 0 auto 50px;
+}
+
+.contactForm input,
+.contactForm textarea {
+  padding: 12px 15px;
+  border: 1px solid var(--accent-purple);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  outline: none;
+  border-color: var(--accent-teal);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.contactForm button {
+  align-self: center;
+}
 
 /* Footer */
 .footer {
