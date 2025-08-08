@@ -195,12 +195,18 @@ export default function Home() {
           
           <div className={styles.aboutContent}>
             <p className={styles.aboutText}>
-              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.  
-              I specialize in AI, web development, and creative applications of machine learning.  
-              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.  
-              My mission: combine innovation and practicality to create solutions that make a real impact.
-
+              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.
             </p>
+            <p className={styles.aboutText}>
+              I specialize in AI, web development, and creative applications of machine learning.
+            </p>
+            <p className={styles.aboutText}>
+              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.
+            </p>
+            <p className={styles.aboutText}>
+              My mission: combine innovation and practicality to create solutions that make a real impact.
+            </p>
+          
             <div className={styles.aboutStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>5th</div>
@@ -570,7 +576,46 @@ export default function Home() {
             <h2 className={styles.sectionTitle}>Connect With Me</h2>
             <div className={styles.sectionDivider}></div>
           </div>
-          
+        
+          {/* Call-to-Action */}
+          <div className={styles.contactCTA}>
+            <p className={styles.contactText}>
+              I’m always open to exciting opportunities, collaborations, or just a friendly chat.  
+              Send me a message, and let’s make something amazing together.
+            </p>
+            <a href="mailto:kishore@example.com" className={styles.primaryBtn}>
+              📩 Send Me an Email
+            </a>
+          </div>
+        
+          {/* Contact Form */}
+          <form 
+            action="https://formspree.io/f/xgvzpbpz" 
+            method="POST" 
+            className={styles.contactForm}
+          >
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Your Name" 
+              required 
+            />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Your Email" 
+              required 
+            />
+            <textarea 
+              name="message" 
+              placeholder="Your Message" 
+              rows={5} 
+              required
+            ></textarea>
+            <button type="submit" className={styles.primaryBtn}>Send Message</button>
+          </form>
+        
+          {/* Social Links */}
           <div className={styles.connectGrid}>
             <a
               href="https://www.facebook.com/profile.php?id=100017656030709"
