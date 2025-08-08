@@ -195,11 +195,11 @@ export default function Home() {
           
           <div className={styles.aboutContent}>
             <p className={styles.aboutText}>
-              Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
-              and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts 
-              and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source 
-              projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, 
-              I'm excited to shape a future where technology and creativity come together to make an impact.
+              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.  
+              I specialize in AI, web development, and creative applications of machine learning.  
+              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.  
+              My mission: combine innovation and practicality to create solutions that make a real impact.
+
             </p>
             <div className={styles.aboutStats}>
               <div className={styles.statItem}>
