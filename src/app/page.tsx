@@ -583,7 +583,7 @@ export default function Home() {
               I’m always open to exciting opportunities, collaborations, or just a friendly chat.  
               Send me a message, and let’s make something amazing together.
             </p>
-            <a href="mailto:kishore@example.com" className={styles.primaryBtn}>
+            <a href="mailto:kishorebalajisivani@gmail.com" className={styles.primaryBtn}>
               📩 Send Me an Email
             </a>
           </div>
