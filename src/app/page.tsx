@@ -194,18 +194,13 @@ export default function Home() {
           </div>
           
           <div className={styles.aboutContent}>
-            <p className={styles.aboutText}>
-              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.
-            </p>
-            <p className={styles.aboutText}>
-              I specialize in AI, web development, and creative applications of machine learning.
-            </p>
-            <p className={styles.aboutText}>
-              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.
-            </p>
-            <p className={styles.aboutText}>
+           <p className={styles.aboutText}>
+              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.<br />
+              I specialize in AI, web development, and creative applications of machine learning.<br />
+              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.<br />
               My mission: combine innovation and practicality to create solutions that make a real impact.
-            </p>
+           </p>
+
           
             <div className={styles.aboutStats}>
               <div className={styles.statItem}>
