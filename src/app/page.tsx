@@ -465,7 +465,6 @@ export default function Home() {
                     <span className={styles.techTag}>phpMyAdmin</span>
                     <span className={styles.techTag}>HTML5</span>
                     <span className={styles.techTag}>CSS3</span>
-                    <span className={styles.techTag}>Web Development</span>
                   </div>
                 </div>
               </div>
