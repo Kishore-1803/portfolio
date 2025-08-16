@@ -86,6 +86,14 @@ export default function Home() {
             <span className={styles.navText}>Skills</span>
           </a>
           <a 
+            href="#experience" 
+            className={`${styles.navItem} ${activeSection === "experience" ? styles.active : ""}`}
+            aria-label="Experience"
+          >
+            <span className={styles.navIcon}>💼</span>
+            <span className={styles.navText}>Experience</span>
+          </a>
+          <a 
             href="#projects" 
             className={`${styles.navItem} ${activeSection === "projects" ? styles.active : ""}`}
             aria-label="Projects"
@@ -122,6 +130,7 @@ export default function Home() {
             <a href="#home" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Home</a>
             <a href="#about" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>About</a>
             <a href="#skills" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Skills</a>
+            <a href="#experience" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Experience</a>
             <a href="#projects" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Projects</a>
             <a href="#social" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Connect</a>
             <button className={styles.themeToggleBtn} onClick={toggleTheme}>
@@ -194,13 +203,14 @@ export default function Home() {
           </div>
           
           <div className={styles.aboutContent}>
-            <p className={styles.aboutText}>
-              Passionate about coding, learning, and exploring cutting-edge AI technologies, I thrive on solving problems 
-              and building innovative solutions. My academic journey has fueled my enthusiasm for both theoretical concepts 
-              and their practical applications in AI and web development. Beyond academics, I actively contribute to open-source 
-              projects, enhancing my skills while giving back to the community. Driven by curiosity and a commitment to growth, 
-              I'm excited to shape a future where technology and creativity come together to make an impact.
-            </p>
+           <p className={styles.aboutText}>
+              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.<br />
+              I specialize in AI, web development, and creative applications of machine learning.<br />
+              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.<br />
+              My mission: combine innovation and practicality to create solutions that make a real impact.
+           </p>
+
+          
             <div className={styles.aboutStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>5th</div>
@@ -406,6 +416,63 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Experience Section */}
+        <section 
+          id="experience" 
+          className={`${styles.section} ${styles.experience}`}
+          ref={(el) => registerSection("experience", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>Where I've Worked</span>
+            <h2 className={styles.sectionTitle}>Experience</h2>
+            <div className={styles.sectionDivider}></div>
+          </div>
+          
+          <div className={styles.experienceContainer}>
+            <div className={styles.experienceTimeline}>
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineDate}>
+                  <span className={styles.dateText}>2025</span>
+                  <span className={styles.dateSubtext}>Present</span>
+                </div>
+                <div className={styles.timelineConnector}>
+                  <div className={styles.timelineDot}></div>
+                  <div className={styles.timelineLine}></div>
+                </div>
+                <div className={styles.experienceCard}>
+                  <div className={styles.experienceHeader}>
+                    <div className={styles.companyInfo}>
+                      <h3 className={styles.jobTitle}>Software Developer Intern</h3>
+                      <h4 className={styles.companyName}>TechZeeb</h4>
+                      <span className={styles.duration}>June 2025 - August 2025</span>
+                      <span className={styles.location}>Remote</span>
+                    </div>
+                    <div className={styles.companyLogo}>
+                      <div className={styles.logoPlaceholder}>TZ</div>
+                    </div>
+                  </div>
+                  <div className={styles.experienceDescription}>
+                    <p>Building innovative web solutions to connect organic farmers with local customers through scalable platforms and optimized backend systems.</p>
+                    <ul className={styles.achievementsList}>
+                      <li>Built "Kovai Natural Farmers" - a web platform bridging organic farmers and local customers</li>
+                      <li>Developed scalable backend APIs with JavaScript and phpMyAdmin; improved data response time by 40%</li>
+                      <li>Designed responsive UI using HTML and CSS, enhancing cross-device usability and UX</li>
+                      <li>Working remotely to deliver high-quality software solutions for agricultural technology</li>
+                    </ul>
+                  </div>
+                  <div className={styles.techStack}>
+                    <span className={styles.techTag}>JavaScript</span>
+                    <span className={styles.techTag}>phpMyAdmin</span>
+                    <span className={styles.techTag}>HTML5</span>
+                    <span className={styles.techTag}>CSS3</span>
+                    <span className={styles.techTag}>Web Development</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Projects Section */}
         <section 
           id="projects" 
@@ -570,7 +637,46 @@ export default function Home() {
             <h2 className={styles.sectionTitle}>Connect With Me</h2>
             <div className={styles.sectionDivider}></div>
           </div>
-          
+        
+          {/* Call-to-Action */}
+          <div className={styles.contactCTA}>
+            <p className={styles.contactText}>
+              I’m always open to exciting opportunities, collaborations, or just a friendly chat.  
+              Send me a message, and let’s make something amazing together.
+            </p>
+            <a href="mailto:kishorebalajisivani@gmail.com" className={styles.primaryBtn}>
+              📩 Send Me an Email
+            </a>
+          </div>
+        
+          {/* Contact Form */}
+          <form 
+            action="https://formspree.io/f/xgvzpbpz" 
+            method="POST" 
+            className={styles.contactForm}
+          >
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Your Name" 
+              required 
+            />
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Your Email" 
+              required 
+            />
+            <textarea 
+              name="message" 
+              placeholder="Your Message" 
+              rows={5} 
+              required
+            ></textarea>
+            <button type="submit" className={styles.primaryBtn}>Send Message</button>
+          </form>
+        
+          {/* Social Links */}
           <div className={styles.connectGrid}>
             <a
               href="https://www.facebook.com/profile.php?id=100017656030709"

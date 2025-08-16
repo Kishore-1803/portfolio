@@ -43,6 +43,7 @@
   z-index: 1000;
   transition: width 0.3s ease;
   box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .lightMode .sideNav {
@@ -88,7 +89,8 @@
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
-  width: 100%;
+  width: calc(100% - 15px);
+  margin-right: 15px;
 }
 
 .navIcon {
@@ -110,7 +112,9 @@
 
 .navItem.active {
   background: var(--gradient-primary);
-  box-shadow: 0 5px 15px rgba(140, 82, 255, 0.3);
+  box-shadow: inset 0 5px 15px rgba(140, 82, 255, 0.3);
+  border-radius: 0 25px 25px 0;
+  margin-right: 0;
 }
 
 .navItem:not(.active):hover {
@@ -525,9 +529,12 @@
 
 .aboutText {
   font-size: 1.1rem;
-  line-height: 1.8;
+  line-height: 1.6; /* slightly smaller for compactness */
   text-align: center;
+  max-width: 900px;
+  margin: 0 auto 15px; /* less bottom margin */
 }
+
 
 .aboutStats {
   display: flex;
@@ -749,6 +756,252 @@
   font-weight: 500;
 }
 
+/* Experience Section */
+.experience {
+  background: linear-gradient(135deg, rgba(52, 224, 161, 0.02) 0%, rgba(140, 82, 255, 0.02) 100%);
+}
+
+.experienceContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.experienceTimeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 150px 80px 1fr;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.timelineDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  padding-top: 20px;
+}
+
+.dateText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.dateSubtext {
+  font-size: 0.9rem;
+  color: var(--accent-teal);
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+.timelineConnector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.timelineDot {
+  width: 20px;
+  height: 20px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(140, 82, 255, 0.4);
+}
+
+.timelineLine {
+  width: 3px;
+  height: calc(100% + 50px);
+  background: linear-gradient(180deg, var(--accent-purple) 0%, rgba(140, 82, 255, 0.2) 100%);
+  position: absolute;
+  top: 20px;
+  z-index: 1;
+}
+
+.timelineItem:last-child .timelineLine {
+  display: none;
+}
+
+.experienceCard {
+  background: rgba(18, 18, 18, 0.6);
+  border: 1px solid rgba(140, 82, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.lightMode .experienceCard {
+  background: rgba(245, 245, 247, 0.6);
+  border: 1px solid rgba(140, 82, 255, 0.2);
+}
+
+.experienceCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(140, 82, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+}
+
+.experienceCard:hover::before {
+  left: 100%;
+}
+
+.experienceCard:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-purple);
+  box-shadow: 0 20px 40px rgba(140, 82, 255, 0.15);
+}
+
+.experienceHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.companyInfo {
+  flex: 1;
+}
+
+.jobTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.companyName {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-teal);
+  margin: 0 0 8px 0;
+}
+
+.duration {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  opacity: 0.7;
+  background: rgba(140, 82, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.location {
+  font-size: 0.8rem;
+  color: var(--accent-teal);
+  opacity: 0.9;
+  background: rgba(52, 224, 161, 0.1);
+  border: 1px solid rgba(52, 224, 161, 0.3);
+  padding: 3px 10px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.companyLogo {
+  margin-left: 20px;
+}
+
+.logoPlaceholder {
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 20px rgba(140, 82, 255, 0.3);
+}
+
+.experienceDescription {
+  margin-bottom: 20px;
+}
+
+.experienceDescription p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: var(--text-light);
+  opacity: 0.9;
+}
+
+.achievementsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.achievementsList li {
+  position: relative;
+  padding: 8px 0 8px 25px;
+  color: var(--text-light);
+  opacity: 0.8;
+  line-height: 1.5;
+}
+
+.achievementsList li::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--accent-teal);
+  font-size: 0.8rem;
+  top: 10px;
+}
+
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.techTag {
+  padding: 6px 14px;
+  background: rgba(52, 224, 161, 0.1);
+  border: 1px solid rgba(52, 224, 161, 0.3);
+  color: var(--accent-teal);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.techTag:hover {
+  background: rgba(52, 224, 161, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Projects Section */
+
 /* Social Connect Section */
 .connectGrid {
   display: grid;
@@ -807,6 +1060,47 @@
 
 .socialCard:hover .socialIcon {
   transform: scale(1.2);
+}
+.contactCTA {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contactText {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin: 0 auto 50px;
+}
+
+.contactForm input,
+.contactForm textarea {
+  padding: 12px 15px;
+  border: 1px solid var(--accent-purple);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+  font-size: 1rem;
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  outline: none;
+  border-color: var(--accent-teal);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.contactForm button {
+  align-self: center;
 }
 
 /* Footer */
@@ -917,6 +1211,19 @@
   .connectGrid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
+
+  .timelineItem {
+    grid-template-columns: 120px 60px 1fr;
+    gap: 20px;
+  }
+  
+  .experienceCard {
+    padding: 25px;
+  }
+  
+  .jobTitle {
+    font-size: 1.3rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -966,5 +1273,51 @@
   
   .connectGrid {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .timelineItem {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .timelineDate {
+    align-items: center;
+    text-align: center;
+    padding-top: 0;
+    order: 1;
+  }
+  
+  .timelineConnector {
+    order: 2;
+    height: 40px;
+  }
+  
+  .timelineLine {
+    height: 20px;
+  }
+  
+  .experienceCard {
+    order: 3;
+    padding: 20px;
+  }
+  
+  .experienceHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .companyLogo {
+    margin-left: 0;
+  }
+  
+  .jobTitle {
+    font-size: 1.2rem;
+  }
+  
+  .techStack {
+    justify-content: center;
   }
 }
