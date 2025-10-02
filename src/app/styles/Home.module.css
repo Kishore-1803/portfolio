@@ -1136,188 +1136,47 @@
   opacity: 0.7;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .heroTitle {
-    font-size: 3.5rem;
-  }
-  
-  .section {
-    padding: 100px 40px;
-  }
-}
-
-@media (max-width: 992px) {
-  .heroContent {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .heroLeft {
-    max-width: 100%;
-  }
-  
-  .heroCTA {
-    justify-content: center;
-  }
-  
-  .techBadges {
-    position: static;
-    flex-direction: row;
-    margin-top: 20px;
-    justify-content: center;
-  }
-  
-  .projectsContainer {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .sideNav {
     display: none;
   }
-  
-  .mobileNav {
-    display: block;
-  }
-  
   .content {
     margin-left: 0;
     width: 100%;
-    padding-top: 70px;
+    padding: 10px;
   }
-  
-  .heroTitle {
-    font-size: 3rem;
+  .mobileNav {
+    display: block;
   }
-  
-  .section {
-    padding: 80px 20px;
+  .hero {
+    flex-direction: column;
+    padding: 0 10px;
+    min-height: auto;
+    gap: 0;
   }
-  
-  .sectionTitle {
-    font-size: 2.5rem;
-  }
-  
-  .statNumber {
-    font-size: 2rem;
-  }
-  
-  .skillsGrid {
+  .heroContent {
+    flex-direction: column;
     gap: 20px;
+    max-width: 100%;
   }
-  
-  .connectGrid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  .profileImgContainer {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
   }
-
-  .timelineItem {
-    grid-template-columns: 120px 60px 1fr;
-    gap: 20px;
-  }
-  
-  .experienceCard {
-    padding: 25px;
-  }
-  
-  .jobTitle {
-    font-size: 1.3rem;
+  .scrollIndicator {
+    position: static;
+    margin-top: 20px;
+    left: 0;
+    transform: none;
   }
 }
 
-@media (max-width: 576px) {
-  .heroTitle {
-    font-size: 2.5rem;
+@media (max-width: 600px) {
+  .section {
+    padding: 40px 10px;
   }
-  
-  .role {
-    font-size: 1.2rem;
-  }
-  
-  .heroCTA {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .sectionTitle {
-    font-size: 2rem;
-  }
-  
-  .sectionPreTitle {
-    font-size: 0.9rem;
-  }
-  
-  .aboutStats {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .statItem {
-    min-width: unset;
-    width: 100%;
-  }
-  
-  .skillCategory {
-    padding: 20px;
-  }
-  
-  .skillItems {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-  }
-  
-  .projectsContainer {
-    grid-template-columns: 1fr;
-  }
-  
-  .connectGrid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-
-  .timelineItem {
-    grid-template-columns: 1fr;
-    gap: 15px;
-    text-align: center;
-  }
-  
-  .timelineDate {
-    align-items: center;
-    text-align: center;
-    padding-top: 0;
-    order: 1;
-  }
-  
-  .timelineConnector {
-    order: 2;
-    height: 40px;
-  }
-  
-  .timelineLine {
-    height: 20px;
-  }
-  
-  .experienceCard {
-    order: 3;
-    padding: 20px;
-  }
-  
-  .experienceHeader {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 15px;
-  }
-  
-  .companyLogo {
-    margin-left: 0;
-  }
-  
-  .jobTitle {
-    font-size: 1.2rem;
-  }
-  
-  .techStack {
-    justify-content: center;
+  .aboutContent, .experienceContainer, .projectsContainer, .skillsGrid {
+    gap: 20px;
   }
 }
