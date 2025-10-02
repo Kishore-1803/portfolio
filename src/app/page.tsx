@@ -182,12 +182,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className={styles.scrollIndicator}>
-            <div className={styles.mouse}>
-              <div className={styles.wheel}></div>
-            </div>
-            <div className={styles.scrollText}>Scroll Down</div>
-          </div>
         </section>
 
         {/* About Section */}
