@@ -473,6 +473,7 @@ export default function Home() {
         </section>
 
         {/* Projects Section */}
+                {/* Projects Section */}
         <section 
           id="projects" 
           className={`${styles.section} ${styles.projects}`}
@@ -572,7 +573,7 @@ export default function Home() {
               <div className={styles.projectInfo}>
                 <h3 className={styles.projectTitle}>XendrixAI</h3>
                 <p className={styles.projectDesc}>
-                   An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful interactive assistant.
+                   An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful developer experience.
                 </p>
                 <div className={styles.projectTags}>
                   <span className={styles.projectTag}>AI</span>
@@ -587,6 +588,7 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Project 4 */}
             <div className={styles.projectCard}>
               <div className={styles.projectImage}>
                 <img 
@@ -608,7 +610,7 @@ export default function Home() {
               <div className={styles.projectInfo}>
                 <h3 className={styles.projectTitle}>SyngenX</h3>
                 <p className={styles.projectDesc}>
-                  An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality handling using data from real contributions.
+                  An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality analysis for engineering teams.
                 </p>
                 <div className={styles.projectTags}>
                   <span className={styles.projectTag}>GenAI</span>
@@ -619,8 +621,10 @@ export default function Home() {
                   <span className={styles.projectTag}>Data Visualization</span>
                 </div>
               </div>
+            </div>
 
-              <div className={styles.projectCard}>
+            {/* Project 5 */}
+            <div className={styles.projectCard}>
               <div className={styles.projectImage}>
                 <img 
                   src="/YOLO.jpg" 
@@ -639,9 +643,9 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis of YOLO  </h3>
+                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis of YOLO</h3>
                 <p className={styles.projectDesc}>
-                  An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness analysis.
+                  An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness testing.
                 </p>
                 <div className={styles.projectTags}>
                   <span className={styles.projectTag}>Computer Vision</span>
