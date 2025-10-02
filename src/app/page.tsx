@@ -619,6 +619,39 @@ export default function Home() {
                   <span className={styles.projectTag}>Data Visualization</span>
                 </div>
               </div>
+
+              <div className={styles.projectCard}>
+              <div className={styles.projectImage}>
+                <img 
+                  src="/YOLO.jpg" 
+                  alt="YOLO"
+                  className={styles.projectImg}
+                />
+                <div className={styles.projectOverlay}>
+                  <a
+                    href="https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.projectLink}
+                  >
+                    View on GitHub
+                  </a>
+                </div>
+              </div>
+              <div className={styles.projectInfo}>
+                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis of YOLO  </h3>
+                <p className={styles.projectDesc}>
+                  An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness analysis.
+                </p>
+                <div className={styles.projectTags}>
+                  <span className={styles.projectTag}>Computer Vision</span>
+                  <span className={styles.projectTag}>XAI</span>
+                  <span className={styles.projectTag}>YOLOv11</span>
+                  <span className={styles.projectTag}>PyTorch</span>
+                  <span className={styles.projectTag}>Grad-CAM</span>
+                  <span className={styles.projectTag}>Robustness Testing</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
