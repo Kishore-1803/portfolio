@@ -44,6 +44,55 @@ export default function Home() {
     setIsDarkMode(!isDarkMode);
   };
 
+  // --- FILTER OPTION FOR PROJECTS BELOW ---
+  const [sortOrder, setSortOrder] = useState<"recent" | "old">("recent");
+  const projects = [
+    {
+      title: "PerspectAI",
+      image: "/AI_Resume.png",
+      link: "https://github.com/Kishore-1803/PerspectAI",
+      desc: "An AI Powered Resume Analyzer which provides insights of your Resume.",
+      tags: ["AI", "NLP", "Analytics"],
+      year: 2025,
+    },
+    {
+      title: "AudioAura",
+      image: "/podcast.jpg",
+      link: "https://github.com/Kishore-1803/AudioAura",
+      desc: "An AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.",
+      tags: ["AI", "React", "Express", "MongoDB"],
+      year: 2024,
+    },
+    {
+      title: "XendrixAI",
+      image: "/Xendrix.jpg",
+      link: "https://github.com/Kishore-1803/XendrixAI",
+      desc: "An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful tool.",
+      tags: ["AI", "Multimodal", "NLP", "Data Visualization", "Image Generation", "Conversational AI", "Python", "Next.js"],
+      year: 2024,
+    },
+    {
+      title: "SyngenX",
+      image: "/SyngenX.jpg",
+      link: "https://github.com/Kishore-1803/SyngenX",
+      desc: "An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality.",
+      tags: ["GenAI", "Developer Analytics", "FastAPI", "Next.js", "Supabase", "Data Visualization"],
+      year: 2023,
+    },
+    {
+      title: "XAI Driven Robustness Analysis Pipeline For YOLO",
+      image: "/YOLO.jpg",
+      link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO",
+      desc: "An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness.",
+      tags: ["Computer Vision", "XAI", "YOLOv11", "PyTorch", "Grad-CAM", "Robustness Testing"],
+      year: 2023,
+    },
+  ];
+  const sortedProjects = [...projects].sort((a, b) =>
+    sortOrder === "recent" ? b.year - a.year : a.year - b.year
+  );
+
+
   return (
     <div className={`${styles.container} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
       <Head>
@@ -468,192 +517,56 @@ export default function Home() {
 
         {/* Projects Section */}
                 {/* Projects Section */}
-        <section 
-          id="projects" 
-          className={`${styles.section} ${styles.projects}`}
-          ref={(el) => registerSection("projects", el)}
-        >
+        <section id="projects" className={`${styles.section} ${styles.projects}`} ref={(el) => registerSection("projects", el)}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionPreTitle}>What I've Built</span>
             <h2 className={styles.sectionTitle}>Projects</h2>
             <div className={styles.sectionDivider}></div>
           </div>
-          
+          <div className={styles.filterBar}>
+            <label htmlFor="sortOrder" style={{ fontWeight: 500, marginRight: "10px" }}>Sort:</label>
+            <select
+              id="sortOrder"
+              value={sortOrder}
+              onChange={e => setSortOrder(e.target.value as "recent" | "old")}
+              className={styles.filterSelect}
+            >
+              <option value="recent">Recent to Old</option>
+              <option value="old">Old to Recent</option>
+            </select>
+          </div>
           <div className={styles.projectsContainer}>
-            {/* Project 1 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/AI_Resume.png" 
-                  alt="PerspectAI Project" 
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/PerspectAI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
+            {sortedProjects.map((proj, idx) => (
+              <div key={idx} className={styles.projectCard}>
+                <div className={styles.projectImage}>
+                  <img src={proj.image} alt={proj.title} className={styles.projectImg} />
+                  <div className={styles.projectOverlay}>
+                    <a
+                      href={proj.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.projectLink}
+                    >
+                      View on GitHub
+                    </a>
+                  </div>
+                </div>
+                <div className={styles.projectInfo}>
+                  <h3 className={styles.projectTitle}>{proj.title}</h3>
+                  <p className={styles.projectDesc}>{proj.desc}</p>
+                  <div className={styles.projectTags}>
+                    {proj.tags.map((tag, i) => (
+                      <span key={i} className={styles.projectTag}>{tag}</span>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: "10px", fontSize: "0.85rem", opacity: 0.6 }}>
+                    {proj.year}
+                  </div>
                 </div>
               </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>PerspectAI</h3>
-                <p className={styles.projectDesc}>
-                  An AI Powered Resume Analyzer which provides insights of your Resume.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>NLP</span>
-                  <span className={styles.projectTag}>Analytics</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 2 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/podcast.jpg" 
-                  alt="AudioAura Project"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/AudioAura"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>AudioAura</h3>
-                <p className={styles.projectDesc}>
-                  An AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>React</span>
-                  <span className={styles.projectTag}>Express</span>
-                  <span className={styles.projectTag}>MongoDB</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 3 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/Xendrix.jpg" 
-                  alt="XendrixAI"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/XendrixAI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>XendrixAI</h3>
-                <p className={styles.projectDesc}>
-                   An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful developer experience.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>Multimodal</span>
-                  <span className={styles.projectTag}>NLP</span>
-                  <span className={styles.projectTag}>Data Visualization</span>
-                  <span className={styles.projectTag}>Image Generation</span>
-                  <span className={styles.projectTag}>Conversational AI</span>
-                  <span className={styles.projectTag}>Python</span>
-                  <span className={styles.projectTag}>Next.js</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 4 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/SyngenX.jpg" 
-                  alt="SyngenX"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/SyngenX"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>SyngenX</h3>
-                <p className={styles.projectDesc}>
-                  An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality analysis for engineering teams.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>GenAI</span>
-                  <span className={styles.projectTag}>Developer Analytics</span>
-                  <span className={styles.projectTag}>FastAPI</span>
-                  <span className={styles.projectTag}>Next.js</span>
-                  <span className={styles.projectTag}>Supabase</span>
-                  <span className={styles.projectTag}>Data Visualization</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 5 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/YOLO.jpg" 
-                  alt="YOLO"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis Pipeline For YOLO</h3>
-                <p className={styles.projectDesc}>
-                  An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness testing.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>Computer Vision</span>
-                  <span className={styles.projectTag}>XAI</span>
-                  <span className={styles.projectTag}>YOLOv11</span>
-                  <span className={styles.projectTag}>PyTorch</span>
-                  <span className={styles.projectTag}>Grad-CAM</span>
-                  <span className={styles.projectTag}>Robustness Testing</span>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
-
         
 
         {/* Social Connect Section */}
