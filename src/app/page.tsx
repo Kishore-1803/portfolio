@@ -88,10 +88,9 @@ export default function Home() {
       year: 2024,
     },
   ];
-  const sortedProjects = [...projects].sort((a, b) =>
-    sortOrder === "recent" ? b.year - a.year : a.year - b.year
-  );
-
+  const sortedProjects = sortOrder === "recent"
+  ? [...projects]
+  : [...projects].reverse();
 
   return (
     <div className={`${styles.container} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
