@@ -523,7 +523,7 @@ export default function Home() {
             <div className={styles.sectionDivider}></div>
           </div>
           <div className={styles.filterBar}>
-            <label htmlFor="sortOrder" style={{ fontWeight: 500, marginRight: "10px" }}>Sort:</label>
+            <span className={styles.filterLabel}>Sort:</span>
             <select
               id="sortOrder"
               value={sortOrder}
