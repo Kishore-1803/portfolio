@@ -637,7 +637,7 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis of YOLO</h3>
+                <h3 className={styles.projectTitle}>XAI Driven Robustness Analysis Pipeline For YOLO</h3>
                 <p className={styles.projectDesc}>
                   An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness testing.
                 </p>
