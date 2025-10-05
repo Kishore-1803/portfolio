@@ -48,6 +48,30 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<"recent" | "old">("recent");
   const projects = [
     {
+      title: "XAI Driven Robustness Analysis Pipeline For YOLO",
+      image: "/YOLO.jpg",
+      link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO",
+      desc: "An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness.",
+      tags: ["Computer Vision", "XAI", "YOLOv11", "PyTorch", "Grad-CAM", "Robustness Testing"],
+      year: 2025,
+    },
+    {
+      title: "SyngenX",
+      image: "/SyngenX.jpg",
+      link: "https://github.com/Kishore-1803/SyngenX",
+      desc: "An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality.",
+      tags: ["GenAI", "Developer Analytics", "FastAPI", "Next.js", "Supabase", "Data Visualization"],
+      year: 2025,
+    },
+    {
+      title: "XendrixAI",
+      image: "/Xendrix.jpg",
+      link: "https://github.com/Kishore-1803/XendrixAI",
+      desc: "An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful tool.",
+      tags: ["AI", "Multimodal", "NLP", "Data Visualization", "Image Generation", "Conversational AI", "Python", "Next.js"],
+      year: 2025,
+    },
+    {
       title: "PerspectAI",
       image: "/AI_Resume.png",
       link: "https://github.com/Kishore-1803/PerspectAI",
@@ -62,30 +86,6 @@ export default function Home() {
       desc: "An AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.",
       tags: ["AI", "React", "Express", "MongoDB"],
       year: 2024,
-    },
-    {
-      title: "XendrixAI",
-      image: "/Xendrix.jpg",
-      link: "https://github.com/Kishore-1803/XendrixAI",
-      desc: "An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful tool.",
-      tags: ["AI", "Multimodal", "NLP", "Data Visualization", "Image Generation", "Conversational AI", "Python", "Next.js"],
-      year: 2024,
-    },
-    {
-      title: "SyngenX",
-      image: "/SyngenX.jpg",
-      link: "https://github.com/Kishore-1803/SyngenX",
-      desc: "An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality.",
-      tags: ["GenAI", "Developer Analytics", "FastAPI", "Next.js", "Supabase", "Data Visualization"],
-      year: 2023,
-    },
-    {
-      title: "XAI Driven Robustness Analysis Pipeline For YOLO",
-      image: "/YOLO.jpg",
-      link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO",
-      desc: "An explainable and robust anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM, Saliency Maps, and uncertainty estimation for model interpretability and robustness.",
-      tags: ["Computer Vision", "XAI", "YOLOv11", "PyTorch", "Grad-CAM", "Robustness Testing"],
-      year: 2023,
     },
   ];
   const sortedProjects = [...projects].sort((a, b) =>
