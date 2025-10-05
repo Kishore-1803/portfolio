@@ -647,6 +647,29 @@
   transform: rotate(10deg);
 }
 
+/* Filter Bar for Projects Section */
+.filterBar {
+  margin-bottom: 2rem;
+  text-align: right;
+}
+.filterSelect {
+  padding: 6px 18px;
+  border-radius: 25px;
+  border: 1px solid #8c52ff;
+  font-weight: 500;
+  background: var(--gray-dark);
+  color: var(--text-light);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.filterSelect:focus {
+  border-color: #34e0a1;
+}
+.lightMode .filterSelect {
+  background: #f5f5f7;
+  color: #121212;
+}
+
 /* Projects Section */
 .projectsContainer {
   display: grid;
@@ -755,6 +778,7 @@
   font-size: 0.8rem;
   font-weight: 500;
 }
+
 
 /* Experience Section */
 .experience {
