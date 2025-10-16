@@ -48,6 +48,14 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<"recent" | "old">("recent");
   const projects = [
     {
+      title : "Loan Default Risk Prediction Using Bayesian Neural Network",
+      image : "/BNN.jpg",
+      link  : "https://github.com/Kishore-1803/Loan-Default-Risk-Prediction-Using-Bayesian-Neural-Network",
+      desc  : "A robust loan default prediction system using Bayesian Neural Networks (BNN) that provides both predictions and uncertainty quantification for better risk assessment in financial lending.",
+      tags  :  ["Neural Networks", "Uncertainty", "Risk Prediction", "AI in Finance", "Bayesian Methods"],
+      year  : 2025,
+    },
+    {
       title: "XAI Driven Robustness Analysis Pipeline For YOLO",
       image: "/YOLO.jpg",
       link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO",
