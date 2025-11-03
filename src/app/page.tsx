@@ -48,6 +48,14 @@ export default function Home() {
   const [sortOrder, setSortOrder] = useState<"recent" | "old">("recent");
   const projects = [
     {
+      title : "Bridging Correlation and Causation - An Explainable ML Approach",
+      image : "/casualML.jpg",
+      link  : "https://github.com/Kishore-1803/Bridging-Correlation-and-Causation-An-Explainable-ML-Approach",
+      desc  : "An machine learning project that predicts using both traditional and causal-informed modeling approaches. ",
+      tags  :  ["Machine Learning", "Causal Inference", "Explainable AI", "SHAP Analysis"],
+      year  : 2025,
+    },
+    {
       title : "Loan Default Risk Prediction Using Bayesian Neural Network",
       image : "/BNN.jpg",
       link  : "https://github.com/Kishore-1803/Loan-Default-Risk-Prediction-Using-Bayesian-Neural-Network",
