@@ -272,7 +272,7 @@ export default function Home() {
             <div className={styles.aboutStats}>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>3rd</div>
-                <div className={styles.statLabel}>Yearr</div>
+                <div className={styles.statLabel}>Year</div>
               </div>
               <div className={styles.statItem}>
                 <div className={styles.statNumber}>B.Tech</div>
