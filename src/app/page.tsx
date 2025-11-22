@@ -166,6 +166,14 @@ export default function Home() {
             <span className={styles.navText}>Projects</span>
           </a>
           <a 
+            href="#achievements" 
+            className={`${styles.navItem} ${activeSection === "achievements" ? styles.active : ""}`}
+            aria-label="Achievements"
+          >
+            <span className={styles.navIcon}>🏆</span>
+            <span className={styles.navText}>Awards</span>
+          </a>
+          <a 
             href="#social" 
             className={`${styles.navItem} ${activeSection === "social" ? styles.active : ""}`}
             aria-label="Connect"
@@ -196,6 +204,7 @@ export default function Home() {
             <a href="#skills" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Skills</a>
             <a href="#experience" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Experience</a>
             <a href="#projects" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Projects</a>
+            <a href="#achievements" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Awards</a>
             <a href="#social" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Connect</a>
             <button className={styles.themeToggleBtn} onClick={toggleTheme}>
               {isDarkMode ? "Switch to Light Mode ☀️" : "Switch to Dark Mode 🌙"}
@@ -531,7 +540,6 @@ export default function Home() {
         </section>
 
         {/* Projects Section */}
-                {/* Projects Section */}
         <section id="projects" className={`${styles.section} ${styles.projects}`} ref={(el) => registerSection("projects", el)}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionPreTitle}>What I've Built</span>
@@ -582,8 +590,70 @@ export default function Home() {
             ))}
           </div>
         </section>
-        
 
+        {/* Achievements & Hackathons Section (New Added) */}
+        <section 
+          id="achievements" 
+          className={`${styles.section} ${styles.experience}`} // Reusing experience style class for consistent timeline look
+          ref={(el) => registerSection("achievements", el)}
+        >
+          <div className={styles.sectionHeader}>
+            <span className={styles.sectionPreTitle}>Honors & Awards</span>
+            <h2 className={styles.sectionTitle}>Achievements & Hackathons</h2>
+            <div className={styles.sectionDivider}></div>
+          </div>
+          
+          <div className={styles.experienceContainer}>
+            <div className={styles.experienceTimeline}>
+              
+              {/* Item 1 */}
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineDate}>
+                  <span className={styles.dateText}>2025</span>
+                </div>
+                <div className={styles.timelineConnector}>
+                  <div className={styles.timelineDot}></div>
+                  <div className={styles.timelineLine}></div>
+                </div>
+                <div className={styles.experienceCard}>
+                  <div className={styles.experienceHeader}>
+                    <div className={styles.companyInfo}>
+                      <h3 className={styles.jobTitle}>Top 20% - Build With India 2025</h3>
+                      <h4 className={styles.companyName}>SatyaCheck: AI-based WhatsApp fact-checking app</h4>
+                    </div>
+                    <div className={styles.companyLogo}>
+                       <span style={{fontSize: "24px"}}>🏅</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 2 */}
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineDate}>
+                  <span className={styles.dateText}>2024</span>
+                </div>
+                <div className={styles.timelineConnector}>
+                  <div className={styles.timelineDot}></div>
+                  <div className={styles.timelineLine}></div>
+                </div>
+                <div className={styles.experienceCard}>
+                  <div className={styles.experienceHeader}>
+                    <div className={styles.companyInfo}>
+                      <h3 className={styles.jobTitle}>Semifinalist - Providence Leap Ideathon 2024</h3>
+                      <h4 className={styles.companyName}>NEXGEN: Wearable Health Tech</h4>
+                    </div>
+                    <div className={styles.companyLogo}>
+                      <span style={{fontSize: "24px"}}>🏆</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+       
         {/* Social Connect Section */}
         <section 
           id="social" 
@@ -595,7 +665,7 @@ export default function Home() {
             <h2 className={styles.sectionTitle}>Connect With Me</h2>
             <div className={styles.sectionDivider}></div>
           </div>
-        
+          
           {/* Call-to-Action */}
           <div className={styles.contactCTA}>
             <p className={styles.contactText}>
@@ -606,7 +676,7 @@ export default function Home() {
               📩 Send Me an Email
             </a>
           </div>
-        
+          
           {/* Contact Form */}
           <form 
             action="https://formspree.io/f/xgvzpbpz" 
@@ -633,7 +703,7 @@ export default function Home() {
             ></textarea>
             <button type="submit" className={styles.primaryBtn}>Send Message</button>
           </form>
-        
+          
           {/* Social Links */}
           <div className={styles.connectGrid}>
             <a
