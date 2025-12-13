@@ -50,7 +50,7 @@ export default function Home() {
   const projects = [
     {
       title : "Thala - Intelligent Incident Management System",
-      image : "/thala.jpeg", // Make sure to add this image to your public folder
+      image : "/Thala.jpeg", // Make sure to add this image to your public folder
       link  : "https://github.com/Kishore-1803/Thala", // Updated based on resume context
       desc  : "An autonomous incident agent using Llama 3.3 and Kafka to detect and classify tickets. Integrated Elasticsearch and AWS Textract for semantic retrieval and OCR capabilities.",
       tags  : ["GenAI", "AWS Bedrock", "Kafka", "Elasticsearch", "Flask"],
