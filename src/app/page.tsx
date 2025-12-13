@@ -46,7 +46,16 @@ export default function Home() {
 
   // --- FILTER OPTION FOR PROJECTS BELOW ---
   const [sortOrder, setSortOrder] = useState<"recent" | "old">("recent");
+  
   const projects = [
+    {
+      title : "Thala - Intelligent Incident Management System",
+      image : "/thala.jpg", // Make sure to add this image to your public folder
+      link  : "https://github.com/Kishore-1803/Thala", // Updated based on resume context
+      desc  : "An autonomous incident agent using Llama 3.3 and Kafka to detect and classify tickets. Integrated Elasticsearch and AWS Textract for semantic retrieval and OCR capabilities.",
+      tags  : ["GenAI", "AWS Bedrock", "Kafka", "Elasticsearch", "Flask"],
+      year  : 2025,
+    },
     {
       title : "Bridging Correlation and Causation - An Explainable ML Approach",
       image : "/casualML.jpg",
@@ -104,6 +113,7 @@ export default function Home() {
       year: 2024,
     },
   ];
+  
   const sortedProjects = sortOrder === "recent"
   ? [...projects]
   : [...projects].reverse();
@@ -591,7 +601,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Achievements & Hackathons Section (New Added) */}
+        {/* Achievements & Hackathons Section */}
         <section 
           id="achievements" 
           className={`${styles.section} ${styles.experience}`} // Reusing experience style class for consistent timeline look
@@ -606,7 +616,29 @@ export default function Home() {
           <div className={styles.experienceContainer}>
             <div className={styles.experienceTimeline}>
               
-              {/* Item 1 */}
+              {/* Item 1 - New Added */}
+              <div className={styles.timelineItem}>
+                <div className={styles.timelineDate}>
+                  <span className={styles.dateText}>2025</span>
+                </div>
+                <div className={styles.timelineConnector}>
+                  <div className={styles.timelineDot}></div>
+                  <div className={styles.timelineLine}></div>
+                </div>
+                <div className={styles.experienceCard}>
+                  <div className={styles.experienceHeader}>
+                    <div className={styles.companyInfo}>
+                      <h3 className={styles.jobTitle}>Runner Up - Superhack 2025</h3>
+                      <h4 className={styles.companyName}>Thala: Intelligent Incident Management System</h4>
+                    </div>
+                    <div className={styles.companyLogo}>
+                      <span style={{fontSize: "24px"}}>🥈</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Item 2 */}
               <div className={styles.timelineItem}>
                 <div className={styles.timelineDate}>
                   <span className={styles.dateText}>2025</span>
@@ -622,13 +654,13 @@ export default function Home() {
                       <h4 className={styles.companyName}>SatyaCheck: AI-based WhatsApp fact-checking app</h4>
                     </div>
                     <div className={styles.companyLogo}>
-                       <span style={{fontSize: "24px"}}>🏅</span>
+                        <span style={{fontSize: "24px"}}>🏅</span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Item 2 */}
+              {/* Item 3 */}
               <div className={styles.timelineItem}>
                 <div className={styles.timelineDate}>
                   <span className={styles.dateText}>2024</span>
@@ -653,7 +685,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-       
+        
         {/* Social Connect Section */}
         <section 
           id="social" 
@@ -669,6 +701,7 @@ export default function Home() {
           {/* Call-to-Action */}
           <div className={styles.contactCTA}>
             <p className={styles.contactText}>
+              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.  
               I’m always open to exciting opportunities, collaborations, or just a friendly chat.  
               Send me a message, and let’s make something amazing together.
             </p>
