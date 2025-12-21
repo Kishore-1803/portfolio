@@ -5,6 +5,110 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "./styles/Home.module.css";
 
+// --- BACKGROUND ANIMATION COMPONENT ---
+const ParticleBackground = ({ theme }: { theme: string }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let particles: any[] = [];
+    const particleCount = 50; // Density of dots
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+
+      constructor() {
+        this.x = Math.random() * canvas!.width;
+        this.y = Math.random() * canvas!.height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * 2 + 1;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Bounce off edges
+        if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
+      }
+
+      draw() {
+        if (!ctx) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        // Change color based on theme
+        ctx.fillStyle = theme === 'dark' 
+          ? "rgba(100, 255, 218, 0.3)" // Cyan for dark mode
+          : "rgba(37, 99, 235, 0.3)";  // Blue for light mode
+        ctx.fill();
+      }
+    }
+
+    const init = () => {
+      particles = [];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    };
+
+    const animate = () => {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((particle, index) => {
+        particle.update();
+        particle.draw();
+
+        // Draw lines between close particles
+        for (let j = index; j < particles.length; j++) {
+          const dx = particles[j].x - particle.x;
+          const dy = particles[j].y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 150) {
+            ctx.beginPath();
+            // Line color based on theme
+            const color = theme === 'dark' ? "100, 255, 218" : "37, 99, 235";
+            ctx.strokeStyle = `rgba(${color}, ${0.1 - distance / 1500})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particle.x, particle.y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(animate);
+    };
+
+    init();
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
+  }, [theme]); // Re-run if theme changes
+
+  return <canvas ref={canvasRef} className={styles.particleCanvas} />;
+};
+
 export default function Home() {
   const [theme, setTheme] = useState("dark");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -49,18 +153,67 @@ export default function Home() {
   ];
   const sortedProjects = sortOrder === "recent" ? [...projects] : [...projects].reverse();
 
-  // Skills
+  // Skills Data - Updated based on Resume.pdf
   const skillsData = [
-    { category: "Languages", items: [{name: "C++", icon: "/c-.png"}, {name: "Python", icon: "/python.png"}, {name: "Java", icon: "/java.png"}, {name: "C", icon: "/c.png"}] },
-    { category: "Frontend", items: [{name: "HTML5", icon: "/html-5.png"}, {name: "CSS3", icon: "/css-3.png"}, {name: "JavaScript", icon: "/js.png"}, {name: "React.js", icon: "/react.png"}, {name: "Next.js", icon: "/next.png"}] },
-    { category: "Backend", items: [{name: "Node.js", icon: "/node.png"}, {name: "Express.js", icon: "/express.png"}, {name: "Flask", icon: "/flask.png"}, {name: "FastAPI", icon: "/FastAPI.png"}] },
-    { category: "Database", items: [{name: "MySQL", icon: "/sql.png"}, {name: "MongoDB", icon: "/mongodb.png"}, {name: "Neo4j", icon: "/neo4j.png"}, {name: "PostgreSQL", icon: "/postgresql.png"}] },
-    { category: "AI/ML Frameworks", items: [{name: "TensorFlow", icon: "/tensorflow.png"}, {name: "PyTorch", icon: "/pytorch.png"}, {name: "Classifiers", icon: "/classifiers.png"}, {name: "Regressors", icon: "/regressors.png"}, {name: "Neural Networks", icon: "/neural network.png"}] }
+    { 
+      category: "Programming", 
+      items: [
+        {name: "Python", icon: "/python.png"}, 
+        {name: "C++", icon: "/c-.png"}, 
+        {name: "Java", icon: "/java.png"}
+      ] 
+    },
+    { 
+      category: "AI & ML", 
+      items: [
+        {name: "PyTorch", icon: "/pytorch.png"}, 
+        {name: "TensorFlow", icon: "/tensorflow.png"}, 
+        {name: "Computer Vision", icon: "/view.png"}, 
+        {name: "LLMs & RAG", icon: "/RAG.png"}, // Grouped LLMs and RAG
+        {name: "NumPy", icon: "/numpy.png"},
+        {name: "Pandas", icon: "/pandas.png"},
+        {name: "Scikit-Learn", icon: "/scikit-learn.png"},
+        {name: "keras", icon: "/keras.png"},
+        {name: "Matplotlib", icon: "/matplotlib.png"}
+      ] 
+    },
+    { 
+      category: "Web Development", 
+      items: [
+        {name: "Next.js", icon: "/next.png"}, 
+        {name: "React", icon: "/react.png"}, 
+        {name: "FastAPI", icon: "/FastAPI.png"}, 
+        {name: "Flask", icon: "/flask.png"}, 
+        {name: "Express.js", icon: "/express.png"}
+      ] 
+    },
+    { 
+      category: "Databases", 
+      items: [
+        {name: "PostgreSQL", icon: "/postgresql.png"}, 
+        {name: "MongoDB", icon: "/mongodb.png"}, 
+        {name: "MySQL", icon: "/sql.png"}, 
+        {name: "Pinecone", icon: "/pinecone.png"} // Generic DB icon for Pinecone if specific one missing
+      ] 
+    },
+    { 
+      category: "Tools & Cloud", 
+      items: [
+        {name: "Git & GitHub", icon: "/github.png"}, 
+        {name: "Docker", icon: "/docker.png"}, // Ensure you have this icon
+        {name: "Kafka", icon: "/kafka.png"},   // Ensure you have this icon
+        {name: "AWS", icon: "/aws.png"}        // Ensure you have this icon
+      ] 
+    }
   ];
 
   return (
     <div className={styles.container}>
       <Head><title>Kishore B | Portfolio</title><meta name="viewport" content="width=device-width, initial-scale=1" /></Head>
+      
+      {/* Background Animation */}
+      <ParticleBackground theme={theme} />
+
       <div ref={cursorDotRef} className="cursor-dot"></div>
       <div ref={cursorOutlineRef} className="cursor-outline"></div>
 
