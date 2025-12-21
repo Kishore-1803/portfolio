@@ -200,9 +200,10 @@ export default function Home() {
       category: "Tools & Cloud", 
       items: [
         {name: "Git & GitHub", icon: "/github.png"}, 
-        {name: "Docker", icon: "/docker.png"}, // Ensure you have this icon
-        {name: "Kafka", icon: "/kafka.png"},   // Ensure you have this icon
-        {name: "AWS", icon: "/aws.png"}        // Ensure you have this icon
+        {name: "Docker", icon: "/docker.png"}, 
+        {name: "Kafka", icon: "/kafka.png"},   
+        {name: "AWS", icon: "/aws.png"},
+        {name: "Azure", icon: "/azure.png"}   
       ] 
     }
   ];
