@@ -1,6 +1,23 @@
 /* Home.module.css */
 
-.container { min-height: 100vh; position: relative; background: var(--bg-page); }
+.container { 
+  min-height: 100vh; 
+  position: relative; 
+  background: var(--bg-page); 
+  /* Make sure container is transparent enough to show particles if necessary, 
+     though particles are inside container, so z-index handles it */
+}
+
+/* --- PARTICLE ANIMATION --- */
+.particleCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Behind main content which will be relative */
+  pointer-events: none;
+}
 
 /* --- NAVBAR --- */
 .navbar {
@@ -138,7 +155,7 @@
 .scrollBtn:hover { background: var(--accent-primary); color: #fff; transform: translateY(-3px); }
 
 /* --- HERO --- */
-.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 140px 20px 80px; }
+.hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 140px 20px 80px; position: relative; z-index: 1; }
 .heroContent { max-width: 1200px; width: 100%; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
 .heroBadge { display: inline-block; padding: 8px 16px; background: rgba(37, 99, 235, 0.1); color: var(--accent-primary); border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
 .heroTitle { font-size: 3.5rem; line-height: 1.2; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
@@ -152,7 +169,7 @@
 .heroImageWrapper { position: relative; width: 100%; display: flex; justify-content: center; }
 .heroImg { width: 100%; max-width: 450px; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 30px; box-shadow: 20px 20px 0 var(--border-light); transition: transform 0.4s; }
 .heroImg:hover { transform: scale(1.02) rotate(-2deg); box-shadow: 25px 25px 0 var(--accent-primary); }
-.section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+.section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
 .sectionHeader { margin-bottom: 60px; }
 .preTitle { color: var(--accent-primary); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; display: block; margin-bottom: 10px; }
 .title { font-size: 2.8rem; font-weight: 800; color: var(--text-main); }
@@ -212,10 +229,6 @@
 .contactBox { background: var(--bg-card); border: 1px solid var(--border-light); border-radius: 30px; padding: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; box-shadow: var(--shadow-card); }
 .socialRow { display: flex; gap: 15px; margin-top: 30px; }
 
-/* FIX: We keep the background neutral (white/card color) on hover.
-   We add a glow and border instead of changing background color.
-   This prevents the "White Circle" issue on colored icons.
-*/
 .socialBtn { 
   width: 50px; 
   height: 50px; 
@@ -229,13 +242,12 @@
 }
 
 .socialBtn:hover { 
-  background: var(--bg-card); /* Keep background same */
+  background: var(--bg-card);
   border-color: var(--accent-primary); 
-  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2); /* Blue Glow */
+  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
   transform: translateY(-5px); 
 }
 
-/* Ensure image stays clean - no filters applied */
 .socialBtn img { 
   width: 24px; 
   height: 24px; 
@@ -246,7 +258,6 @@
 
 .socialBtn:hover img { 
   transform: scale(1.1); 
-  /* No filter property here */
 }
 
 .formInput, .formText { width: 100%; padding: 15px; background: var(--bg-page); border: 1px solid var(--border-light); border-radius: 10px; color: var(--text-main); font-family: inherit; margin-bottom: 15px; }
