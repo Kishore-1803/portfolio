@@ -102,7 +102,7 @@ Open **[http://localhost:3000](http://localhost:3000)** in your browser to view 
 
 ## 📁 Project Structure
 
-```text
+```markdown
 portfolio/
 ├── public/                  # Static assets (images, icons, resume)
 └── src/
@@ -115,8 +115,6 @@ portfolio/
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](LICENSE) file for more details.
-
-```
 
 ---
 
