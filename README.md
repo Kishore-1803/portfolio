@@ -125,6 +125,3 @@ See the [LICENSE](LICENSE) file for more details.
 ---
 
 ⭐ *If you like this portfolio, consider starring the repository!* ⭐
-
-Just say the word 🚀
-```
