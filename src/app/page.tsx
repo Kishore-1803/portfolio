@@ -1,742 +1,429 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import Head from "next/head";
-import Image from "next/image";
+import { useEffect, useRef, useLayoutEffect, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "@studio-freight/lenis";
+import { FiSun, FiMoon, FiDownload, FiArrowRight } from "react-icons/fi"; // Added Icons
 import styles from "./styles/Home.module.css";
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState("home");
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const sectionsRef = useRef<{ [key: string]: HTMLElement | null }>({});
-  
-  // Register section refs
-  const registerSection = (id: string, ref: HTMLElement | null) => {
-    sectionsRef.current[id] = ref;
-  };
+  const [theme, setTheme] = useState("dark"); // Theme State
 
-  // Handle intersection observer for sections
+  const containerRef = useRef<HTMLDivElement>(null);
+  const cursorDotRef = useRef<HTMLDivElement>(null);
+  const cursorOutlineRef = useRef<HTMLDivElement>(null);
+  const heroTextRef = useRef<HTMLHeadingElement>(null);
+  const toggleRef = useRef<HTMLDivElement>(null);
+
+  // --- DATA ---
+  const projects = [
+    { 
+      id: "01",
+      title: "THALA", 
+      fullName: "Thala - Intelligent Incident Management System",
+      category: "GenAI System", 
+      desc: "An autonomous incident agent using Llama 3.3 and Kafka to detect and classify tickets. Integrated Elasticsearch and AWS Textract.", 
+      image: "/Thala.jpeg",
+      link: "https://github.com/Kishore-1803/Thala"
+    },
+    { 
+      id: "02",
+      title: "CAUSAL ML", 
+      fullName: "Bridging Correlation and Causation",
+      category: "Research", 
+      desc: "ML project predicting using both traditional and causal-informed modeling approaches.", 
+      image: "/casualML.jpg",
+      link: "https://github.com/Kishore-1803/Bridging-Correlation-and-Causation-An-Explainable-ML-Approach"
+    },
+    { 
+      id: "03",
+      title: "LOAN RISK", 
+      fullName: "Loan Default Risk Prediction",
+      category: "FinTech AI", 
+      desc: "Robust loan default prediction system using Bayesian Neural Networks (BNN).", 
+      image: "/BNN.jpg",
+      link: "https://github.com/Kishore-1803/Loan-Default-Risk-Prediction-Using-Bayesian-Neural-Network"
+    },
+    { 
+      id: "04",
+      title: "YOLO XAI", 
+      fullName: "XAI Driven Robustness Analysis For YOLO",
+      category: "Vision Intelligence", 
+      desc: "Anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM and Saliency Maps.", 
+      image: "/YOLO.jpg",
+      link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO"
+    },
+    { 
+      id: "05",
+      title: "SYNGENX", 
+      fullName: "SyngenX - Developer Analytics",
+      category: "Dev Analytics", 
+      desc: "AI-powered developer performance analytics system connecting to GitHub.", 
+      image: "/SyngenX.jpg",
+      link: "https://github.com/Kishore-1803/SyngenX"
+    },
+    { 
+      id: "06",
+      title: "XENDRIX", 
+      fullName: "XendrixAI - Multimodal Assistant",
+      category: "Multimodal AI", 
+      desc: "Multimodal AI assistant combining conversational AI, document analysis, and image generation.", 
+      image: "/Xendrix.jpg",
+      link: "https://github.com/Kishore-1803/XendrixAI"
+    },
+    { 
+      id: "07",
+      title: "PERSPECTAI", 
+      fullName: "PerspectAI - Resume Analyzer",
+      category: "NLP", 
+      desc: "AI Powered Resume Analyzer which provides insights of your Resume.", 
+      image: "/AI_Resume.png",
+      link: "https://github.com/Kishore-1803/PerspectAI"
+    },
+    { 
+      id: "08",
+      title: "AUDIOAURA", 
+      fullName: "AudioAura - Podcast Generator",
+      category: "Voice AI", 
+      desc: "AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.", 
+      image: "/podcast.jpg",
+      link: "https://github.com/Kishore-1803/AudioAura"
+    },
+  ];
+
+  const skillsData = [
+    { category: "AI & ML", items: ["PyTorch", "TensorFlow", "LLMs & RAG", "Computer Vision", "NumPy", "Pandas"] },
+    { category: "Web Dev", items: ["Next.js", "React", "FastAPI", "Flask", "Express.js"] },
+    { category: "Cloud & Ops", items: ["AWS", "Azure", "Docker", "Kafka", "Git"] },
+    { category: "Languages", items: ["Python", "C++"] }
+  ];
+
+  const experience = [
+    {
+      year: "2025",
+      role: "Software Developer Intern",
+      company: "TechZeeb",
+      desc: [
+        "Built 'Kovai Natural Farmers' platform bridging organic farmers to customers.",
+        "Optimized backend APIs reducing data response time by 40%.",
+        "Designed responsive UI enhancing cross-device usability."
+      ]
+    }
+  ];
+
+  const achievements = [
+    { year: "2025", name: "SUPERHACK", desc: "Runner Up" },
+    { year: "2025", name: "BUILD WITH INDIA", desc: "Top 20%" },
+    { year: "2024", name: "PROVIDENCE LEAP IDEATHON", desc: "Semifinalist" }
+  ];
+
+
+  // THEME EFFECT
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 300;
-      
-      // Find which section is currently visible
-      for (const section in sectionsRef.current) {
-        const element = sectionsRef.current[section];
-        if (!element) continue;
-        
-        const offsetTop = element.offsetTop;
-        const offsetHeight = element.offsetHeight;
-        
-        if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-          setActiveSection(section);
-          break;
-        }
-      }
-    };
+    document.documentElement.setAttribute('data-theme', theme);
+    if (toggleRef.current) {
+      gsap.to(toggleRef.current, { 
+        x: theme === 'dark' ? 0 : 30, 
+        duration: 0.4, 
+        ease: "power2.out" 
+      });
+    }
+  }, [theme]);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  useLayoutEffect(() => {
+    // 1. Initialize Lenis
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+    });
+    const raf = (time: number) => {
+      lenis.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // HERO PARALLAX
+      gsap.to(heroTextRef.current, {
+        scrollTrigger: { trigger: document.body, start: "top top", end: "100vh top", scrub: 1 },
+        y: -150, opacity: 0, scale: 1.1
+      });
+
+      // TEXT REVEALS (Big Statement)
+      gsap.utils.toArray(`.${styles.revealText}`).forEach((el: any) => {
+         gsap.from(el, {
+           scrollTrigger: { trigger: el, start: "top 85%", end: "top 60%", scrub: true },
+           opacity: 0.1, y: 20
+         });
+      });
+
+      // ABOUT CONTENT FADE UP
+      gsap.from(`.${styles.bioText}`, {
+        scrollTrigger: { trigger: `.${styles.bioText}`, start: "top 85%" },
+        y: 40, opacity: 0, duration: 1, ease: "power3.out"
+      });
+      
+      gsap.utils.toArray(`.${styles.statItem}`).forEach((el: any, i) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: `.${styles.statsGrid}`, start: "top 85%" },
+          y: 40, opacity: 0, duration: 0.8, delay: i * 0.1, ease: "back.out(1.7)"
+        });
+      });
+
+      // SKILLS STAGGER
+      gsap.utils.toArray(`.${styles.skillCategory}`).forEach((el: any) => {
+        gsap.from(el, {
+           scrollTrigger: { trigger: el, start: "top 85%" },
+           y: 50, opacity: 0, duration: 1, ease: "power3.out"
+        });
+      });
+
+      // EXPERIENCE ITEMS SLIDE IN
+      gsap.utils.toArray(`.${styles.expItem}`).forEach((el: any) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 85%" },
+          x: -50, opacity: 0, duration: 1, ease: "power3.out"
+        });
+      });
+
+      // PROJECT TEXT REVEAL
+      gsap.utils.toArray(`.${styles.projectInfo}`).forEach((el: any) => {
+         gsap.from(el, {
+            scrollTrigger: { trigger: el, start: "top 80%" },
+            y: 50, opacity: 0, duration: 1, ease: "power3.out"
+         });
+      });
+
+      // IMAGE PARALLAX
+      gsap.utils.toArray(`.${styles.projectImage}`).forEach((img: any) => {
+        gsap.to(img, {
+          yPercent: 20,
+          ease: "none",
+          scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+        });
+      });
+
+    }, containerRef);
+    
+    // Custom cursor movement
+    const moveCursor = (e: MouseEvent) => {
+      // Use duration 0 for instant, lag-free movement 
+      gsap.to(cursorDotRef.current, { x: e.clientX, y: e.clientY, duration: 0 });
+    };
+    window.addEventListener("mousemove", moveCursor);
+
+    // Cursor hover effects
+    const onHover = () => document.body.classList.add("hovering");
+    const onLeave = () => document.body.classList.remove("hovering");
+
+    const links = document.querySelectorAll("a, button, .projectLink");
+    links.forEach(link => {
+       link.addEventListener("mouseenter", onHover);
+       link.addEventListener("mouseleave", onLeave);
+    });
+
+    return () => {
+      lenis.destroy();
+      ctx.revert();
+      window.removeEventListener("mousemove", moveCursor);
+      links.forEach(link => {
+         link.removeEventListener("mouseenter", onHover);
+         link.removeEventListener("mouseleave", onLeave);
+      });
+    };
   }, []);
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
-
   return (
-    <div className={`${styles.container} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
-      <Head>
-        <title>Kishore's Portfolio</title>
-        <meta name="description" content="Portfolio of Kishore B - AI Engineer, Full Stack Developer, and Software Engineer" />
-        <meta name="keywords" content="portfolio, web development, AI, software engineer, full stack" />
-        <link rel="icon" href="/favicon.ico" />
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-      </Head>
+    <div ref={containerRef} className={styles.main}>
+      <div className={styles.bgGlow}></div>
+      <div className={styles.bgGrain}></div>
+      <div ref={cursorDotRef} className="cursor-dot"></div>
+      <div ref={cursorOutlineRef} className="cursor-outline"></div>
 
-      {/* Side Navigation */}
-      <nav className={styles.sideNav}>
-        <div className={styles.themeToggle} onClick={toggleTheme}>
-          {isDarkMode ? "☀️" : "🌙"}
-        </div>
-        
-        <div className={styles.navItems}>
-          <a 
-            href="#home" 
-            className={`${styles.navItem} ${activeSection === "home" ? styles.active : ""}`}
-            aria-label="Home"
-          >
-            <span className={styles.navIcon}>🏠</span>
-            <span className={styles.navText}>Home</span>
-          </a>
-          <a 
-            href="#about" 
-            className={`${styles.navItem} ${activeSection === "about" ? styles.active : ""}`}
-            aria-label="About"
-          >
-            <span className={styles.navIcon}>👤</span>
-            <span className={styles.navText}>About</span>
-          </a>
-          <a 
-            href="#skills" 
-            className={`${styles.navItem} ${activeSection === "skills" ? styles.active : ""}`}
-            aria-label="Skills"
-          >
-            <span className={styles.navIcon}>🛠️</span>
-            <span className={styles.navText}>Skills</span>
-          </a>
-          <a 
-            href="#experience" 
-            className={`${styles.navItem} ${activeSection === "experience" ? styles.active : ""}`}
-            aria-label="Experience"
-          >
-            <span className={styles.navIcon}>💼</span>
-            <span className={styles.navText}>Experience</span>
-          </a>
-          <a 
-            href="#projects" 
-            className={`${styles.navItem} ${activeSection === "projects" ? styles.active : ""}`}
-            aria-label="Projects"
-          >
-            <span className={styles.navIcon}>📂</span>
-            <span className={styles.navText}>Projects</span>
-          </a>
-          <a 
-            href="#social" 
-            className={`${styles.navItem} ${activeSection === "social" ? styles.active : ""}`}
-            aria-label="Connect"
-          >
-            <span className={styles.navIcon}>🔗</span>
-            <span className={styles.navText}>Connect</span>
-          </a>
-        </div>
+      {/* FIXED NAV */}
+      <nav className={styles.navContainer}>
+         <div className={styles.navLogo}>
+            <h2 className={styles.headerName}>KISHORE</h2>
+            <span className={styles.headerRole}>STUDENT</span>
+         </div>
+         <div className={styles.navLinks}>
+            <a href="#about" className={styles.navLink}>About</a>
+            <a href="#skills" className={styles.navLink}>Stack</a>
+            <a href="#experience" className={styles.navLink}>Exp</a>
+            <a href="#work" className={styles.navLink}>Work</a>
+            <a href="#contact" className={styles.navLink}>Contact</a>
+            <a href="/Resume.pdf" target="_blank" className={styles.navLink}>Resume</a>
+
+            {/* THEME TOGGLE */}
+            <div className={styles.themeToggle} onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}>
+               <div ref={toggleRef} className={styles.toggleKnob}>
+                  {theme === "dark" ? <FiMoon className={styles.toggleIcon} /> : <FiSun className={styles.toggleIcon} />}
+               </div>
+            </div>
+         </div>
       </nav>
 
-      {/* Mobile Navigation */}
-      <div className={styles.mobileNav}>
-        <div className={styles.mobileNavHeader}>
-          <span className={styles.mobileLogo}>KB</span>
-          <button 
-            className={styles.mobileMenuBtn}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? "✕" : "☰"}
-          </button>
+      {/* HERO */}
+      <header className={styles.heroSection}>
+        <div className={styles.heroContent}>
+           <p className={styles.heroIntro}>I'M KISHORE BALAJI</p>
+           <h1 ref={heroTextRef} className={styles.hugeText}>
+             HELLO<br/>WORLD.
+           </h1>
+           <div className={styles.scrollIndicator}>SCROLL TO EXPLORE</div>
         </div>
-        
-        {menuOpen && (
-          <div className={styles.mobileMenu}>
-            <a href="#home" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Home</a>
-            <a href="#about" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>About</a>
-            <a href="#skills" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Skills</a>
-            <a href="#experience" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Experience</a>
-            <a href="#projects" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Projects</a>
-            <a href="#social" className={styles.mobileMenuItem} onClick={() => setMenuOpen(false)}>Connect</a>
-            <button className={styles.themeToggleBtn} onClick={toggleTheme}>
-              {isDarkMode ? "Switch to Light Mode ☀️" : "Switch to Dark Mode 🌙"}
-            </button>
-          </div>
-        )}
-      </div>
+      </header>
 
-      <main className={styles.content}>
-        {/* Hero Section */}
-        <section 
-          id="home" 
-          className={styles.hero}
-          ref={(el) => registerSection("home", el)}
-        >
-          <div className={styles.heroContent}>
-            <div className={styles.heroLeft}>
-              <div className={styles.heroGreeting}>Hello, World!</div>
-              <h1 className={styles.heroTitle}>I'm <span className={styles.highlight}>Kishore B</span></h1>
-              <div className={styles.roleWrapper}>
-                <div className={styles.roleSlider}>
-                  <div className={styles.role}>Student</div>
-                  <div className={styles.role}>AI Engineer</div>
-                  <div className={styles.role}>Full Stack Developer</div>
-                </div>
-              </div>
-              <div className={styles.heroCTA}>
-                <a href="/Resume.pdf" className={styles.primaryBtn} target="_blank" rel="noopener noreferrer">
-                  Download Resume
-                </a>
-                <a href="#projects" className={styles.secondaryBtn}>
-                  View Projects
-                </a>
-              </div>
+      {/* ABOUT */}
+      <section id="about" className={styles.aboutSection}>
+         <div className={styles.aboutLeft}>
+            <div className={styles.bigStatement}>
+                <p className={styles.revealText}>I BUILD SYSTEMS THAT THINK.</p>
+                <p className={styles.revealText}>TURNING BLANK EDITORS INTO</p>
+                <p className={styles.revealText}>INTELLIGENT ECOSYSTEMS.</p>
             </div>
-            <div className={styles.heroRight}>
-              <div className={styles.profileImgContainer}>
-                <Image
-                  src="/me.jpg"
-                  alt="Kishore"
-                  width={320}
-                  height={320}
-                  className={styles.profileImg}
-                  priority
-                />
-                <div className={styles.profileImgShape}></div>
-                <div className={styles.profileImgDecoration}></div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.scrollIndicator}>
-            <div className={styles.mouse}>
-              <div className={styles.wheel}></div>
-            </div>
-            <div className={styles.scrollText}>Scroll Down</div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section 
-          id="about" 
-          className={`${styles.section} ${styles.about}`}
-          ref={(el) => registerSection("about", el)}
-        >
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionPreTitle}>Who Am I</span>
-            <h2 className={styles.sectionTitle}>About Me</h2>
-            <div className={styles.sectionDivider}></div>
-          </div>
-          
-          <div className={styles.aboutContent}>
-           <p className={styles.aboutText}>
-              I’m a B.Tech AI student passionate about building intelligent systems that solve real-world problems.<br />
-              I specialize in AI, web development, and creative applications of machine learning.<br />
-              Beyond academics, I contribute to open-source projects and enjoy experimenting with emerging technologies.<br />
-              My mission: combine innovation and practicality to create solutions that make a real impact.
-           </p>
-
-          
-            <div className={styles.aboutStats}>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>5th</div>
-                <div className={styles.statLabel}>Semester</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>B.Tech</div>
-                <div className={styles.statLabel}>Degree</div>
-              </div>
-              <div className={styles.statItem}>
-                <div className={styles.statNumber}>CSE(AI)</div>
-                <div className={styles.statLabel}>Specialization</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        <section 
-          id="skills" 
-          className={`${styles.section} ${styles.skills}`}
-          ref={(el) => registerSection("skills", el)}
-        >
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionPreTitle}>What I Know</span>
-            <h2 className={styles.sectionTitle}>My Skills</h2>
-            <div className={styles.sectionDivider}></div>
-          </div>
-          
-          <div className={styles.skillsGrid}>
-            {/* Languages */}
-            <div className={styles.skillCategory}>
-              <div className={styles.skillCategoryHeader}>
-                <div className={styles.categoryIcon}>
-                  <img
-                    src="/programming.png"
-                    alt="Languages Icon"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className={styles.skillCategoryTitle}>Languages</h3>
-              </div>
-              <div className={styles.skillItems}>
-                <div className={styles.skillItem}>
-                  <img src="/c-.png" alt="C++ Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>C++</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/python.png" alt="Python Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Python</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/java.png" alt="Java Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Java</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/c.png" alt="C Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>C</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Frontend */}
-            <div className={styles.skillCategory}>
-              <div className={styles.skillCategoryHeader}>
-                <div className={styles.categoryIcon}>
-                  <img
-                    src="/frontend.png"
-                    alt="Frontend Icon"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className={styles.skillCategoryTitle}>Frontend</h3>
-              </div>
-              <div className={styles.skillItems}>
-                <div className={styles.skillItem}>
-                  <img src="/html-5.png" alt="HTML Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>HTML5</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/css-3.png" alt="CSS Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>CSS3</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/js.png" alt="JavaScript Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>JavaScript</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/react.png" alt="React Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>React.js</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/next.png" alt="Next Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Next.js</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Backend */}
-            <div className={styles.skillCategory}>
-              <div className={styles.skillCategoryHeader}>
-                <div className={styles.categoryIcon}>
-                  <img
-                    src="/backend.png"
-                    alt="Backend Icon"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className={styles.skillCategoryTitle}>Backend</h3>
-              </div>
-              <div className={styles.skillItems}>
-                <div className={styles.skillItem}>
-                  <img src="/node.png" alt="Node.js Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Node.js</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/express.png" alt="Express Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Express.js</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/flask.png" alt="Express Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Flask</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/FastAPI.png" alt="Express Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>FastAPI</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Database */}
-            <div className={styles.skillCategory}>
-              <div className={styles.skillCategoryHeader}>
-                <div className={styles.categoryIcon}>
-                  <img
-                    src="/database.png"
-                    alt="Database Icon"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className={styles.skillCategoryTitle}>Database</h3>
-              </div>
-              <div className={styles.skillItems}>
-                <div className={styles.skillItem}>
-                  <img src="/sql.png" alt="MySQL Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>MySQL</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/mongodb.png" alt="MongoDB Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>MongoDB</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/neo4j.png" alt="Neo4j Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Neo4j</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/postgresql.png" alt="PostgreSQL Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>PostgreSQL</span>
-                </div>
-              </div>
-            </div>
-
-            {/* AI/ML Frameworks */}
-            <div className={styles.skillCategory}>
-              <div className={styles.skillCategoryHeader}>
-                <div className={styles.categoryIcon}>
-                  <img
-                    src="/aiml.png"
-                    alt="AI/ML Icon"
-                    width={40}
-                    height={40}
-                  />
-                </div>
-                <h3 className={styles.skillCategoryTitle}>AI/ML Frameworks</h3>
-              </div>
-              <div className={styles.skillItems}>
-                <div className={styles.skillItem}>
-                  <img src="/tensorflow.png" alt="TensorFlow Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>TensorFlow</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/pytorch.png" alt="PyTorch Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>PyTorch</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/classifiers.png" alt="Classifiers Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Classifiers</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/regressors.png" alt="Regressors Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Regressors</span>
-                </div>
-                <div className={styles.skillItem}>
-                  <img src="/neural network.png" alt="Neural Networks Icon" width={24} height={24} className={styles.skillItemImg} />
-                  <span>Neural Networks</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Section */}
-        <section 
-          id="experience" 
-          className={`${styles.section} ${styles.experience}`}
-          ref={(el) => registerSection("experience", el)}
-        >
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionPreTitle}>Where I've Worked</span>
-            <h2 className={styles.sectionTitle}>Experience</h2>
-            <div className={styles.sectionDivider}></div>
-          </div>
-          
-          <div className={styles.experienceContainer}>
-            <div className={styles.experienceTimeline}>
-              <div className={styles.timelineItem}>
-                <div className={styles.timelineDate}>
-                  <span className={styles.dateText}>2025</span>
-                  <span className={styles.dateSubtext}>Present</span>
-                </div>
-                <div className={styles.timelineConnector}>
-                  <div className={styles.timelineDot}></div>
-                  <div className={styles.timelineLine}></div>
-                </div>
-                <div className={styles.experienceCard}>
-                  <div className={styles.experienceHeader}>
-                    <div className={styles.companyInfo}>
-                      <h3 className={styles.jobTitle}>Software Developer Intern</h3>
-                      <h4 className={styles.companyName}>TechZeeb</h4>
-                      <span className={styles.duration}>June 2025 - August 2025</span>
-                      <span className={styles.location}>Remote</span>
-                    </div>
-                    <div className={styles.companyLogo}>
-                      <div className={styles.logoPlaceholder}>TZ</div>
-                    </div>
-                  </div>
-                  <div className={styles.experienceDescription}>
-                    <p>Building innovative web solutions to connect organic farmers with local customers through scalable platforms and optimized backend systems.</p>
-                    <ul className={styles.achievementsList}>
-                      <li>Built "Kovai Natural Farmers" - a web platform bridging organic farmers and local customers</li>
-                      <li>Developed scalable backend APIs with JavaScript and phpMyAdmin; improved data response time by 40%</li>
-                      <li>Designed responsive UI using HTML and CSS, enhancing cross-device usability and UX</li>
-                      <li>Working remotely to deliver high-quality software solutions for agricultural technology</li>
-                    </ul>
-                  </div>
-                  <div className={styles.techStack}>
-                    <span className={styles.techTag}>JavaScript</span>
-                    <span className={styles.techTag}>phpMyAdmin</span>
-                    <span className={styles.techTag}>HTML5</span>
-                    <span className={styles.techTag}>CSS3</span>
-                    <span className={styles.techTag}>Web Development</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section 
-          id="projects" 
-          className={`${styles.section} ${styles.projects}`}
-          ref={(el) => registerSection("projects", el)}
-        >
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionPreTitle}>What I've Built</span>
-            <h2 className={styles.sectionTitle}>Projects</h2>
-            <div className={styles.sectionDivider}></div>
-          </div>
-          
-          <div className={styles.projectsContainer}>
-            {/* Project 1 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/AI_Resume.png" 
-                  alt="PerspectAI Project" 
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/PerspectAI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>PerspectAI</h3>
-                <p className={styles.projectDesc}>
-                  An AI Powered Resume Analyzer which provides insights of your Resume.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>NLP</span>
-                  <span className={styles.projectTag}>Analytics</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 2 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/podcast.jpg" 
-                  alt="AudioAura Project"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/AudioAura"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>AudioAura</h3>
-                <p className={styles.projectDesc}>
-                  An AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>React</span>
-                  <span className={styles.projectTag}>Express</span>
-                  <span className={styles.projectTag}>MongoDB</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Project 3 */}
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/Xendrix.jpg" 
-                  alt="XendrixAI"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/XendrixAI"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>XendrixAI</h3>
-                <p className={styles.projectDesc}>
-                   An intelligent, multimodal AI assistant. Xendrix combines conversational AI, document analysis, multilingual capabilities, data visualization, and image generation to provide a powerful interactive assistant.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>AI</span>
-                  <span className={styles.projectTag}>Multimodal</span>
-                  <span className={styles.projectTag}>NLP</span>
-                  <span className={styles.projectTag}>Data Visualization</span>
-                  <span className={styles.projectTag}>Image Generation</span>
-                  <span className={styles.projectTag}>Conversational AI</span>
-                  <span className={styles.projectTag}>Python</span>
-                  <span className={styles.projectTag}>Next.js</span>
-                </div>
-              </div>
-            </div>
-
-            <div className={styles.projectCard}>
-              <div className={styles.projectImage}>
-                <img 
-                  src="/SyngenX.jpg" 
-                  alt="SyngenX"
-                  className={styles.projectImg}
-                />
-                <div className={styles.projectOverlay}>
-                  <a
-                    href="https://github.com/Kishore-1803/SyngenX"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.projectLink}
-                  >
-                    View on GitHub
-                  </a>
-                </div>
-              </div>
-              <div className={styles.projectInfo}>
-                <h3 className={styles.projectTitle}>SyngenX</h3>
-                <p className={styles.projectDesc}>
-                  An AI-powered developer performance analytics system. SyngenX connects to GitHub to deliver intelligent insights on individual strengths, team metrics, productivity, and criticality handling using data from real contributions.
-                </p>
-                <div className={styles.projectTags}>
-                  <span className={styles.projectTag}>GenAI</span>
-                  <span className={styles.projectTag}>Developer Analytics</span>
-                  <span className={styles.projectTag}>FastAPI</span>
-                  <span className={styles.projectTag}>Next.js</span>
-                  <span className={styles.projectTag}>Supabase</span>
-                  <span className={styles.projectTag}>Data Visualization</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        
-
-        {/* Social Connect Section */}
-        <section 
-          id="social" 
-          className={`${styles.section} ${styles.social}`}
-          ref={(el) => registerSection("social", el)}
-        >
-          <div className={styles.sectionHeader}>
-            <span className={styles.sectionPreTitle}>Get In Touch</span>
-            <h2 className={styles.sectionTitle}>Connect With Me</h2>
-            <div className={styles.sectionDivider}></div>
-          </div>
-        
-          {/* Call-to-Action */}
-          <div className={styles.contactCTA}>
-            <p className={styles.contactText}>
-              I’m always open to exciting opportunities, collaborations, or just a friendly chat.  
-              Send me a message, and let’s make something amazing together.
+            
+            <p className={styles.bioText}>
+              I am a B.Tech AI student at Amrita Vishwa Vidyapeetham, architecting the future of synthetic intelligence. 
+              Specializing in Generative AI, Computer Vision, and high-performance Web Systems, I bridge the gap between 
+              raw correlation and true causation.
             </p>
-            <a href="mailto:kishorebalajisivani@gmail.com" className={styles.primaryBtn}>
-              📩 Send Me an Email
-            </a>
-          </div>
-        
-          {/* Contact Form */}
-          <form 
-            action="https://formspree.io/f/xgvzpbpz" 
-            method="POST" 
-            className={styles.contactForm}
-          >
-            <input 
-              type="text" 
-              name="name" 
-              placeholder="Your Name" 
-              required 
-            />
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Your Email" 
-              required 
-            />
-            <textarea 
-              name="message" 
-              placeholder="Your Message" 
-              rows={5} 
-              required
-            ></textarea>
-            <button type="submit" className={styles.primaryBtn}>Send Message</button>
-          </form>
-        
-          {/* Social Links */}
-          <div className={styles.connectGrid}>
-            <a
-              href="https://www.facebook.com/profile.php?id=100017656030709"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialCard}
-            >
-              <div className={styles.socialIconWrap}>
-                <img src="/facebook.png" alt="Facebook" className={styles.socialIcon} />
-              </div>
-              <span>Facebook</span>
-            </a>
-            
-            <a
-              href="https://www.instagram.com/kishore_balaji_03/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialCard}
-            >
-              <div className={styles.socialIconWrap}>
-                <img src="/instagram.png" alt="Instagram" className={styles.socialIcon} />
-              </div>
-              <span>Instagram</span>
-            </a>
-            
-            <a
-              href="https://www.linkedin.com/in/kishore-balaji-081168292/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialCard}
-            >
-              <div className={styles.socialIconWrap}>
-                <img src="/linkedin.png" alt="LinkedIn" className={styles.socialIcon} />
-              </div>
-              <span>LinkedIn</span>
-            </a>
-            
-            <a
-              href="https://github.com/Kishore-1803"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.socialCard}
-            >
-              <div className={styles.socialIconWrap}>
-                <img src="/github.png" alt="GitHub" className={styles.socialIcon} />
-              </div>
-              <span>GitHub</span>
-            </a>
-          </div>
-        </section>
-      </main>
+         </div>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerLogo}>
-            <span>KB</span>
-          </div>
-          <p className={styles.footerCopyright}>© 2024 Kishore. All rights reserved.</p>
+         <div className={styles.statsGrid}>
+            <div className={styles.statItem}><span className={styles.statNum}>3rd</span><span className={styles.statLabel}>Year Student</span></div>
+            <div className={styles.statItem}><span className={styles.statNum}>10+</span><span className={styles.statLabel}>Projects</span></div>
+            <div className={styles.statItem}><span className={styles.statNum}>100%</span><span className={styles.statLabel}>Dedication</span></div>
+            <div className={styles.statItem}><span className={styles.statNum}>∞</span><span className={styles.statLabel}>Passion</span></div>
+         </div>
+      </section>
+
+      {/* SKILLS */}
+      <section id="skills" className={styles.skillsSection}>
+        <div className={styles.sectionHeader}>
+            <span>TECHNICAL SKILLS</span>
         </div>
+        {skillsData.map((cat, i) => (
+           <div key={i} className={styles.skillCategory}>
+              <h3 className={styles.skillCatTitle}>{cat.category}</h3>
+              <div className={styles.skillList}>
+                 {cat.items.map((skill, j) => (
+                    <span key={j} className={styles.skillItem}>{skill}</span>
+                 ))}
+              </div>
+           </div>
+        ))}
+      </section>
+
+      {/* EXPERIENCE */}
+      <section id="experience" className={styles.experienceSection}>
+        <div className={styles.sectionHeader}>
+            <span>CAREER HISTORY</span>
+        </div>
+        <div>
+           {experience.map((exp, i) => (
+              <div key={i} className={styles.expItem}>
+                 <div className={styles.expDate}>{exp.year}</div>
+                 <div className={styles.expContent}>
+                    <h3 className={styles.expRole}>{exp.role}</h3>
+                    <span className={styles.expCompany}>{exp.company}</span>
+                    <ul className={styles.expDesc}>
+                       {exp.desc.map((d, j) => <li key={j}>{d}</li>)}
+                    </ul>
+                 </div>
+              </div>
+           ))}
+        </div>
+      </section>
+
+      {/* WORK / PROJECTS */}
+      <section id="work" className={styles.gallerySection}>
+        <div className={styles.sectionHeader}>
+            <span>SELECTED WORKS</span>
+            <span>(2023 — 2026)</span>
+        </div>
+        {projects.map((proj, i) => (
+          <div key={i} className={styles.projectContainer}>
+             <div className={styles.projectInfo}>
+                <span className={styles.projectIndex}>{proj.id}</span>
+                <h2 className={styles.projectTitle}>{proj.title}</h2>
+                <h3 className={styles.projectSubTitle}>{proj.fullName}</h3>
+                <p className={styles.projectCat}>{proj.category}</p>
+                <p className={styles.projectDesc}>{proj.desc}</p>
+                <a href={proj.link} target="_blank" className={styles.projectLink}>VIEW CASE STUDY</a>
+             </div>
+             <div className={styles.projectVisual}>
+                <div className={styles.imageWrapper}>
+                   <div 
+                      className={styles.projectImage} 
+                      style={{ 
+                        backgroundImage: `url(${proj.image})`,
+                      }}
+                   >
+                     {/* Overlay for readability if image is light */}
+                     <div className="absolute inset-0 bg-black/20"></div>
+                   </div>
+                </div>
+             </div>
+          </div>
+        ))}
+      </section>
+
+      {/* ACHIEVEMENTS MARQUEE */}
+      <section className={styles.awardsSection}>
+        <div className={styles.sectionHeader} style={{paddingLeft: '5vw'}}>
+            <span>HACKATHONS</span>
+        </div>
+        
+        <div className={styles.marqueeContainer}>
+           <div className={styles.marqueeTrack}>
+              {/* Grouped list to allow gaps between sets */}
+              {[1, 2, 3, 4].map((group) => (
+                <div key={group} className={styles.awardGroup}>
+                    {achievements.map((award, i) => (
+                        <div key={i} className={styles.awardCard}>
+                          <span className={styles.awardYear}>{award.year}</span>
+                          <h3 className={styles.awardName}>{award.name}</h3>
+                          <span className={styles.awardDesc}>{award.desc}</span>
+                        </div>
+                    ))}
+                </div>
+              ))}
+           </div>
+        </div>
+      </section>
+
+      {/* CONNECT / FOOTER */}
+      <footer id="contact" className={styles.contactSection}>
+          <h2 className={styles.contactTitle}>GET IN TOUCH</h2>
+          <p className={styles.bioText} style={{margin: '0', textAlign: 'center'}}>
+            Have an idea? I'm always open to exciting opportunities or just a friendly chat.
+          </p>
+          
+          <form action="https://formspree.io/f/xgvzpbpz" method="POST" className={styles.contactForm}>
+             <input type="text" name="name" placeholder="YOUR NAME" className={styles.formInput} required />
+             <input type="email" name="email" placeholder="YOUR EMAIL" className={styles.formInput} required />
+             <textarea name="message" rows={4} placeholder="TELL ME ABOUT YOUR PROJECT" className={styles.formText} required></textarea>
+             <button type="submit" className={styles.submitBtn}>SEND MESSAGE</button>
+          </form>
+
+          <div className={styles.socialRow}>
+             <a href="https://github.com/Kishore-1803" target="_blank" className={styles.socialBtn}>GITHUB</a>
+             <a href="https://www.linkedin.com/in/kishore-balaji-081168292/" target="_blank" className={styles.socialBtn}>LINKEDIN</a>
+             <a href="https://leetcode.com/u/kishore_balaji_03/" target="_blank" className={styles.socialBtn}>LEETCODE</a>
+             <a href="mailto:contact@kishore.dev" className={styles.socialBtn}>EMAIL</a>
+          </div>
+
+          <div style={{marginTop: '4rem', opacity: 0.3, fontSize: '0.8rem'}}>
+            © 2026 KISHORE BALAJI. SYSTEM OPERATIONAL.
+          </div>
       </footer>
     </div>
   );
