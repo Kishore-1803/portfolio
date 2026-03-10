@@ -395,133 +395,615 @@
 }
 
 
-/* PARALLAX GALLERY SECTION */
-.gallerySection {
+/* ═══════════════════════════════════════════════════
+   BOOKSHELF SECTION — 3D Book Open
+   ═══════════════════════════════════════════════════ */
+
+.bookshelfSection {
   padding: 10vh 5vw;
   position: relative;
   z-index: 5;
   background: var(--bg-secondary);
 }
 
-.projectContainer {
+.bookshelfWrapper {
   display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Individual shelf row */
+.shelf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Shelf category label */
+.shelfLabel {
+  align-self: flex-start;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--accent-cyan);
+  opacity: 0.9;
+}
+
+.shelfBooks {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0 1rem;
+  min-height: 280px;
+  perspective: 1200px;
+}
+
+/* Minimal shelf board */
+.shelfBoard {
   width: 100%;
-  margin-bottom: 20vh;
-  align-items: center; /* Center align image and text */
-  justify-content: space-between;
+  height: 14px;
+  background: linear-gradient(180deg,
+    #2a2a3e 0%,
+    #1e1e2f 40%,
+    #151525 100%
+  );
+  border-radius: 0 0 3px 3px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   position: relative;
+  margin-bottom: 3rem;
 }
 
-/* Reverse layout for even items */
-.projectContainer:nth-child(even) {
-  flex-direction: row-reverse;
+.shelfBoard::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(180deg, #3a3a52, #2a2a3e);
+  border-radius: 2px 2px 0 0;
 }
 
-.projectInfo {
-  width: 35%;
-  position: relative; /* Changed from sticky to avoid stacking issues */
-  z-index: 2;
-  align-self: center; /* Center vertically with image */
-  top: 0;
+
+/* ── BOOK CONTAINER (wrapper for perspective) ── */
+.bookContainer {
+  position: relative;
+  width: 80px;
+  height: 260px;
+  perspective: 1200px;
+  margin: 0 3px;
+  flex-shrink: 0;
+  flex-shrink: 0;
+} /* end .bookContainer */
+
+/* ── THE BOOK (3D transform container) ── */
+.book {
+  position: relative;
+  width: 80px;
+  height: 260px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  border-radius: 4px;
 }
 
-.projectIndex {
-  font-size: 1rem;
-  display: block;
-  margin-bottom: 1rem;
-  font-family: 'Space Grotesk', monospace;
-  opacity: 0.5;
+.book:hover {
+  transform: translateY(-14px) scale(1.05) rotateY(-8deg);
+  z-index: 10;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
-.projectTitle {
-  font-size: 5vw;
-  line-height: 0.9;
+.book:hover .bookSpine {
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.4), inset -1px 0 3px rgba(0, 0, 0, 0.15);
+}
+
+/* Book spine (visible face) */
+.bookSpine {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--book-color) 100%, white 10%),
+    var(--book-color),
+    color-mix(in srgb, var(--book-color) 90%, black)
+  );
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 6px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.25), inset -1px 0 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.35s ease;
+}
+
+.bookSpine::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.08) 100%);
+  pointer-events: none;
+}
+
+.bookSpine::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 1px;
+  background: rgba(200, 210, 220, 0.2);
+  /* Push the second line further down so it clears the enlarged text */
+  box-shadow: 0 240px 0 rgba(200, 210, 220, 0.2);
+}
+
+.bookSpineTitle {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
   font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  word-wrap: break-word; /* Ensure huge text breaks if needed */
+  letter-spacing: 0.15em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(180deg);
 }
 
-.projectSubTitle {
-  font-size: 1.2rem;
-  font-weight: 400;
-  color: var(--text-main);
-  opacity: 0.8;
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.projectCat {
-  font-size: 1rem;
+.bookSpineCategory {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 0.55rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-  color: var(--accent-cyan);
+  transform: rotate(180deg);
 }
 
-.projectDesc {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.8;
-  margin-bottom: 2rem;
-  max-width: 400px;
+/* Thin "front cover" edge visible in 3D */
+.bookFront {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 8px;
+  height: 100%;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--book-color) 80%, black), color-mix(in srgb, var(--book-color) 65%, black));
+  border-radius: 0 2px 2px 0;
+  transform-origin: left center;
+  backface-visibility: hidden;
 }
 
-.projectLink {
-  display: inline-block;
-  padding: 1rem 2rem;
+/* ── HOVER TOOLTIP ── */
+.bookTooltip {
+  position: absolute;
+  bottom: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: 220px;
+  background: var(--bg-main);
   border: 1px solid var(--border-dim);
-  border-radius: 50px;
-  text-decoration: none;
+  border-radius: 10px;
+  padding: 14px 16px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+  z-index: 50;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.bookTooltip::after {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: var(--bg-main);
+  border-right: 1px solid var(--border-dim);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.book:hover .bookTooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltipTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
   color: var(--text-main);
-  font-size: 0.9rem;
   text-transform: uppercase;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
 }
 
-.projectLink:hover {
-  background: var(--text-main);
-  color: var(--bg-main);
-  transform: scale(1.05);
+.tooltipDesc {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
-/* PARALLAX VISUAL WRAPPER */
-.projectVisual {
-  width: 55%;
-  height: 60vh; /* Reduced height to fit better */
-  position: relative;
-  overflow: hidden; 
+.tooltipTech {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tooltipTechItem {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: rgba(180, 200, 220, 0.9);
+  background: rgba(100, 120, 150, 0.12);
+  padding: 2px 7px;
   border-radius: 4px;
-  background: transparent; 
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(100, 120, 150, 0.2);
 }
 
-.imageWrapper {
-  width: 100%;
-  height: 100%;
+/* ═══════════════════════════════════════════════════
+   LARGE 3D BOOK MODAL
+   ═══════════════════════════════════════════════════ */
+
+.bookModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: bgFadeIn 0.3s ease-out forwards;
+}
+
+.bookModalClosing {
+  animation: bgFadeOut 0.5s ease-in forwards;
+}
+
+@keyframes bgFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bgFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* The book spread container */
+.largeBookContainer {
   position: relative;
-  overflow: visible; /* Allow content to be seen fully */
+  width: 900px;
+  height: 560px;
+  perspective: 1600px;
+  transform-style: preserve-3d;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.projectImage {
-  width: 100%;
+.largeBookPage {
+  position: absolute;
+  right: 0;
+  width: 50%;
   height: 100%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  filter: drop-shadow(0 0 20px rgba(0,255,255,0.1));
+  background-color: #141422;
+  /* Add subtle diagonal lines pattern as a watermark/texture */
+  background-image: 
+    radial-gradient(ellipse at center, rgba(30, 30, 45, 0.4) 0%, transparent 70%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.01) 10px,
+      rgba(255, 255, 255, 0.01) 20px
+    );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: none;
+  border-radius: 2px 8px 8px 2px;
+  padding: 40px 40px 40px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 10px 20px 40px rgba(0,0,0,0.5);
+  z-index: 1;
 }
 
-.projectContainer:hover .projectImage {
-  transform: scale(1.02);
-  filter: drop-shadow(0 0 30px rgba(0,255,255,0.2));
+/* Inner page gutter shadow */
+.largeBookPage::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.4), transparent);
+  pointer-events: none;
+}
+
+.largeBookCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  z-index: 10;
+}
+
+.largeBookCloseBtn:hover {
+  background: #fff;
+  color: #000;
+  transform: rotate(90deg);
+}
+
+.largeBookFullName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.largeBookCategoryBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 50px;
+  background: rgba(100, 120, 150, 0.15);
+  color: rgba(180, 200, 220, 0.9);
+  border: 1px solid rgba(100, 120, 150, 0.2);
+  margin-bottom: 24px;
+}
+
+.largeBookDescText {
+  font-size: 0.95rem; /* Increased */
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 25px;
+}
+
+.largeBookFeaturesList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.largeBookFeatureItem {
+  font-size: 0.9rem; /* Increased */
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.largeBookFeatureItem::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+  opacity: 0.8;
+}
+
+.largeBookTechSection {
+  margin-bottom: 30px; /* Increased spacing */
+}
+
+.largeBookTechLabel {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem; /* Increased */
+  font-weight: 600;
+  letter-spacing: 0.2em; /* Increased letter spacing */
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px; /* Increased margin */
+}
+
+.largeBookTechList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Increased gap */
+}
+
+.largeBookTechItem {
+  font-size: 0.75rem; /* Increased */
+  font-weight: 600;
+  color: rgba(180, 200, 220, 0.95);
+  background: rgba(100, 120, 150, 0.15); /* Slightly stronger bg */
+  padding: 6px 14px; /* Larger padding */
+  border-radius: 6px;
+  border: 1px solid rgba(100, 120, 150, 0.25);
+  transition: background 0.2s;
+}
+
+.largeBookTechItem:hover {
+  background: rgba(100, 120, 150, 0.3);
+}
+
+.largeBookLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.largeBookLinkBtn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ── FRONT COVER (Flips Open) ── */
+.largeBookCoverGroup {
+  position: absolute;
+  left: 50%; /* Start exactly on the right half, overlapping the static page */
+  width: 50%;
+  height: 100%;
+  transform-origin: left center; /* Hinge is on the left edge (the spine) */
+  transform-style: preserve-3d;
+  z-index: 2;
+  box-shadow: -10px 20px 40px rgba(0,0,0,0.5);
+  border-radius: 2px 8px 8px 2px;
+}
+
+/* Opening animation */
+.largeBookContainer.opening .largeBookCoverGroup {
+  animation: coverFlipOpen 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Closing animation */
+.largeBookContainer.closing .largeBookCoverGroup {
+  animation: coverFlipClose 0.6s cubic-bezier(0.55, 0, 1, 0.45) forwards;
+}
+
+@keyframes coverFlipOpen {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(-180deg); }
+}
+
+@keyframes coverFlipClose {
+  0% { transform: rotateY(-180deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+.largeBookCoverOutside,
+.largeBookCoverInside {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+/* Round the right edge of the cover when closed */
+.largeBookCoverOutside {
+  border-radius: 2px 8px 8px 2px;
+}
+/* When flipped 180deg, that right edge becomes the left edge */
+.largeBookCoverInside {
+  border-radius: 8px 2px 2px 8px;
+}
+
+.largeBookCoverOutside {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--book-color) 100%, white 8%),
+    var(--book-color),
+    color-mix(in srgb, var(--book-color) 85%, black)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Deep spine shadow / thickness */
+.largeBookCoverOutside::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 15px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3));
+}
+
+.largeBookCoverInside {
+  background: linear-gradient(135deg, #181825 0%, #101018 100%);
+  transform: rotateY(180deg);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.largeBookCoverInside::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,0,0,0.3), transparent);
+}
+
+.largeBookCoverContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.insideCoverContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 50px 40px;
+  height: 100%;
+}
+
+.insideCoverTitle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.1;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.insideCoverCategoryBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-cyan);
+  opacity: 0.9;
 }
 
 
@@ -799,7 +1281,7 @@
   .heroIntro { font-size: 1rem; margin-top: 0rem; }
   
   /* SECTIONS */
-  .aboutSection, .skillsSection, .experienceSection, .gallerySection, .awardsSection, .contactSection {
+  .aboutSection, .skillsSection, .experienceSection, .bookshelfSection, .awardsSection, .contactSection {
     padding: 10vh 5vw;
   }
   
@@ -817,18 +1299,82 @@
   .expRole { font-size: 2rem; margin-top: 0.5rem; }
   .expCompany { margin-bottom: 2rem; }
   
-  /* PROJECTS */
-  .projectContainer, .projectContainer:nth-child(even) {
-    flex-direction: column-reverse;
-    margin-bottom: 12vh;
-    gap: 2rem;
+  /* BOOKSHELF MOBILE */
+  .bookshelfWrapper {
+    gap: 0;
   }
-  
-  .projectInfo { width: 100%; }
-  .projectVisual { width: 100%; height: 35vh; }
-  .projectTitle { font-size: 10vw; margin-bottom: 1rem; }
+
+  .shelfLabel {
+    font-size: 0.65rem;
+    margin-bottom: 1rem;
+  }
+
+  .shelfBooks {
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 1rem 0.5rem 1rem;
+    min-height: 200px;
+    scrollbar-width: none;
+  }
+
+  .shelfBooks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bookContainer {
+    width: 60px;
+    height: 200px;
+  }
+
+  /* LARGE BOOK MODAL - MOBILE */
+  .largeBookContainer {
+    width: 330px;
+    height: 500px;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .largeBookContainer.opening {
+    /* Shift the container right when the cover swings open to the left */
+    transform: translateX(60px);
+  }
+
+  .largeBookPage {
+    width: 100%;
+    padding: 30px 20px 30px 30px;
+  }
+
+  .largeBookCoverGroup {
+    width: 100%;
+  }
+
+  .largeBookFullName {
+    font-size: 1.15rem;
+  }
+
+  .largeBookDescText {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .largeBookTechList {
+    gap: 4px;
+  }
+
+  .largeBookTechItem {
+    font-size: 0.6rem;
+    padding: 3px 8px;
+  }
+
+  .largeBookLinkBtn {
+    font-size: 0.65rem;
+    padding: 10px 18px;
+  }
   
   /* FOOTER */
   .contactTitle { font-size: 10vw; }
-  .socialRow { flex-wrap: wrap; gap: 1rem; padding-bottom: 100px; /* Space for bottom nav */ } 
+  .socialRow { flex-wrap: wrap; gap: 1rem; padding-bottom: 100px; }
 }
+

@@ -1,95 +1,253 @@
 "use client";
 
-import { useEffect, useRef, useLayoutEffect, useState } from "react";
+import { useEffect, useRef, useLayoutEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "@studio-freight/lenis";
-import { FiSun, FiMoon, FiDownload, FiArrowRight } from "react-icons/fi"; // Added Icons
+import { FiSun, FiMoon, FiGithub, FiExternalLink } from "react-icons/fi";
 import styles from "./styles/Home.module.css";
 
 export default function Home() {
-  const [theme, setTheme] = useState("dark"); // Theme State
+  const [theme, setTheme] = useState("dark");
+  const [openBook, setOpenBook] = useState<number | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorOutlineRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const toggleRef = useRef<HTMLDivElement>(null);
+  const bookshelfRef = useRef<HTMLDivElement>(null);
 
-  // --- DATA ---
-  const projects = [
+  // --- Mouse tilt handler ---
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const book = e.currentTarget;
+    const rect = book.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = -(y - centerY) / 12;
+    const rotateY = (x - centerX) / 10;
+    book.style.transform = `translateY(-8px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  }, []);
+
+  const resetTilt = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.currentTarget.style.transform = `rotateX(0deg) rotateY(0deg)`;
+  }, []);
+
+  // --- Toggle book open/close ---
+  const openBookModal = useCallback((idx: number) => {
+    setOpenBook(idx);
+    setIsClosing(false);
+  }, []);
+
+  const closeBookModal = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setIsClosing(true);
+    setTimeout(() => {
+      setOpenBook(null);
+      setIsClosing(false);
+    }, 600); // 600ms match cover flip animation duration
+  }, []);
+
+  // --- PROJECT DATA with tech stacks ---
+  // Shelf 1: AI / ML Projects
+  const aiProjects = [
     { 
-      id: "01",
-      title: "THALA", 
-      fullName: "Thala - Intelligent Incident Management System",
-      category: "GenAI System", 
+      id: "01", title: "THALA", 
+      fullName: "Thala - Intelligent Incident Management",
+      category: "GenAI System",
       desc: "An autonomous incident agent using Llama 3.3 and Kafka to detect and classify tickets. Integrated Elasticsearch and AWS Textract.", 
-      image: "/Thala.jpeg",
+      features: [
+        "Autonomous ticket classification",
+        "Kafka event streaming architecture",
+        "AWS Textract OCR integration",
+        "Elasticsearch log analysis"
+      ],
+      tech: ["Llama 3.3", "Kafka", "Elasticsearch", "AWS Textract"],
       link: "https://github.com/Kishore-1803/Thala"
     },
     { 
-      id: "02",
-      title: "CAUSAL ML", 
+      id: "02", title: "CAUSAL ML", 
       fullName: "Bridging Correlation and Causation",
-      category: "Research", 
+      category: "Research",
       desc: "ML project predicting using both traditional and causal-informed modeling approaches.", 
-      image: "/casualML.jpg",
+      features: [
+        "Causal Inference Modeling",
+        "DoWhy framework integration",
+        "SHAP value explainability",
+        "Correlation vs Causation analysis"
+      ],
+      tech: ["Python", "Scikit-learn", "DoWhy", "SHAP"],
       link: "https://github.com/Kishore-1803/Bridging-Correlation-and-Causation-An-Explainable-ML-Approach"
     },
     { 
-      id: "03",
-      title: "LOAN RISK", 
+      id: "03", title: "LOAN RISK", 
       fullName: "Loan Default Risk Prediction",
-      category: "FinTech AI", 
+      category: "FinTech AI",
       desc: "Robust loan default prediction system using Bayesian Neural Networks (BNN).", 
-      image: "/BNN.jpg",
+      features: [
+        "Bayesian Neural Networks (BNN)",
+        "Uncertainty quantification",
+        "Robust default risk prediction",
+        "Financial data preprocessing"
+      ],
+      tech: ["PyTorch", "BNN", "Pandas", "NumPy"],
       link: "https://github.com/Kishore-1803/Loan-Default-Risk-Prediction-Using-Bayesian-Neural-Network"
     },
     { 
-      id: "04",
-      title: "YOLO XAI", 
-      fullName: "XAI Driven Robustness Analysis For YOLO",
-      category: "Vision Intelligence", 
+      id: "04", title: "YOLO XAI", 
+      fullName: "XAI Driven Robustness Analysis",
+      category: "Vision Intelligence",
       desc: "Anomaly detection pipeline using YOLOv11 with XAI methods including Grad-CAM and Saliency Maps.", 
-      image: "/YOLO.jpg",
+      features: [
+        "YOLOv11 Anomaly Detection",
+        "Grad-CAM visual explanations",
+        "Saliency Map generation",
+        "Model robustness evaluation"
+      ],
+      tech: ["YOLOv11", "Grad-CAM", "PyTorch", "OpenCV"],
       link: "https://github.com/Kishore-1803/XAI-Driven-Robustness-Analysis-of-YOLO"
     },
     { 
-      id: "05",
-      title: "SYNGENX", 
+      id: "05", title: "XENDRIX", 
+      fullName: "XendrixAI - Multimodal Assistant",
+      category: "Multimodal AI",
+      desc: "Multimodal AI assistant combining conversational AI, document analysis, and image generation.", 
+      features: [
+        "Multimodal input (Text, PDF, Images)",
+        "RAG pipeline using LangChain",
+        "Secure User Auth integration",
+        "Image Generation via APIs"
+      ],
+      tech: ["FastAPI", "React", "LangChain", "FAISS"],
+      link: "https://github.com/Kishore-1803/XendrixAI"
+    },
+    {
+      id: "06", title: "FINCAUSAL",
+      fullName: "Financial Document Causality Detection",
+      category: "NLP Research",
+      desc: "Benchmarking Transformer architectures for extracting causal relationships from financial reports.",
+      features: [
+        "Transformer Benchmarking (BERT, RoBERTa)",
+        "Financial narrative parsed extraction",
+        "Causal relationship mapping",
+        "Performance metric comparison"
+      ],
+      tech: ["BERT", "RoBERTa", "FinBERT", "PyTorch"],
+      link: "https://github.com/Kishore-1803/Financial-Document-Causality-Detection"
+    },
+    { 
+      id: "07", title: "PERSPECTAI", 
+      fullName: "PerspectAI - Resume Analyzer",
+      category: "NLP",
+      desc: "AI Powered Resume Analyzer which provides insights of your Resume.", 
+      features: [
+        "Automated Resume Parsing",
+        "NLP-based Insight generation",
+        "Skill extraction & matching",
+        "Interactive Streamlit dashboard"
+      ],
+      tech: ["Python", "NLP", "Streamlit", "SpaCy"],
+      link: "https://github.com/Kishore-1803/PerspectAI"
+    },
+  ];
+
+  // Shelf 2: Systems / Web / Tools
+  const systemsProjects = [
+    { 
+      id: "08", title: "SYNGENX", 
       fullName: "SyngenX - Developer Analytics",
       category: "Dev Analytics", 
       desc: "AI-powered developer performance analytics system connecting to GitHub.", 
-      image: "/SyngenX.jpg",
+      features: [
+        "GitHub API data extraction",
+        "Developer Performance metrics",
+        "Predictive burnout analysis",
+        "D3.js visualization charts"
+      ],
+      tech: ["Next.js", "GitHub API", "Python", "D3.js"],
       link: "https://github.com/Kishore-1803/SyngenX"
     },
     { 
-      id: "06",
-      title: "XENDRIX", 
-      fullName: "XendrixAI - Multimodal Assistant",
-      category: "Multimodal AI", 
-      desc: "Multimodal AI assistant combining conversational AI, document analysis, and image generation.", 
-      image: "/Xendrix.jpg",
-      link: "https://github.com/Kishore-1803/XendrixAI"
-    },
-    { 
-      id: "07",
-      title: "PERSPECTAI", 
-      fullName: "PerspectAI - Resume Analyzer",
-      category: "NLP", 
-      desc: "AI Powered Resume Analyzer which provides insights of your Resume.", 
-      image: "/AI_Resume.png",
-      link: "https://github.com/Kishore-1803/PerspectAI"
-    },
-    { 
-      id: "08",
-      title: "AUDIOAURA", 
+      id: "09", title: "AUDIOAURA", 
       fullName: "AudioAura - Podcast Generator",
       category: "Voice AI", 
       desc: "AI Powered Podcast Generator That Provides News And Weather Updates Using APIs.", 
-      image: "/podcast.jpg",
+      features: [
+        "Automated News Aggregation",
+        "Script generation pipeline",
+        "Text-to-Speech audio rendering",
+        "Daily podcast scheduling"
+      ],
+      tech: ["Python", "TTS", "News API", "Flask"],
       link: "https://github.com/Kishore-1803/AudioAura"
     },
+    {
+      id: "10", title: "VIGILANCE",
+      fullName: "VigilanceStream - Security Monitoring",
+      category: "Security AI",
+      desc: "Autonomous security monitoring engine using Groq AI, Kafka streaming, and Supabase for real-time threat detection.",
+      features: [
+        "Real-time event streaming",
+        "Ultra-fast Groq AI analysis",
+        "Threat detection rules engine",
+        "Live monitoring dashboard"
+      ],
+      tech: ["Groq AI", "Kafka", "Supabase", "Next.js"],
+      link: "https://github.com/Kishore-1803/VigilanceStream"
+    },
+    {
+      id: "11", title: "NEXUS",
+      fullName: "Nexus Sentinel - AI Governance",
+      category: "AI Governance",
+      desc: "Enterprise AI governance platform bridging operational velocity and legal compliance via Slack & Jira integration.",
+      features: [
+        "Slack & Jira API Integration",
+        "Automated Compliance checks",
+        "Governance workflow routing",
+        "Audit trail generation"
+      ],
+      tech: ["FastAPI", "Kafka", "Slack API", "Jira API"],
+      link: "https://github.com/Kishore-1803/Nexus-sentinel"
+    },
+    {
+      id: "12", title: "CODE STUDIO",
+      fullName: "Agentic Code Studio",
+      category: "Agentic AI",
+      desc: "Multi-agent autonomous software engineering platform using Actor-Critic architecture with LangGraph.",
+      features: [
+        "Actor-Critic AI workflow",
+        "LangGraph state management",
+        "Autonomous code generation",
+        "Self-healing execution loops"
+      ],
+      tech: ["LangGraph", "React", "FastAPI", "GPT-4"],
+      link: "https://github.com/Kishore-1803/Agentic-Code-Studio"
+    },
+    {
+      id: "13", title: "HIRELYTICS",
+      fullName: "Hirelytics - Assessment Recommender",
+      category: "HR Tech AI",
+      desc: "AI-driven SHL assessment recommendation system using semantic embeddings and Gemini-based reranking.",
+      features: [
+        "Semantic Candidate Matching",
+        "Gemini LLM Reranking layer",
+        "Bias-free assessment APIs",
+        "HR Dashboard interface"
+      ],
+      tech: ["Gemini", "FastAPI", "Embeddings", "React"],
+      link: "https://github.com/Kishore-1803/Hirelytics"
+    },
+  ];
+
+  const allProjects = [...aiProjects, ...systemsProjects];
+
+  const bookColors = [
+    "#2C3E50", "#1F2937", "#334155", "#4A5568", "#2D3748",
+    "#1E3A5F", "#3B4252", "#44546A", "#374151", "#4C566A",
+    "#2E4057", "#37474F", "#1A202C"
   ];
 
   const skillsData = [
@@ -118,7 +276,6 @@ export default function Home() {
     { year: "2024", name: "PROVIDENCE LEAP IDEATHON", desc: "Semifinalist" }
   ];
 
-
   // THEME EFFECT
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -132,7 +289,6 @@ export default function Home() {
   }, [theme]);
 
   useLayoutEffect(() => {
-    // 1. Initialize Lenis
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -150,13 +306,11 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      // HERO PARALLAX
       gsap.to(heroTextRef.current, {
         scrollTrigger: { trigger: document.body, start: "top top", end: "100vh top", scrub: 1 },
         y: -150, opacity: 0, scale: 1.1
       });
 
-      // TEXT REVEALS (Big Statement)
       gsap.utils.toArray(`.${styles.revealText}`).forEach((el: any) => {
          gsap.from(el, {
            scrollTrigger: { trigger: el, start: "top 85%", end: "top 60%", scrub: true },
@@ -164,7 +318,6 @@ export default function Home() {
          });
       });
 
-      // ABOUT CONTENT FADE UP
       gsap.from(`.${styles.bioText}`, {
         scrollTrigger: { trigger: `.${styles.bioText}`, start: "top 85%" },
         y: 40, opacity: 0, duration: 1, ease: "power3.out"
@@ -177,7 +330,6 @@ export default function Home() {
         });
       });
 
-      // SKILLS STAGGER
       gsap.utils.toArray(`.${styles.skillCategory}`).forEach((el: any) => {
         gsap.from(el, {
            scrollTrigger: { trigger: el, start: "top 85%" },
@@ -185,7 +337,6 @@ export default function Home() {
         });
       });
 
-      // EXPERIENCE ITEMS SLIDE IN
       gsap.utils.toArray(`.${styles.expItem}`).forEach((el: any) => {
         gsap.from(el, {
           scrollTrigger: { trigger: el, start: "top 85%" },
@@ -193,36 +344,30 @@ export default function Home() {
         });
       });
 
-      // PROJECT TEXT REVEAL
-      gsap.utils.toArray(`.${styles.projectInfo}`).forEach((el: any) => {
-         gsap.from(el, {
-            scrollTrigger: { trigger: el, start: "top 80%" },
-            y: 50, opacity: 0, duration: 1, ease: "power3.out"
-         });
+      // Books stagger in
+      gsap.utils.toArray(`.${styles.bookContainer}`).forEach((el: any, i) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el.closest(`.${styles.shelf}`), start: "top 85%" },
+          y: 60, opacity: 0, duration: 0.7, delay: (i % 7) * 0.08, ease: "back.out(1.2)"
+        });
       });
 
-      // IMAGE PARALLAX
-      gsap.utils.toArray(`.${styles.projectImage}`).forEach((img: any) => {
-        gsap.to(img, {
-          yPercent: 20,
-          ease: "none",
-          scrollTrigger: { trigger: img.parentElement, start: "top bottom", end: "bottom top", scrub: true }
+      gsap.utils.toArray(`.${styles.shelf}`).forEach((el: any) => {
+        gsap.from(el, {
+          scrollTrigger: { trigger: el, start: "top 90%" },
+          opacity: 0, y: 40, duration: 1, ease: "power3.out"
         });
       });
 
     }, containerRef);
     
-    // Custom cursor movement
     const moveCursor = (e: MouseEvent) => {
-      // Use duration 0 for instant, lag-free movement 
       gsap.to(cursorDotRef.current, { x: e.clientX, y: e.clientY, duration: 0 });
     };
     window.addEventListener("mousemove", moveCursor);
 
-    // Cursor hover effects
     const onHover = () => document.body.classList.add("hovering");
     const onLeave = () => document.body.classList.remove("hovering");
-
     const links = document.querySelectorAll("a, button, .projectLink");
     links.forEach(link => {
        link.addEventListener("mouseenter", onHover);
@@ -240,6 +385,59 @@ export default function Home() {
     };
   }, []);
 
+  // Render a single book on the shelf
+  const renderBook = (proj: typeof aiProjects[0], globalIdx: number) => {
+    return (
+      <div
+        key={globalIdx}
+        className={styles.bookContainer}
+        style={{ '--book-color': bookColors[globalIdx] } as React.CSSProperties}
+      >
+        {/* The 3D shelf book */}
+        <div
+          className={styles.book}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={resetTilt}
+          onClick={() => openBookModal(globalIdx)}
+          role="button"
+          tabIndex={0}
+          aria-label={`Open ${proj.title}`}
+        >
+          {/* Tooltip on hover */}
+          <div className={styles.bookTooltip}>
+            <div className={styles.tooltipTitle}>{proj.title}</div>
+            <div className={styles.tooltipDesc}>{proj.category}</div>
+            <div className={styles.tooltipTech}>
+              {proj.tech.slice(0, 3).map((t, ti) => (
+                <span key={ti} className={styles.tooltipTechItem}>{t}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className={styles.bookSpine}>
+            <span className={styles.bookSpineTitle}>{proj.title}</span>
+            <span className={styles.bookSpineCategory}>{proj.category}</span>
+          </div>
+          <div className={styles.bookFront}></div>
+        </div>
+      </div>
+    );
+  };
+
+  // Render shelf
+  const renderShelf = (projects: typeof aiProjects, label: string, startIndex: number) => (
+    <div className={styles.shelf}>
+      <div className={styles.shelfLabel}>{label}</div>
+      <div className={styles.shelfBooks}>
+        {projects.map((proj, i) => renderBook(proj, startIndex + i))}
+      </div>
+      <div className={styles.shelfBoard}></div>
+    </div>
+  );
+
+  // Active project for modal
+  const activeProject = openBook !== null ? allProjects[openBook] : null;
+
   return (
     <div ref={containerRef} className={styles.main}>
       <div className={styles.bgGlow}></div>
@@ -247,7 +445,6 @@ export default function Home() {
       <div ref={cursorDotRef} className="cursor-dot"></div>
       <div ref={cursorOutlineRef} className="cursor-outline"></div>
 
-      {/* FIXED NAV */}
       <nav className={styles.navContainer}>
          <div className={styles.navLogo}>
             <h2 className={styles.headerName}>KISHORE</h2>
@@ -260,8 +457,6 @@ export default function Home() {
             <a href="#work" className={styles.navLink}>Work</a>
             <a href="#contact" className={styles.navLink}>Contact</a>
             <a href="/Resume.pdf" target="_blank" className={styles.navLink}>Resume</a>
-
-            {/* THEME TOGGLE */}
             <div className={styles.themeToggle} onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}>
                <div ref={toggleRef} className={styles.toggleKnob}>
                   {theme === "dark" ? <FiMoon className={styles.toggleIcon} /> : <FiSun className={styles.toggleIcon} />}
@@ -270,7 +465,6 @@ export default function Home() {
          </div>
       </nav>
 
-      {/* HERO */}
       <header className={styles.heroSection}>
         <div className={styles.heroContent}>
            <p className={styles.heroIntro}>I'M KISHORE BALAJI</p>
@@ -281,7 +475,6 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ABOUT */}
       <section id="about" className={styles.aboutSection}>
          <div className={styles.aboutLeft}>
             <div className={styles.bigStatement}>
@@ -289,14 +482,12 @@ export default function Home() {
                 <p className={styles.revealText}>TURNING BLANK EDITORS INTO</p>
                 <p className={styles.revealText}>INTELLIGENT ECOSYSTEMS.</p>
             </div>
-            
             <p className={styles.bioText}>
               I am a B.Tech AI student at Amrita Vishwa Vidyapeetham, architecting the future of synthetic intelligence. 
               Specializing in Generative AI, Computer Vision, and high-performance Web Systems, I bridge the gap between 
               raw correlation and true causation.
             </p>
          </div>
-
          <div className={styles.statsGrid}>
             <div className={styles.statItem}><span className={styles.statNum}>3rd</span><span className={styles.statLabel}>Year Student</span></div>
             <div className={styles.statItem}><span className={styles.statNum}>10+</span><span className={styles.statLabel}>Projects</span></div>
@@ -305,11 +496,8 @@ export default function Home() {
          </div>
       </section>
 
-      {/* SKILLS */}
       <section id="skills" className={styles.skillsSection}>
-        <div className={styles.sectionHeader}>
-            <span>TECHNICAL SKILLS</span>
-        </div>
+        <div className={styles.sectionHeader}><span>TECHNICAL SKILLS</span></div>
         {skillsData.map((cat, i) => (
            <div key={i} className={styles.skillCategory}>
               <h3 className={styles.skillCatTitle}>{cat.category}</h3>
@@ -322,11 +510,8 @@ export default function Home() {
         ))}
       </section>
 
-      {/* EXPERIENCE */}
       <section id="experience" className={styles.experienceSection}>
-        <div className={styles.sectionHeader}>
-            <span>CAREER HISTORY</span>
-        </div>
+        <div className={styles.sectionHeader}><span>CAREER HISTORY</span></div>
         <div>
            {experience.map((exp, i) => (
               <div key={i} className={styles.expItem}>
@@ -343,48 +528,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WORK / PROJECTS */}
-      <section id="work" className={styles.gallerySection}>
+      {/* PROJECTS — BOOKSHELF */}
+      <section id="work" className={styles.bookshelfSection} ref={bookshelfRef}>
         <div className={styles.sectionHeader}>
-            <span>SELECTED WORKS</span>
+            <span>PROJECTS</span>
             <span>(2023 — 2026)</span>
         </div>
-        {projects.map((proj, i) => (
-          <div key={i} className={styles.projectContainer}>
-             <div className={styles.projectInfo}>
-                <span className={styles.projectIndex}>{proj.id}</span>
-                <h2 className={styles.projectTitle}>{proj.title}</h2>
-                <h3 className={styles.projectSubTitle}>{proj.fullName}</h3>
-                <p className={styles.projectCat}>{proj.category}</p>
-                <p className={styles.projectDesc}>{proj.desc}</p>
-                <a href={proj.link} target="_blank" className={styles.projectLink}>VIEW CASE STUDY</a>
-             </div>
-             <div className={styles.projectVisual}>
-                <div className={styles.imageWrapper}>
-                   <div 
-                      className={styles.projectImage} 
-                      style={{ 
-                        backgroundImage: `url(${proj.image})`,
-                      }}
-                   >
-                     {/* Overlay for readability if image is light */}
-                     <div className="absolute inset-0 bg-black/20"></div>
-                   </div>
-                </div>
-             </div>
-          </div>
-        ))}
+
+        <div className={styles.bookshelfWrapper}>
+          {renderShelf(aiProjects, "AI / ML PROJECTS", 0)}
+          {renderShelf(systemsProjects, "SYSTEMS / WEB / TOOLS", aiProjects.length)}
+        </div>
       </section>
 
-      {/* ACHIEVEMENTS MARQUEE */}
       <section className={styles.awardsSection}>
-        <div className={styles.sectionHeader} style={{paddingLeft: '5vw'}}>
-            <span>HACKATHONS</span>
-        </div>
-        
+        <div className={styles.sectionHeader} style={{paddingLeft: '5vw'}}><span>HACKATHONS</span></div>
         <div className={styles.marqueeContainer}>
            <div className={styles.marqueeTrack}>
-              {/* Grouped list to allow gaps between sets */}
               {[1, 2, 3, 4].map((group) => (
                 <div key={group} className={styles.awardGroup}>
                     {achievements.map((award, i) => (
@@ -400,31 +560,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CONNECT / FOOTER */}
       <footer id="contact" className={styles.contactSection}>
           <h2 className={styles.contactTitle}>GET IN TOUCH</h2>
           <p className={styles.bioText} style={{margin: '0', textAlign: 'center'}}>
             Have an idea? I'm always open to exciting opportunities or just a friendly chat.
           </p>
-          
           <form action="https://formspree.io/f/xgvzpbpz" method="POST" className={styles.contactForm}>
              <input type="text" name="name" placeholder="YOUR NAME" className={styles.formInput} required />
              <input type="email" name="email" placeholder="YOUR EMAIL" className={styles.formInput} required />
              <textarea name="message" rows={4} placeholder="TELL ME ABOUT YOUR PROJECT" className={styles.formText} required></textarea>
              <button type="submit" className={styles.submitBtn}>SEND MESSAGE</button>
           </form>
-
           <div className={styles.socialRow}>
              <a href="https://github.com/Kishore-1803" target="_blank" className={styles.socialBtn}>GITHUB</a>
              <a href="https://www.linkedin.com/in/kishore-balaji-081168292/" target="_blank" className={styles.socialBtn}>LINKEDIN</a>
              <a href="https://leetcode.com/u/kishore_balaji_03/" target="_blank" className={styles.socialBtn}>LEETCODE</a>
              <a href="mailto:contact@kishore.dev" className={styles.socialBtn}>EMAIL</a>
           </div>
-
           <div style={{marginTop: '4rem', opacity: 0.3, fontSize: '0.8rem'}}>
             © 2026 KISHORE BALAJI. SYSTEM OPERATIONAL.
           </div>
       </footer>
+
+      {/* 3D BOOK MODAL */}
+      {activeProject && (
+        <div className={`${styles.bookModal} ${isClosing ? styles.bookModalClosing : ''}`} onClick={closeBookModal}>
+          <div 
+            className={`${styles.largeBookContainer} ${isClosing ? styles.closing : styles.opening}`} 
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* The right page (static detailed content) */}
+            <div className={styles.largeBookPage}>
+              <button className={styles.largeBookCloseBtn} onClick={closeBookModal} aria-label="Close">✕</button>
+              
+              <div className={styles.largeBookTechSection} style={{marginBottom: '15px'}}>
+                <span className={styles.largeBookTechLabel}>KEY FEATURES</span>
+                <ul className={styles.largeBookFeaturesList}>
+                  {activeProject.features && activeProject.features.map((feat: string, i: number) => (
+                    <li key={i} className={styles.largeBookFeatureItem}>{feat}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.largeBookSection}>
+                <span className={styles.largeBookTechLabel}>ABOUT PROJECT</span>
+                <p className={styles.largeBookDescText}>{activeProject.desc}</p>
+              </div>
+              
+              <div className={styles.largeBookTechSection}>
+                <span className={styles.largeBookTechLabel}>TECH STACK / TOOLS</span>
+                <div className={styles.largeBookTechList}>
+                  {activeProject.tech.map((t, i) => (
+                    <span key={i} className={styles.largeBookTechItem}>{t}</span>
+                  ))}
+                </div>
+              </div>
+
+              <a href={activeProject.link} target="_blank" rel="noopener noreferrer" className={styles.largeBookLinkBtn}>
+                <FiGithub /> VIEW ON GITHUB <FiExternalLink />
+              </a>
+            </div>
+
+            {/* The 3D front cover (rotates open) */}
+            <div className={styles.largeBookCoverGroup}>
+              {/* Outside of the cover */}
+              <div className={styles.largeBookCoverOutside} style={{ '--book-color': bookColors[openBook as number] } as React.CSSProperties}>
+                 <div className={styles.largeBookCoverContent}>
+                   <span className={styles.bookCoverDeco}></span>
+                   <span className={styles.bookCoverTitle}>{activeProject.title}</span>
+                   <span className={styles.bookCoverCategory}>{activeProject.category}</span>
+                   <span className={styles.bookCoverDeco}></span>
+                 </div>
+              </div>
+              {/* Inside of the cover (textured) - NOW HAS TITLE */}
+              <div className={styles.largeBookCoverInside}>
+                <div className={styles.insideCoverContent}>
+                   <h3 className={styles.insideCoverTitle}>{activeProject.fullName}</h3>
+                   <div className={styles.insideCoverCategoryBadge}>{activeProject.category}</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
