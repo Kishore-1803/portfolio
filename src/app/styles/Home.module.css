@@ -38,8 +38,15 @@
 }
 
 @keyframes pulseGlow {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-  100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
 }
 
 /* FIXED NAV */
@@ -53,7 +60,8 @@
   justify-content: space-between;
   align-items: flex-start;
   z-index: 100;
-  pointer-events: none; /* Let clicks pass through empty space */
+  pointer-events: none;
+  /* Let clicks pass through empty space */
 }
 
 .navLogo {
@@ -120,6 +128,7 @@
   align-items: center;
   border: 1px solid var(--text-main);
 }
+
 .resumeBtn:hover {
   transform: scale(1.05);
   background: transparent;
@@ -171,8 +180,15 @@
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
 }
 
 
@@ -270,7 +286,8 @@
   position: sticky;
   top: 5vh;
   z-index: 20;
-  padding-top: 1rem; /* Add padding top so text isn't cut off if sticky touches top edge */
+  padding-top: 1rem;
+  /* Add padding top so text isn't cut off if sticky touches top edge */
 }
 
 .skillCategory {
@@ -322,47 +339,55 @@
   display: grid;
   grid-template-columns: 200px 1fr;
   border-top: 1px solid var(--border-dim);
-  padding: 4rem 2rem; /* Added horizontal padding */
+  padding: 4rem 2rem;
+  /* Added horizontal padding */
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 8px; /* Slight rounding for hover effect */
+  border-radius: 8px;
+  /* Slight rounding for hover effect */
 }
 
 .expItem:hover {
   background: var(--glass);
-  transform: translateX(10px); 
-  border-top-color: var(--accent-cyan); /* Highlight top border */
+  transform: translateX(10px);
+  border-top-color: var(--accent-cyan);
+  /* Highlight top border */
 }
 
 .expDate {
   font-family: 'Space Grotesk', monospace;
-  font-size: 1.5rem; /* Larger year */
+  font-size: 1.5rem;
+  /* Larger year */
   color: var(--accent-cyan);
   font-weight: 700;
   opacity: 0.8;
 }
 
 .expRole {
-  font-size: 3rem; 
+  font-size: 3rem;
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1;
   text-transform: uppercase;
-  color: var(--text-main); /* Solid white for readability */
+  color: var(--text-main);
+  /* Solid white for readability */
   background: none;
   -webkit-text-fill-color: initial;
 }
 
 .expCompany {
-  font-size: 1.3rem; /* Slightly larger */
+  font-size: 1.3rem;
+  /* Slightly larger */
   display: inline-flex;
   align-items: center;
   margin-bottom: 2.5rem;
   color: var(--text-main);
-  opacity: 1; /* Reset opacity */
+  opacity: 1;
+  /* Reset opacity */
   font-style: normal;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  background: var(--border-dim); /* More visible background */
+  background: var(--border-dim);
+  /* More visible background */
   padding: 0.5rem 1rem;
   border-radius: 4px;
 }
@@ -370,7 +395,8 @@
 .expDesc {
   padding-left: 0;
   margin-left: 0;
-  border-left: none; /* Removed line to simplify */
+  border-left: none;
+  /* Removed line to simplify */
 }
 
 .expDesc li {
@@ -378,9 +404,11 @@
   line-height: 1.6;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
-  list-style: none; /* No dots by default */
+  list-style: none;
+  /* No dots by default */
   position: relative;
-  border-left: 2px solid var(--border-dim); /* Individual lines */
+  border-left: 2px solid var(--border-dim);
+  /* Individual lines */
   padding-left: 1.5rem;
   transition: all 0.3s;
 }
@@ -391,7 +419,8 @@
 }
 
 .expDesc li::before {
-  display: none; /* Hide old dots */
+  display: none;
+  /* Hide old dots */
 }
 
 
@@ -429,7 +458,8 @@
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--text-main);
+  /* Adapt to theme */
   margin-bottom: 1.5rem;
   padding-left: 1rem;
   border-left: 2px solid var(--accent-cyan);
@@ -451,15 +481,13 @@
   width: 100%;
   height: 14px;
   background: linear-gradient(180deg,
-    #2a2a3e 0%,
-    #1e1e2f 40%,
-    #151525 100%
-  );
+      var(--shelf-front) 0%,
+      var(--shelf-bottom) 100%);
   border-radius: 0 0 3px 3px;
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.35),
-    0 1px 3px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    0 4px 16px var(--shelf-shadow),
+    0 1px 3px var(--shelf-shadow),
+    inset 0 1px 0 var(--shelf-inset);
   position: relative;
   margin-bottom: 3rem;
 }
@@ -471,7 +499,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(180deg, #3a3a52, #2a2a3e);
+  background: linear-gradient(180deg, var(--shelf-top), var(--shelf-front));
   border-radius: 2px 2px 0 0;
 }
 
@@ -485,7 +513,9 @@
   margin: 0 3px;
   flex-shrink: 0;
   flex-shrink: 0;
-} /* end .bookContainer */
+}
+
+/* end .bookContainer */
 
 /* ── THE BOOK (3D transform container) ── */
 .book {
@@ -513,10 +543,9 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg,
-    color-mix(in srgb, var(--book-color) 100%, white 10%),
-    var(--book-color),
-    color-mix(in srgb, var(--book-color) 90%, black)
-  );
+      color-mix(in srgb, var(--book-color) 100%, white 10%),
+      var(--book-color),
+      color-mix(in srgb, var(--book-color) 90%, black));
   border-radius: 3px 0 0 3px;
   display: flex;
   flex-direction: column;
@@ -533,7 +562,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.08) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.08) 100%);
   pointer-events: none;
 }
 
@@ -545,9 +574,9 @@
   transform: translateX(-50%);
   width: 55%;
   height: 1px;
-  background: rgba(200, 210, 220, 0.2);
+  background: var(--spine-line);
   /* Push the second line further down so it clears the enlarged text */
-  box-shadow: 0 240px 0 rgba(200, 210, 220, 0.2);
+  box-shadow: 0 240px 0 var(--spine-line);
 }
 
 .bookSpineTitle {
@@ -556,10 +585,10 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--spine-title);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px var(--spine-shadow);
   flex: 1;
   display: flex;
   align-items: center;
@@ -572,7 +601,7 @@
   text-orientation: mixed;
   font-size: 0.55rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--spine-category);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   transform: rotate(180deg);
@@ -685,13 +714,23 @@
 }
 
 @keyframes bgFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes bgFadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 /* The book spread container */
@@ -713,15 +752,13 @@
   height: 100%;
   background-color: #141422;
   /* Add subtle diagonal lines pattern as a watermark/texture */
-  background-image: 
+  background-image:
     radial-gradient(ellipse at center, rgba(30, 30, 45, 0.4) 0%, transparent 70%),
-    repeating-linear-gradient(
-      45deg,
+    repeating-linear-gradient(45deg,
       transparent,
       transparent 10px,
       rgba(255, 255, 255, 0.01) 10px,
-      rgba(255, 255, 255, 0.01) 20px
-    );
+      rgba(255, 255, 255, 0.01) 20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-left: none;
   border-radius: 2px 8px 8px 2px;
@@ -729,7 +766,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 10px 20px 40px rgba(0,0,0,0.5);
+  box-shadow: 10px 20px 40px rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -741,7 +778,7 @@
   left: 0;
   width: 40px;
   height: 100%;
-  background: linear-gradient(90deg, rgba(0,0,0,0.4), transparent);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), transparent);
   pointer-events: none;
 }
 
@@ -796,7 +833,8 @@
 }
 
 .largeBookDescText {
-  font-size: 0.95rem; /* Increased */
+  font-size: 0.95rem;
+  /* Increased */
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.75);
   margin-bottom: 25px;
@@ -809,7 +847,8 @@
 }
 
 .largeBookFeatureItem {
-  font-size: 0.9rem; /* Increased */
+  font-size: 0.9rem;
+  /* Increased */
   color: rgba(255, 255, 255, 0.85);
   margin-bottom: 10px;
   position: relative;
@@ -825,32 +864,40 @@
 }
 
 .largeBookTechSection {
-  margin-bottom: 30px; /* Increased spacing */
+  margin-bottom: 30px;
+  /* Increased spacing */
 }
 
 .largeBookTechLabel {
   display: block;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.8rem; /* Increased */
+  font-size: 0.8rem;
+  /* Increased */
   font-weight: 600;
-  letter-spacing: 0.2em; /* Increased letter spacing */
+  letter-spacing: 0.2em;
+  /* Increased letter spacing */
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 12px; /* Increased margin */
+  margin-bottom: 12px;
+  /* Increased margin */
 }
 
 .largeBookTechList {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Increased gap */
+  gap: 8px;
+  /* Increased gap */
 }
 
 .largeBookTechItem {
-  font-size: 0.75rem; /* Increased */
+  font-size: 0.75rem;
+  /* Increased */
   font-weight: 600;
   color: rgba(180, 200, 220, 0.95);
-  background: rgba(100, 120, 150, 0.15); /* Slightly stronger bg */
-  padding: 6px 14px; /* Larger padding */
+  background: rgba(100, 120, 150, 0.15);
+  /* Slightly stronger bg */
+  padding: 6px 14px;
+  /* Larger padding */
   border-radius: 6px;
   border: 1px solid rgba(100, 120, 150, 0.25);
   transition: background 0.2s;
@@ -885,13 +932,15 @@
 /* ── FRONT COVER (Flips Open) ── */
 .largeBookCoverGroup {
   position: absolute;
-  left: 50%; /* Start exactly on the right half, overlapping the static page */
+  left: 50%;
+  /* Start exactly on the right half, overlapping the static page */
   width: 50%;
   height: 100%;
-  transform-origin: left center; /* Hinge is on the left edge (the spine) */
+  transform-origin: left center;
+  /* Hinge is on the left edge (the spine) */
   transform-style: preserve-3d;
   z-index: 2;
-  box-shadow: -10px 20px 40px rgba(0,0,0,0.5);
+  box-shadow: -10px 20px 40px rgba(0, 0, 0, 0.5);
   border-radius: 2px 8px 8px 2px;
 }
 
@@ -906,13 +955,23 @@
 }
 
 @keyframes coverFlipOpen {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(-180deg); }
+  0% {
+    transform: rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateY(-180deg);
+  }
 }
 
 @keyframes coverFlipClose {
-  0% { transform: rotateY(-180deg); }
-  100% { transform: rotateY(0deg); }
+  0% {
+    transform: rotateY(-180deg);
+  }
+
+  100% {
+    transform: rotateY(0deg);
+  }
 }
 
 .largeBookCoverOutside,
@@ -926,6 +985,7 @@
 .largeBookCoverOutside {
   border-radius: 2px 8px 8px 2px;
 }
+
 /* When flipped 180deg, that right edge becomes the left edge */
 .largeBookCoverInside {
   border-radius: 8px 2px 2px 8px;
@@ -933,10 +993,9 @@
 
 .largeBookCoverOutside {
   background: linear-gradient(180deg,
-    color-mix(in srgb, var(--book-color) 100%, white 8%),
-    var(--book-color),
-    color-mix(in srgb, var(--book-color) 85%, black)
-  );
+      color-mix(in srgb, var(--book-color) 100%, white 8%),
+      var(--book-color),
+      color-mix(in srgb, var(--book-color) 85%, black));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -950,7 +1009,7 @@
   top: 0;
   width: 15px;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.3));
+  background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.3));
 }
 
 .largeBookCoverInside {
@@ -966,7 +1025,7 @@
   top: 0;
   width: 30px;
   height: 100%;
-  background: linear-gradient(90deg, rgba(0,0,0,0.3), transparent);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.3), transparent);
 }
 
 .largeBookCoverContent {
@@ -1009,7 +1068,8 @@
 
 /* ACHIEVEMENTS / MARQUEE */
 .awardsSection {
-  padding: 10vh 0; /* Removing horizontal padding for full bleed */
+  padding: 10vh 0;
+  /* Removing horizontal padding for full bleed */
   background: var(--bg-main);
   color: var(--text-main);
   z-index: 5;
@@ -1029,7 +1089,8 @@
 .marqueeTrack {
   display: flex;
   width: max-content;
-  animation: scrollMarquee 45s linear infinite; /* Slower loop */
+  animation: scrollMarquee 45s linear infinite;
+  /* Slower loop */
 }
 
 /* Removed hover pause to ensure smooth continuity if requested, or keep it. Keeping it. */
@@ -1039,13 +1100,22 @@
 
 .awardGroup {
   display: flex;
-  gap: 3rem; /* Spacing between cards in a set */
-  padding-right: 25vw; /* LARGE GAP between sets. Superhack leaves before next appears */
+  gap: 3rem;
+  /* Spacing between cards in a set */
+  padding-right: 25vw;
+  /* LARGE GAP between sets. Superhack leaves before next appears */
 }
 
 @keyframes scrollMarquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-25%); } /* Move 1 group width (including its padding) */
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-25%);
+  }
+
+  /* Move 1 group width (including its padding) */
 }
 
 .awardCard {
@@ -1065,7 +1135,7 @@
   background: var(--border-dim);
   border-color: var(--accent-cyan);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .awardYear {
@@ -1083,7 +1153,8 @@
   letter-spacing: 0.02em;
   color: var(--text-main);
   margin-bottom: 0.5rem;
-  white-space: normal; /* Allow text wrapping inside card if needed */
+  white-space: normal;
+  /* Allow text wrapping inside card if needed */
   line-height: 1;
 }
 
@@ -1096,7 +1167,10 @@
 }
 
 /* Hide legacy list styles */
-.awardList, .awardItem { display: none; }
+.awardList,
+.awardItem {
+  display: none;
+}
 
 
 /* CONTACT FORM SECTION */
@@ -1124,7 +1198,8 @@
   margin-top: 3rem;
 }
 
-.formInput, .formText {
+.formInput,
+.formText {
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--border-dim);
@@ -1135,7 +1210,8 @@
   transition: border-color 0.3s;
 }
 
-.formInput:focus, .formText:focus {
+.formInput:focus,
+.formText:focus {
   outline: none;
   border-bottom-color: var(--accent-cyan);
 }
@@ -1183,7 +1259,8 @@
 }
 
 /* RESET LEGACY */
-.loader, .bentoSection {
+.loader,
+.bentoSection {
   display: none;
 }
 
@@ -1212,7 +1289,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .toggleIcon {
@@ -1222,9 +1299,18 @@
 
 /* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
+
   /* GLOBAL */
-  .main { overflow-x: hidden; }
-  .cursor-dot, .cursor-outline { display: none; } /* Hide custom cursor on touch */
+  .main {
+    overflow-x: hidden;
+  }
+
+  .cursor-dot,
+  .cursor-outline {
+    display: none;
+  }
+
+  /* Hide custom cursor on touch */
 
   /* NAVIGATION - Top Mobile Header */
   .navContainer {
@@ -1237,14 +1323,15 @@
     border-bottom: 1px solid var(--border-dim);
     height: auto;
   }
-  
-  .navLogo { 
+
+  .navLogo {
     width: 100%;
     margin-bottom: 0.5rem;
   }
-  
+
   .navLinks {
-    position: static; /* Reset from fixed bottom */
+    position: static;
+    /* Reset from fixed bottom */
     width: 100%;
     height: auto;
     background: transparent;
@@ -1260,45 +1347,91 @@
     -webkit-overflow-scrolling: touch;
     pointer-events: auto;
   }
-  
+
   /* Ensure last item isn't cut off */
   .navLinks:after {
     content: "";
     padding-right: 2rem;
   }
-  
-  .headerRole { display: none; } /* Simplify header on mobile */
 
-  .navLinks::-webkit-scrollbar { display: none; }
+  .headerRole {
+    display: none;
+  }
 
-  .navLink { font-size: 0.9rem; margin-right: 0;}
+  /* Simplify header on mobile */
 
-  .themeToggle { margin-left: 0; flex-shrink: 0; } 
+  .navLinks::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navLink {
+    font-size: 0.9rem;
+    margin-right: 0;
+  }
+
+  .themeToggle {
+    margin-left: 0;
+    flex-shrink: 0;
+  }
 
   /* HERO */
-  .heroSection { height: 90vh; padding-top: 100px; /* Account for fixed header */ }
-  .hugeText { font-size: 18vw; line-height: 0.9; }
-  .heroIntro { font-size: 1rem; margin-top: 0rem; }
-  
+  .heroSection {
+    height: 90vh;
+    padding-top: 100px;
+    /* Account for fixed header */
+  }
+
+  .hugeText {
+    font-size: 18vw;
+    line-height: 0.9;
+  }
+
+  .heroIntro {
+    font-size: 1rem;
+    margin-top: 0rem;
+  }
+
   /* SECTIONS */
-  .aboutSection, .skillsSection, .experienceSection, .bookshelfSection, .awardsSection, .contactSection {
+  .aboutSection,
+  .skillsSection,
+  .experienceSection,
+  .bookshelfSection,
+  .awardsSection,
+  .contactSection {
     padding: 10vh 5vw;
   }
-  
+
   /* ABOUT */
-  .aboutSection { grid-template-columns: 1fr; gap: 4rem; }
-  .bigStatement { font-size: 8vw; }
-  .statsGrid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-  
+  .aboutSection {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .bigStatement {
+    font-size: 8vw;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
   /* EXPERIENCE */
   .expItem {
     grid-template-columns: 1fr;
     padding: 2rem 1rem;
     gap: 1rem;
   }
-  .expRole { font-size: 2rem; margin-top: 0.5rem; }
-  .expCompany { margin-bottom: 2rem; }
-  
+
+  .expRole {
+    font-size: 2rem;
+    margin-top: 0.5rem;
+  }
+
+  .expCompany {
+    margin-bottom: 2rem;
+  }
+
   /* BOOKSHELF MOBILE */
   .bookshelfWrapper {
     gap: 0;
@@ -1372,9 +1505,15 @@
     font-size: 0.65rem;
     padding: 10px 18px;
   }
-  
-  /* FOOTER */
-  .contactTitle { font-size: 10vw; }
-  .socialRow { flex-wrap: wrap; gap: 1rem; padding-bottom: 100px; }
-}
 
+  /* FOOTER */
+  .contactTitle {
+    font-size: 10vw;
+  }
+
+  .socialRow {
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 100px;
+  }
+}
