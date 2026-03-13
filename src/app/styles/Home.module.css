@@ -290,6 +290,38 @@
   /* Add padding top so text isn't cut off if sticky touches top edge */
 }
 
+.exploreHint {
+  text-align: center;
+  margin: -5rem 0 4rem; /* Negative margin to pull it up closer to header, but depends on layout */
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  opacity: 0.7;
+}
+
+.exploreArrow {
+  font-size: 1.1rem;
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.exploreHint:hover {
+  opacity: 1;
+  color: var(--text-main);
+  cursor: default;
+}
+
+.exploreHint:hover .exploreArrow {
+  transform: translateX(6px);
+}
+
 .skillCategory {
   margin-bottom: 4rem;
 }

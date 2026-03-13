@@ -538,7 +538,12 @@ export default function Home() {
       <section id="work" className={styles.bookshelfSection} ref={bookshelfRef}>
         <div className={styles.sectionHeader}>
           <span>PROJECTS</span>
-          <span>(2023 — 2026)</span>
+          <span>(2023 — Present)</span>
+        </div>
+
+        <div className={styles.exploreHint}>
+          <span>Click any book to explore</span>
+          <span className={styles.exploreArrow}>→</span>
         </div>
 
         <div className={styles.bookshelfWrapper}>
