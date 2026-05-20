@@ -240,6 +240,20 @@ export default function Home() {
       tech: ["FastAPI", "Sentence-BERT", "Supabase", "Gemini 2.5"],
       link: "https://github.com/Kishore-1803/hirelytics"
     },
+    {
+    id: "14", title: "FRAUD GNN",
+    fullName: "Temporal GNN for Financial Fraud Detection",
+    category: "FinTech AI",
+    desc: "Detecting fraudulent interactions in temporal trust networks using a GRU-based Temporal Graph Neural Network that models dynamic evolution of user behavior over time.",
+    features: [
+      "GRU-based node memory with continual state updates",
+      "Temporal negative sampling & cost-sensitive BCE loss",
+      "Zero-leakage historical feature engineering",
+      "ROC-AUC 0.89 & PR-AUC 0.71 on Bitcoin OTC dataset"
+    ],
+    tech: ["PyTorch", "Pandas", "Scikit-learn", "Jupyter"],
+    link: "https://github.com/Kishore-1803/Temporal-GNN-Financial-Fraud-Detection"
+  },
   ];
 
   const allProjects = [...aiProjects, ...systemsProjects];
@@ -263,20 +277,33 @@ export default function Home() {
     { category: "Languages", items: ["Python", "C++"] }
   ];
 
-  const experience = [
-    {
-      year: "2025",
-      role: "Software Developer Intern",
-      company: "TechZeeb",
-      desc: [
-        "Built 'Kovai Natural Farmers' platform bridging organic farmers to customers.",
-        "Optimized backend APIs reducing data response time by 40%.",
-        "Designed responsive UI enhancing cross-device usability."
-      ]
-    }
-  ];
+ const experience = [
+  {
+    year: "2026",
+    role: "Software Engineer Intern",
+    company: "MuxGrow",
+    desc: [
+      "Rebuilt transactional email system with Amazon SES, Handlebars templates, event-driven delivery, payload validation, retry handling, and idempotency guards.",
+      "Built a chat-first AI playground with agent layer, DB-persisted session history, slash-command skill creation, per-response attribution, and telemetry.",
+      "Extended DM automation pipeline with plan-aware watermark injection, idempotency, overflow handling, and structured telemetry for Free plan enforcement.",
+      "Shipped workspace email campaign module with SES v2, sender identity management, template versioning, send_email automation action, and analytics pipeline.",
+      "Fixed billing, account lifecycle, and inbox bugs — including async webhook unsubscription on deletion, WebSocket inbox sync, chat pagination, and AI autocomplete."
+    ]
+  },
+  {
+    year: "2025",
+    role: "Software Developer Intern",
+    company: "TechZeeb",
+    desc: [
+      "Built 'Kovai Natural Farmers' platform bridging organic farmers to customers.",
+      "Optimized backend APIs reducing data response time by 40%.",
+      "Designed responsive UI enhancing cross-device usability."
+    ]
+  }
+];
 
   const achievements = [
+    { year: "2026", name: "INNOVATEFINLIT", dec: "Finalist"},
     { year: "2025", name: "SUPERHACK", desc: "Runner Up" },
     { year: "2025", name: "BUILD WITH INDIA", desc: "Top 20%" },
     { year: "2024", name: "PROVIDENCE LEAP IDEATHON", desc: "Semifinalist" }
