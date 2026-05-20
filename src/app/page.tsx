@@ -522,8 +522,8 @@ export default function Home() {
           </p>
         </div>
         <div className={styles.statsGrid}>
-          <div className={styles.statItem}><span className={styles.statNum}>3rd</span><span className={styles.statLabel}>Year Student</span></div>
-          <div className={styles.statItem}><span className={styles.statNum}>10+</span><span className={styles.statLabel}>Projects</span></div>
+          <div className={styles.statItem}><span className={styles.statNum}>4th</span><span className={styles.statLabel}>Year Student</span></div>
+          <div className={styles.statItem}><span className={styles.statNum}>15+</span><span className={styles.statLabel}>Projects</span></div>
           <div className={styles.statItem}><span className={styles.statNum}>100%</span><span className={styles.statLabel}>Dedication</span></div>
           <div className={styles.statItem}><span className={styles.statNum}>∞</span><span className={styles.statLabel}>Passion</span></div>
         </div>
