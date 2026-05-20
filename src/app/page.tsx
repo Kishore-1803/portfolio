@@ -152,6 +152,20 @@ export default function Home() {
       tech: ["React", "Flask", "Gemini API", "ChromaDB"],
       link: "https://github.com/Kishore-1803/PerspectAI"
     },
+    {
+    id: "14", title: "FRAUD GNN",
+    fullName: "Temporal GNN for Financial Fraud Detection",
+    category: "FinTech AI",
+    desc: "Detecting fraudulent interactions in temporal trust networks using a GRU-based Temporal Graph Neural Network that models dynamic evolution of user behavior over time.",
+    features: [
+      "GRU-based node memory with continual state updates",
+      "Temporal negative sampling & cost-sensitive BCE loss",
+      "Zero-leakage historical feature engineering",
+      "ROC-AUC 0.89 & PR-AUC 0.71 on Bitcoin OTC dataset"
+    ],
+    tech: ["PyTorch", "Pandas", "Scikit-learn", "Jupyter"],
+    link: "https://github.com/Kishore-1803/Temporal-GNN-for-Financial-Fraud-Detection"
+  },
   ];
 
   // Shelf 2: Systems / Web / Tools
@@ -240,20 +254,6 @@ export default function Home() {
       tech: ["FastAPI", "Sentence-BERT", "Supabase", "Gemini 2.5"],
       link: "https://github.com/Kishore-1803/hirelytics"
     },
-    {
-    id: "14", title: "FRAUD GNN",
-    fullName: "Temporal GNN for Financial Fraud Detection",
-    category: "FinTech AI",
-    desc: "Detecting fraudulent interactions in temporal trust networks using a GRU-based Temporal Graph Neural Network that models dynamic evolution of user behavior over time.",
-    features: [
-      "GRU-based node memory with continual state updates",
-      "Temporal negative sampling & cost-sensitive BCE loss",
-      "Zero-leakage historical feature engineering",
-      "ROC-AUC 0.89 & PR-AUC 0.71 on Bitcoin OTC dataset"
-    ],
-    tech: ["PyTorch", "Pandas", "Scikit-learn", "Jupyter"],
-    link: "https://github.com/Kishore-1803/Temporal-GNN-Financial-Fraud-Detection"
-  },
   ];
 
   const allProjects = [...aiProjects, ...systemsProjects];
