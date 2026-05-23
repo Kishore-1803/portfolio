@@ -59,7 +59,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  z-index: 100;
+  z-index: 300;
   pointer-events: none;
   /* Let clicks pass through empty space */
 }
@@ -135,6 +135,133 @@
   color: var(--text-main);
 }
 
+/* ── HAMBURGER BUTTON (hidden on desktop) ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 201;
+  padding: 0;
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text-main);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+.hamburgerOpen span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburgerOpen span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburgerOpen span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── MOBILE FULLSCREEN OVERLAY ── */
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 5, 5, 0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="light"] .mobileOverlay {
+  background: rgba(245, 245, 245, 0.97);
+}
+
+.mobileOverlayOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlayContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 80%;
+  max-width: 400px;
+}
+
+.overlayLink {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-dim);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.1s, transform 0.1s;
+}
+
+.mobileOverlayOpen .overlayLink {
+  animation: overlayLinkIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes overlayLinkIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overlayLinkIndex {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  opacity: 0.5;
+  min-width: 1.5rem;
+}
+
+.overlayLinkText {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+  transition: color 0.3s;
+}
+
+.overlayLink:active .overlayLinkText {
+  color: var(--accent-cyan);
+}
+
+.overlayTheme {
+  padding-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
 /* HERO SECTION */
 .heroSection {
   height: 100vh;
@@ -467,6 +594,14 @@
   background: var(--bg-secondary);
 }
 
+.desktopProjects {
+  display: block;
+}
+
+.mobileProjects {
+  display: none;
+}
+
 .bookshelfWrapper {
   display: flex;
   flex-direction: column;
@@ -615,7 +750,7 @@
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--spine-title);
   text-transform: uppercase;
@@ -631,12 +766,13 @@
 .bookSpineCategory {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   font-weight: 500;
   color: var(--spine-category);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   transform: rotate(180deg);
+  opacity: 0.85;
 }
 
 /* Thin "front cover" edge visible in 3D */
@@ -1101,7 +1237,6 @@
 /* ACHIEVEMENTS / MARQUEE */
 .awardsSection {
   padding: 10vh 0;
-  /* Removing horizontal padding for full bleed */
   background: var(--bg-main);
   color: var(--text-main);
   z-index: 5;
@@ -1109,11 +1244,19 @@
   overflow: hidden;
 }
 
+.desktopAwards {
+  display: block;
+}
+
+.mobileAwards {
+  display: none;
+}
+
 .marqueeContainer {
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
-  padding: 2rem 0;
+  padding: 3rem 0;
   position: relative;
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
@@ -1122,20 +1265,53 @@
   display: flex;
   width: max-content;
   animation: scrollMarquee 45s linear infinite;
-  /* Slower loop */
 }
 
-/* Removed hover pause to ensure smooth continuity if requested, or keep it. Keeping it. */
 .marqueeTrack:hover {
   animation-play-state: paused;
 }
 
 .awardGroup {
   display: flex;
-  gap: 3rem;
-  /* Spacing between cards in a set */
+  gap: 2rem;
   padding-right: 25vw;
-  /* LARGE GAP between sets. Superhack leaves before next appears */
+}
+
+.awardGroup .achieveCard {
+  min-width: 650px;
+  flex-shrink: 0;
+  animation: none;
+}
+
+.awardGroup .achieveCard .achieveInner {
+  padding: 3rem 3.5rem;
+  min-height: 180px;
+}
+
+.awardGroup .achieveCard .achieveUnlocked {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  margin-bottom: 1rem;
+}
+
+.awardGroup .achieveCard .achieveName {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.awardGroup .achieveCard .achieveMeta {
+  font-size: 1rem;
+}
+
+.awardGroup .achieveCard .achieveInner::after {
+  font-size: 12rem;
+  right: -1rem;
+  bottom: -1.5rem;
+  opacity: 0.05;
+}
+
+.awardGroup .achieveCard:hover {
+  transform: translateY(-8px);
 }
 
 @keyframes scrollMarquee {
@@ -1146,62 +1322,205 @@
   100% {
     transform: translateX(-25%);
   }
-
-  /* Move 1 group width (including its padding) */
-}
-
-.awardCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: var(--glass);
-  padding: 2rem 3rem;
-  border: 1px solid var(--border-dim);
-  border-radius: 6px;
-  min-width: 350px;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.awardCard:hover {
-  background: var(--border-dim);
-  border-color: var(--accent-cyan);
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-}
-
-.awardYear {
-  font-family: 'Space Grotesk', monospace;
-  opacity: 0.5;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.awardName {
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
-  white-space: normal;
-  /* Allow text wrapping inside card if needed */
-  line-height: 1;
-}
-
-.awardDesc {
-  font-size: 1rem;
-  color: var(--accent-cyan);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
 /* Hide legacy list styles */
 .awardList,
-.awardItem {
+.awardItem,
+.awardCard {
   display: none;
+}
+
+/* ── ACHIEVEMENT UNLOCKED CARDS (mobile) ── */
+.achieveGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem 0;
+}
+
+.achieveCard {
+  position: relative;
+  border-radius: 14px;
+  padding: 2px; /* This creates the border gap for the glow */
+  overflow: hidden;
+  cursor: pointer;
+  animation: achieveSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes achieveSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.achieveCard:active {
+  transform: scale(0.97);
+}
+
+.achieveTapped {
+  animation: achievePulse 0.6s ease-out;
+}
+
+@keyframes achievePulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.03); }
+  60% { transform: scale(0.98); }
+  100% { transform: scale(1); }
+}
+
+/* Rotating gradient border */
+.achieveBorderGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: conic-gradient(
+    from var(--border-angle, 0deg),
+    transparent 0%,
+    var(--achieve-accent) 10%,
+    transparent 20%,
+    transparent 80%,
+    var(--achieve-accent) 90%,
+    transparent 100%
+  );
+  animation: rotateBorder 4s linear infinite;
+  z-index: 0;
+}
+
+@keyframes rotateBorder {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* Fallback animation for browsers that don't support @property */
+@supports not (background: conic-gradient(from 0deg, red, blue)) {
+  .achieveBorderGlow {
+    background: linear-gradient(135deg, var(--achieve-accent), transparent, var(--achieve-accent));
+  }
+}
+
+/* Shimmer sweep effect */
+.achieveShimmer {
+  position: absolute;
+  inset: 2px;
+  border-radius: 12px;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.achieveShimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0.06),
+    transparent
+  );
+  animation: shimmerSweep 3s ease-in-out infinite;
+}
+
+@keyframes shimmerSweep {
+  0% { left: -100%; }
+  50% { left: 150%; }
+  100% { left: 150%; }
+}
+
+/* Card inner content */
+.achieveInner {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.achieveLeft {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Large decorative year watermark */
+.achieveInner::after {
+  content: attr(data-year);
+  position: absolute;
+  right: -0.3rem;
+  bottom: -0.8rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 8rem;
+  font-weight: 900;
+  color: var(--achieve-accent);
+  opacity: 0.08;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 0;
+  letter-spacing: -0.05em;
+}
+
+.achieveUnlocked {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--achieve-accent);
+  margin-bottom: 0.5rem;
+  opacity: 0.9;
+}
+
+.achieveName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-main);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.achieveMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.achieveYear {
+  font-family: 'Space Grotesk', monospace;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.achieveDot {
+  color: var(--text-muted);
+  opacity: 0.3;
+}
+
+.achieveResult {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 
@@ -1344,66 +1663,27 @@
 
   /* Hide custom cursor on touch */
 
-  /* NAVIGATION - Top Mobile Header */
+  /* NAVIGATION - Mobile hamburger + overlay */
   .navContainer {
     padding: 1rem 5vw;
     background: var(--bg-main);
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
     pointer-events: auto;
     border-bottom: 1px solid var(--border-dim);
     height: auto;
-  }
-
-  .navLogo {
-    width: 100%;
-    margin-bottom: 0.5rem;
+    position: relative;
   }
 
   .navLinks {
-    position: static;
-    /* Reset from fixed bottom */
-    width: 100%;
-    height: auto;
-    background: transparent;
-    padding: 0.2rem 0 0.5rem 0;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1.5rem;
-    overflow-x: auto;
-    overflow-y: hidden;
-    border-top: none;
-    z-index: 999;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    pointer-events: auto;
-  }
-
-  /* Ensure last item isn't cut off */
-  .navLinks:after {
-    content: "";
-    padding-right: 2rem;
+    display: none;
   }
 
   .headerRole {
     display: none;
   }
 
-  /* Simplify header on mobile */
-
-  .navLinks::-webkit-scrollbar {
-    display: none;
-  }
-
-  .navLink {
-    font-size: 0.9rem;
-    margin-right: 0;
-  }
-
-  .themeToggle {
-    margin-left: 0;
-    flex-shrink: 0;
+  .hamburger {
+    display: flex;
   }
 
   /* HERO */
@@ -1464,78 +1744,295 @@
     margin-bottom: 2rem;
   }
 
-  /* BOOKSHELF MOBILE */
-  .bookshelfWrapper {
-    gap: 0;
+  /* SKILLS MOBILE */
+  .skillItem {
+    font-size: 1.2rem;
   }
 
-  .shelfLabel {
-    font-size: 0.65rem;
-    margin-bottom: 1rem;
-  }
-
-  .shelfBooks {
-    justify-content: flex-start;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 1rem 0.5rem 1rem;
-    min-height: 200px;
-    scrollbar-width: none;
-  }
-
-  .shelfBooks::-webkit-scrollbar {
+  /* ═══════════════════════════════════════════════════
+     MOBILE: 3D STACKED CARD CAROUSEL
+     ═══════════════════════════════════════════════════ */
+  .desktopProjects {
     display: none;
   }
 
-  .bookContainer {
-    width: 60px;
-    height: 200px;
+  .mobileProjects {
+    display: block;
   }
 
-  /* LARGE BOOK MODAL - MOBILE */
-  .largeBookContainer {
-    width: 330px;
-    height: 500px;
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  .carouselHint {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    opacity: 0.6;
+    animation: hintPulse 3s ease-in-out infinite;
   }
 
-  .largeBookContainer.opening {
-    /* Shift the container right when the cover swings open to the left */
-    transform: translateX(60px);
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
   }
 
-  .largeBookPage {
+  .carouselViewport {
+    position: relative;
     width: 100%;
-    padding: 30px 20px 30px 30px;
+    min-height: 480px;
+    perspective: 1200px;
+    overflow: visible;
+    touch-action: pan-y;
   }
 
-  .largeBookCoverGroup {
+  .carouselStack {
+    position: relative;
     width: 100%;
+    height: 480px;
   }
 
-  .largeBookFullName {
-    font-size: 1.15rem;
+  .carouselCard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-dim);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
   }
 
-  .largeBookDescText {
-    font-size: 0.8rem;
-    line-height: 1.5;
-    margin-bottom: 20px;
+  .carouselCardActive {
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.3),
+      0 0 0 1px var(--border-dim),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
 
-  .largeBookTechList {
-    gap: 4px;
+  .carouselCardExiting {
+    transition: all 0.4s cubic-bezier(0.55, 0, 1, 0.45);
   }
 
-  .largeBookTechItem {
+  .cardAccentBar {
+    width: 100%;
+    height: 4px;
+  }
+
+  .cardInner {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .cardTopRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .cardNumber {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  .cardCategoryBadge {
     font-size: 0.6rem;
-    padding: 3px 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 5px 12px;
+    border-radius: 50px;
+    background: rgba(100, 120, 150, 0.12);
+    color: var(--text-muted);
+    border: 1px solid var(--border-dim);
   }
 
-  .largeBookLinkBtn {
-    font-size: 0.65rem;
-    padding: 10px 18px;
+  .cardTitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-transform: uppercase;
+    line-height: 1.25;
+    margin-bottom: 0.75rem;
+  }
+
+  .cardDesc {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cardFeatures {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .cardFeatureItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.4;
+  }
+
+  [data-theme="light"] .cardFeatureItem {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .featureArrow {
+    color: var(--accent-cyan);
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .cardTechRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.25rem;
+  }
+
+  .cardTechPill {
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 50px;
+    background: rgba(100, 120, 150, 0.12);
+    color: var(--text-muted);
+    border: 1px solid var(--border-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .cardGithubBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    color: var(--bg-main);
+    background: var(--text-main);
+    transition: all 0.3s ease;
+  }
+
+  /* ── NAV CONTROLS ── */
+  .carouselNav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .carouselNavBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border-dim);
+    background: var(--glass);
+    color: var(--text-main);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .carouselNavBtn:disabled {
+    opacity: 0.2;
+    cursor: default;
+  }
+
+  .carouselNavBtn:not(:disabled):active {
+    background: var(--accent-cyan);
+    color: #000;
+    border-color: var(--accent-cyan);
+    transform: scale(0.92);
+  }
+
+  .carouselCounter {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    font-family: 'Space Grotesk', monospace;
+  }
+
+  .counterCurrent {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .counterSep {
+    font-size: 1rem;
+    color: var(--text-muted);
+    opacity: 0.4;
+  }
+
+  .counterTotal {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  /* ── PROGRESS BAR ── */
+  .carouselProgress {
+    width: 80%;
+    height: 3px;
+    background: var(--border-dim);
+    border-radius: 10px;
+    margin: 1.5rem auto 0;
+    overflow: hidden;
+  }
+
+  .carouselProgressFill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── CAROUSEL CARD ACTIVE GLOW ── */
+  .carouselCardActive {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 20px 60px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── AWARDS MOBILE ── */
+  .desktopAwards {
+    display: none;
+  }
+
+  .mobileAwards {
+    display: block;
+    padding: 1rem 5vw;
+  }
+
+  .awardsSection {
+    padding: 8vh 0;
   }
 
   /* FOOTER */
