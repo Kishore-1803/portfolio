@@ -11,6 +11,10 @@ export default function Home() {
   const [theme, setTheme] = useState("dark");
   const [openBook, setOpenBook] = useState<number | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [mobileCardIndex, setMobileCardIndex] = useState(0);
+  const [swipeDir, setSwipeDir] = useState<'left' | 'right' | null>(null);
+  const [tappedAchieve, setTappedAchieve] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
@@ -18,6 +22,8 @@ export default function Home() {
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const toggleRef = useRef<HTMLDivElement>(null);
   const bookshelfRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
 
   // --- Mouse tilt handler ---
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -153,19 +159,33 @@ export default function Home() {
       link: "https://github.com/Kishore-1803/PerspectAI"
     },
     {
-    id: "14", title: "FRAUD GNN",
-    fullName: "Temporal GNN for Financial Fraud Detection",
-    category: "FinTech AI",
-    desc: "Detecting fraudulent interactions in temporal trust networks using a GRU-based Temporal Graph Neural Network that models dynamic evolution of user behavior over time.",
-    features: [
-      "GRU-based node memory with continual state updates",
-      "Temporal negative sampling & cost-sensitive BCE loss",
-      "Zero-leakage historical feature engineering",
-      "ROC-AUC 0.89 & PR-AUC 0.71 on Bitcoin OTC dataset"
-    ],
-    tech: ["PyTorch", "Pandas", "Scikit-learn", "Jupyter"],
-    link: "https://github.com/Kishore-1803/Temporal-GNN-for-Financial-Fraud-Detection"
-  },
+      id: "14", title: "FRAUD GNN",
+      fullName: "Temporal GNN for Financial Fraud Detection",
+      category: "FinTech AI",
+      desc: "Detecting fraudulent interactions in temporal trust networks using a GRU-based Temporal Graph Neural Network that models dynamic evolution of user behavior over time.",
+      features: [
+        "GRU-based node memory with continual state updates",
+        "Temporal negative sampling & cost-sensitive BCE loss",
+        "Zero-leakage historical feature engineering",
+        "ROC-AUC 0.89 & PR-AUC 0.71 on Bitcoin OTC dataset"
+      ],
+      tech: ["PyTorch", "Pandas", "Scikit-learn", "Jupyter"],
+      link: "https://github.com/Kishore-1803/Temporal-GNN-for-Financial-Fraud-Detection"
+    },
+    {
+      id: "17", title: "CLOUD DEPLOY",
+      fullName: "CloudDeploy-RL - OpenEnv Planner Environment",
+      category: "RL Platform",
+      desc: "OpenEnv-compliant reinforcement learning simulation environment for testing and evaluating autonomous cloud-agnostic deployment planner agents.",
+      features: [
+        "OpenEnv loop interface (reset, step, state MDP)",
+        "Deterministic task grader scoring between 0.0 and 1.0",
+        "Progressive trajectory reward shaping logic",
+        "Multi-provider LLM benchmarking (Groq / HF / OpenAI)"
+      ],
+      tech: ["Python", "OpenEnv", "Docker", "Groq AI"],
+      link: "https://github.com/Kishore-1803/CloudDeploy-RL"
+    },
   ];
 
   // Shelf 2: Systems / Web / Tools
@@ -254,20 +274,80 @@ export default function Home() {
       tech: ["FastAPI", "Sentence-BERT", "Supabase", "Gemini 2.5"],
       link: "https://github.com/Kishore-1803/hirelytics"
     },
+    {
+      id: "15", title: "ANOMYST",
+      fullName: "Anomyst - Monitoring Data Pipeline Health",
+      category: "Data Ops",
+      desc: "Modern data pipeline health monitoring platform designed to catch silent failures using statistical profiling (Z-score & KS-tests) and Groq LLM narration.",
+      features: [
+        "Statistical Drift Detection via Z-score & KS-tests",
+        "Dynamic baseline profiling over trailing runs",
+        "AI-augmented root-cause alerts via Groq Llama 3.3",
+        "Simulation framework for CSV anomaly injection"
+      ],
+      tech: ["FastAPI", "Next.js", "PostgreSQL", "Groq AI"],
+      link: "https://github.com/Kishore-1803/Anomyst"
+    },
+    {
+      id: "16", title: "SAKHI LEDGER",
+      fullName: "Sakhi's Ledger - Gamified Financial Literacy",
+      category: "FinTech App",
+      desc: "Gamified, offline-first financial literacy mobile app built for women in Self-Help Groups across India with multilingual TTS support.",
+      features: [
+        "Gamified XP, levels, community leaderboards",
+        "AI-generated fraud simulations (SMS/Call Scam Arena)",
+        "Visual envelope-jar budgeting system",
+        "Offline-first sync via Redux Persist & AsyncStorage"
+      ],
+      tech: ["React Native", "Expo", "Redux Toolkit", "TypeScript"],
+      link: "https://github.com/Kishore-1803/Sakhis-Ledger"
+    },
   ];
 
-  const allProjects = [...aiProjects, ...systemsProjects];
+  // Custom ranking logic to surface the most complex/impressive projects first on mobile
+  const mobileRank = ["01", "12", "17", "14", "05", "16", "15", "11", "10", "06", "02", "04", "03", "13", "08", "09", "07"];
+  const allProjects = [...aiProjects, ...systemsProjects].sort((a, b) => mobileRank.indexOf(a.id) - mobileRank.indexOf(b.id));
+
+  // Vibrant gradient pairs for mobile carousel cards
+  const mobileCardGradients = [
+    ['#0f2027', '#2c5364'],  // Deep Teal
+    ['#1a1a2e', '#16213e'],  // Midnight Blue
+    ['#0d1117', '#1b3a4b'],  // Ocean Depth
+    ['#1c1c3d', '#3a1c71'],  // Purple Night
+    ['#1a0a2e', '#2d1b69'],  // Violet Abyss
+    ['#0b0f19', '#1e3a5f'],  // Navy Steel
+    ['#111827', '#1f4037'],  // Forest Dark
+    ['#0f0c29', '#302b63'],  // Indigo Haze
+    ['#141e30', '#243b55'],  // Slate Storm
+    ['#1b1b2f', '#162447'],  // Cosmic Ink
+    ['#0a0e27', '#1a237e'],  // Deep Sapphire
+    ['#100e17', '#2d132c'],  // Dark Plum
+    ['#0b0c10', '#1b2838'],  // Charcoal Blue
+    ['#161625', '#1d2b3a'],  // Dark Graphite
+    ['#140d24', '#2c1654'],  // Cyber Violet / Anomyst Alert
+    ['#1e0a16', '#3d162a'],  // Warm Rosewood / Sakhi's Ledger
+    ['#071510', '#103020'],  // Emerald Obsidian / CloudDeploy-RL
+  ];
+
+  const mobileCardAccents = [
+    '#00f3ff', '#60a5fa', '#34d399', '#a78bfa',
+    '#f472b6', '#38bdf8', '#4ade80', '#818cf8',
+    '#fb923c', '#22d3ee', '#6366f1', '#ec4899',
+    '#2dd4bf', '#facc15', '#ff5757', '#ff7ebb', '#00ff88',
+  ];
 
   const bookColors = theme === "light"
     ? [
       "#627D98", "#829AB1", "#9FB3C8", "#BCCCDC", "#546E7A",
       "#78909C", "#90A4AE", "#6C8EBF", "#84A1C4", "#A8C0D4",
-      "#6D8B74", "#8DA399", "#A5B5A5"
+      "#6D8B74", "#8DA399", "#A5B5A5", "#7E97A6", "#93A8B5",
+      "#A6B9C7", "#8FA89B", "#7A9A95", "#8E9CA8", "#B4C5D4"
     ]
     : [
       "#2C3E50", "#1F2937", "#334155", "#4A5568", "#2D3748",
       "#1E3A5F", "#3B4252", "#44546A", "#374151", "#4C566A",
-      "#2E4057", "#37474F", "#1A202C"
+      "#2E4057", "#37474F", "#1A202C", "#233242", "#2F3E46",
+      "#354F52", "#2C3539", "#202C39", "#2D3A4A", "#1D2A3A"
     ];
 
   const skillsData = [
@@ -303,10 +383,10 @@ export default function Home() {
 ];
 
   const achievements = [
-    { year: "2026", name: "INNOVATEFINLIT", dec: "Finalist"},
-    { year: "2025", name: "SUPERHACK", desc: "Runner Up" },
-    { year: "2025", name: "BUILD WITH INDIA", desc: "Top 20%" },
-    { year: "2024", name: "PROVIDENCE LEAP IDEATHON", desc: "Semifinalist" }
+    { year: "2026", name: "INNOVATEFINLIT", desc: "Finalist", accent: "#facc15" },
+    { year: "2025", name: "SUPERHACK", desc: "Runner Up", accent: "#60a5fa" },
+    { year: "2025", name: "BUILD WITH INDIA", desc: "Top 20%", accent: "#34d399" },
+    { year: "2024", name: "PROVIDENCE LEAP", desc: "Semifinalist", accent: "#a78bfa" }
   ];
 
   // THEME EFFECT
@@ -424,7 +504,7 @@ export default function Home() {
       <div
         key={globalIdx}
         className={styles.bookContainer}
-        style={{ '--book-color': bookColors[globalIdx] } as React.CSSProperties}
+        style={{ '--book-color': bookColors[globalIdx % bookColors.length] } as React.CSSProperties}
       >
         {/* The 3D shelf book */}
         <div
@@ -483,6 +563,8 @@ export default function Home() {
           <h2 className={styles.headerName}>KISHORE</h2>
           <span className={styles.headerRole}>STUDENT</span>
         </div>
+
+        {/* Desktop nav links */}
         <div className={styles.navLinks}>
           <a href="#about" className={styles.navLink}>About</a>
           <a href="#skills" className={styles.navLink}>Stack</a>
@@ -496,7 +578,46 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className={`${styles.hamburger} ${mobileMenuOpen ? styles.hamburgerOpen : ''}`}
+          onClick={() => setMobileMenuOpen(prev => !prev)}
+          aria-label="Toggle menu"
+        >
+          <span /><span /><span />
+        </button>
       </nav>
+
+      {/* Mobile fullscreen overlay menu */}
+      <div className={`${styles.mobileOverlay} ${mobileMenuOpen ? styles.mobileOverlayOpen : ''}`}>
+        <div className={styles.overlayContent}>
+          {['About', 'Stack', 'Exp', 'Work', 'Contact', 'Resume'].map((item, i) => {
+            const href = item === 'Resume' ? '/Resume.pdf' : `#${item === 'Stack' ? 'skills' : item === 'Exp' ? 'experience' : item.toLowerCase()}`;
+            const isExternal = item === 'Resume';
+            return (
+              <a
+                key={item}
+                href={href}
+                target={isExternal ? '_blank' : undefined}
+                className={styles.overlayLink}
+                style={{ animationDelay: `${i * 0.08}s` }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span className={styles.overlayLinkIndex}>{String(i + 1).padStart(2, '0')}</span>
+                <span className={styles.overlayLinkText}>{item}</span>
+              </a>
+            );
+          })}
+          <div className={styles.overlayTheme}>
+            <div className={styles.themeToggle} onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}>
+              <div ref={toggleRef} className={styles.toggleKnob}>
+                {theme === "dark" ? <FiMoon className={styles.toggleIcon} /> : <FiSun className={styles.toggleIcon} />}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <header className={styles.heroSection}>
         <div className={styles.heroContent}>
@@ -561,37 +682,213 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PROJECTS — BOOKSHELF */}
+      {/* PROJECTS */}
       <section id="work" className={styles.bookshelfSection} ref={bookshelfRef}>
         <div className={styles.sectionHeader}>
           <span>PROJECTS</span>
           <span>(2023 — Present)</span>
         </div>
 
-        <div className={styles.exploreHint}>
-          <span>Click any book to explore</span>
-          <span className={styles.exploreArrow}>→</span>
+        <div className={styles.desktopProjects}>
+          <div className={styles.exploreHint}>
+            <span>Click any book to explore</span>
+            <span className={styles.exploreArrow}>→</span>
+          </div>
+
+          <div className={styles.bookshelfWrapper}>
+            {renderShelf(aiProjects, "AI / ML PROJECTS", 0)}
+            {renderShelf(systemsProjects, "SYSTEMS / WEB / TOOLS", aiProjects.length)}
+          </div>
         </div>
 
-        <div className={styles.bookshelfWrapper}>
-          {renderShelf(aiProjects, "AI / ML PROJECTS", 0)}
-          {renderShelf(systemsProjects, "SYSTEMS / WEB / TOOLS", aiProjects.length)}
+        <div className={styles.mobileProjects}>
+          {/* Swipe hint */}
+          <div className={styles.carouselHint}>
+            <span>← SWIPE TO EXPLORE →</span>
+          </div>
+
+          {/* 3D Stacked Card Carousel */}
+          <div
+            className={styles.carouselViewport}
+            onTouchStart={(e) => {
+              touchStartX.current = e.touches[0].clientX;
+              touchStartY.current = e.touches[0].clientY;
+            }}
+            onTouchEnd={(e) => {
+              const dx = e.changedTouches[0].clientX - touchStartX.current;
+              const dy = e.changedTouches[0].clientY - touchStartY.current;
+              if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+                if (dx < 0 && mobileCardIndex < allProjects.length - 1) {
+                  setSwipeDir('left');
+                  setTimeout(() => { setMobileCardIndex(prev => prev + 1); setSwipeDir(null); }, 50);
+                } else if (dx > 0 && mobileCardIndex > 0) {
+                  setSwipeDir('right');
+                  setTimeout(() => { setMobileCardIndex(prev => prev - 1); setSwipeDir(null); }, 50);
+                }
+              }
+            }}
+          >
+            <div className={styles.carouselStack}>
+              {allProjects.map((proj, idx) => {
+                const offset = idx - mobileCardIndex;
+                if (offset < -1 || offset > 3) return null;
+                const isActive = offset === 0;
+                const gradient = mobileCardGradients[idx % mobileCardGradients.length];
+                const accent = mobileCardAccents[idx % mobileCardAccents.length];
+                return (
+                  <div
+                    key={idx}
+                    className={`${styles.carouselCard} ${isActive ? styles.carouselCardActive : ''} ${offset < 0 ? styles.carouselCardExiting : ''}`}
+                    style={{
+                      '--card-offset': offset,
+                      '--card-accent': accent,
+                      zIndex: allProjects.length - offset,
+                      background: `linear-gradient(145deg, ${gradient[0]}, ${gradient[1]})`,
+                      transform: offset < 0
+                        ? `translateX(-120%) scale(0.9) rotateY(10deg)`
+                        : `translateY(${offset * 14}px) scale(${1 - offset * 0.06})`,
+                      opacity: offset < 0 ? 0 : offset > 2 ? 0 : 1 - offset * 0.2,
+                      pointerEvents: isActive ? 'auto' : 'none',
+                      filter: isActive ? 'none' : `brightness(${1 - offset * 0.15})`,
+                    } as React.CSSProperties}
+                  >
+                    {/* Gradient accent bar */}
+                    <div className={styles.cardAccentBar} style={{ background: `linear-gradient(90deg, ${accent}, ${accent}44)` }} />
+
+                    <div className={styles.cardInner}>
+                      <div className={styles.cardTopRow}>
+                        <span className={styles.cardNumber} style={{ color: accent }}>{String(idx + 1).padStart(2, '0')}</span>
+                        <span className={styles.cardCategoryBadge} style={{ borderColor: `${accent}44`, color: accent }}>{proj.category}</span>
+                      </div>
+
+                      <h3 className={styles.cardTitle}>{proj.fullName}</h3>
+                      <p className={styles.cardDesc}>{proj.desc}</p>
+
+                      <div className={styles.cardFeatures}>
+                        {proj.features.slice(0, 3).map((feat, fi) => (
+                          <div key={fi} className={styles.cardFeatureItem}>
+                            <span className={styles.featureArrow} style={{ color: accent }}>→</span>
+                            <span>{feat}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className={styles.cardTechRow}>
+                        {proj.tech.map((t, ti) => (
+                          <span key={ti} className={styles.cardTechPill} style={{ borderColor: `${accent}33` }}>{t}</span>
+                        ))}
+                      </div>
+
+                      <a
+                        href={proj.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.cardGithubBtn}
+                        style={{ background: accent, color: '#000' }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FiGithub /> VIEW ON GITHUB <FiExternalLink />
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Counter & dots */}
+          <div className={styles.carouselNav}>
+            <button
+              className={styles.carouselNavBtn}
+              onClick={() => { if (mobileCardIndex > 0) { setSwipeDir('right'); setTimeout(() => { setMobileCardIndex(prev => prev - 1); setSwipeDir(null); }, 50); } }}
+              disabled={mobileCardIndex === 0}
+              aria-label="Previous"
+            >
+              ←
+            </button>
+            <div className={styles.carouselCounter}>
+              <span className={styles.counterCurrent}>{String(mobileCardIndex + 1).padStart(2, '0')}</span>
+              <span className={styles.counterSep}>/</span>
+              <span className={styles.counterTotal}>{String(allProjects.length).padStart(2, '0')}</span>
+            </div>
+            <button
+              className={styles.carouselNavBtn}
+              onClick={() => { if (mobileCardIndex < allProjects.length - 1) { setSwipeDir('left'); setTimeout(() => { setMobileCardIndex(prev => prev + 1); setSwipeDir(null); }, 50); } }}
+              disabled={mobileCardIndex === allProjects.length - 1}
+              aria-label="Next"
+            >
+              →
+            </button>
+          </div>
+
+          {/* Progress bar */}
+          <div className={styles.carouselProgress}>
+            <div
+              className={styles.carouselProgressFill}
+              style={{ width: `${((mobileCardIndex + 1) / allProjects.length) * 100}%` }}
+            />
+          </div>
         </div>
       </section>
 
       <section className={styles.awardsSection}>
         <div className={styles.sectionHeader} style={{ paddingLeft: '5vw' }}><span>HACKATHONS</span></div>
-        <div className={styles.marqueeContainer}>
-          <div className={styles.marqueeTrack}>
-            {[1, 2, 3, 4].map((group) => (
-              <div key={group} className={styles.awardGroup}>
-                {achievements.map((award, i) => (
-                  <div key={i} className={styles.awardCard}>
-                    <span className={styles.awardYear}>{award.year}</span>
-                    <h3 className={styles.awardName}>{award.name}</h3>
-                    <span className={styles.awardDesc}>{award.desc}</span>
+        
+        {/* Desktop: Marquee with animated border cards */}
+        <div className={styles.desktopAwards}>
+          <div className={styles.marqueeContainer}>
+            <div className={styles.marqueeTrack}>
+              {[1, 2, 3, 4].map((group) => (
+                <div key={group} className={styles.awardGroup}>
+                  {achievements.map((award, i) => (
+                    <div key={i} className={styles.achieveCard} style={{ '--achieve-accent': award.accent } as React.CSSProperties}>
+                      <div className={styles.achieveBorderGlow} />
+                      <div className={styles.achieveShimmer} />
+                      <div className={styles.achieveInner} data-year={award.year}>
+                        <div className={styles.achieveLeft}>
+                          <div className={styles.achieveUnlocked}>ACHIEVEMENT UNLOCKED</div>
+                          <h3 className={styles.achieveName}>{award.name}</h3>
+                          <div className={styles.achieveMeta}>
+                            <span className={styles.achieveYear}>{award.year}</span>
+                            <span className={styles.achieveDot}>•</span>
+                            <span className={styles.achieveResult} style={{ color: award.accent }}>{award.desc}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile: Achievement Unlocked Cards */}
+        <div className={styles.mobileAwards}>
+          <div className={styles.achieveGrid}>
+            {achievements.map((award, i) => (
+              <div
+                key={i}
+                className={`${styles.achieveCard} ${tappedAchieve === i ? styles.achieveTapped : ''}`}
+                style={{ '--achieve-accent': award.accent, animationDelay: `${i * 0.15}s` } as React.CSSProperties}
+                onClick={() => {
+                  setTappedAchieve(i);
+                  setTimeout(() => setTappedAchieve(null), 600);
+                }}
+              >
+                <div className={styles.achieveBorderGlow} />
+                <div className={styles.achieveShimmer} />
+                <div className={styles.achieveInner} data-year={award.year}>
+                  <div className={styles.achieveLeft}>
+                    <div className={styles.achieveUnlocked}>ACHIEVEMENT UNLOCKED</div>
+                    <h4 className={styles.achieveName}>{award.name}</h4>
+                    <div className={styles.achieveMeta}>
+                      <span className={styles.achieveYear}>{award.year}</span>
+                      <span className={styles.achieveDot}>•</span>
+                      <span className={styles.achieveResult} style={{ color: award.accent }}>{award.desc}</span>
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
             ))}
           </div>
