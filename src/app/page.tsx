@@ -16,7 +16,6 @@ export default function Home() {
   const [swipeDir, setSwipeDir] = useState<'left' | 'right' | null>(null);
   const [tappedAchieve, setTappedAchieve] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrambleText, setScrambleText] = useState('');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const preloaderRef = useRef<HTMLDivElement>(null);
@@ -27,6 +26,8 @@ export default function Home() {
   const toggleRef = useRef<HTMLDivElement>(null);
   const bookshelfRef = useRef<HTMLDivElement>(null);
   const wipeLineRef = useRef<HTMLDivElement>(null);
+  const logoContainerRef = useRef<HTMLDivElement>(null);
+  const logoSvgRef = useRef<SVGSVGElement>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
@@ -461,71 +462,150 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     const ctx = gsap.context(() => {
-      // --- Preloader: Text Scramble / Decode Effect ---
-      const targetName = 'KISHORE BALAJI';
-      const glitchChars = '!@#$%^&*()_+{}|:<>?/\\=01';
-      const totalDuration = 2.0; // total scramble time in seconds
-      const scrambleObj = { progress: 0 };
+      // --- Preloader: Lokal-Inspired Curtain + K Logo Reveal ---
+      const curtainCols = gsap.utils.toArray(`.${styles.curtainCol}`);
+      const logoWrap = logoContainerRef.current;
+      const logoPaths = logoSvgRef.current?.querySelectorAll('.k-path');
 
-      // Initialize with all glitch chars
-      setScrambleText(targetName.split('').map(c => c === ' ' ? ' ' : glitchChars[Math.floor(Math.random() * glitchChars.length)]).join(''));
+      // Prepare SVG paths: set strokeDasharray = total length, offset = full (hidden)
+      if (logoPaths) {
+        logoPaths.forEach((path: any) => {
+          const len = path.getTotalLength();
+          gsap.set(path, {
+            strokeDasharray: len,
+            strokeDashoffset: len,
+            fill: 'none',
+          });
+        });
+      }
 
       const tl = gsap.timeline();
 
-      tl.to(scrambleObj, {
-        progress: 1,
-        duration: totalDuration,
-        ease: "power2.in",
-        onUpdate: () => {
-          const p = scrambleObj.progress;
-          const lockedCount = Math.floor(p * targetName.length);
-          const result = targetName.split('').map((char, i) => {
-            if (char === ' ') return ' ';
-            if (i < lockedCount) return char;
-            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-          }).join('');
-          setScrambleText(result);
-        },
-        onComplete: () => setScrambleText(targetName),
-      })
-      // Pause to let the decoded name breathe
-      .to({}, { duration: 0.5 })
-      // Slide entire preloader up
-      .to(preloaderRef.current, {
-        yPercent: -100,
-        duration: 1,
+      // Step 1: Staggered curtain columns drop from top
+      tl.to(curtainCols, {
+        scaleY: 1,
+        duration: 0.8,
         ease: "power4.inOut",
+        stagger: 0.1,
       })
+
+      // Step 2: Fade in the logo container
+      .to(logoWrap, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power3.out",
+      }, "-=0.3")
+
+      // Step 3: Draw stroke outlines — staggered per path
+      .to(logoPaths ? Array.from(logoPaths) : [], {
+        strokeDashoffset: 0,
+        duration: 1.4,
+        ease: "power2.inOut",
+        stagger: 0.25,
+      }, "-=0.2")
+
+      // Step 4: Breathe — short pause with outline visible
+      .to({}, { duration: 0.3 })
+
+      // Step 5: Fill paths with portfolio colors — staggered
+      .to(logoPaths ? logoPaths[0] : {}, {
+        fill: '#00f3ff',
+        duration: 0.5,
+        ease: "power2.inOut",
+      })
+      .to(logoPaths ? logoPaths[1] : {}, {
+        fill: '#00c8d6',
+        duration: 0.5,
+        ease: "power2.inOut",
+      }, "-=0.35")
+      .to(logoPaths ? logoPaths[2] : {}, {
+        fill: '#bd00ff',
+        duration: 0.5,
+        ease: "power2.inOut",
+      }, "-=0.35")
+
+      // Step 6: Add neon glow to the logo
+      .to(logoSvgRef.current, {
+        filter: 'drop-shadow(0 0 25px rgba(0, 243, 255, 0.6)) drop-shadow(0 0 60px rgba(189, 0, 255, 0.3))',
+        duration: 0.6,
+        ease: "power2.out",
+      }, "-=0.3")
+
+      // Step 7: Scale up the logo and fade out (diving into the K)
+      .to(logoWrap, {
+        scale: 5,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.in",
+      })
+
+      // Step 8: Staggered curtain columns retract upward
+      .to(curtainCols, {
+        scaleY: 0,
+        duration: 0.8,
+        ease: "power4.inOut",
+        stagger: 0.1,
+      }, "-=0.6")
+
+      // Step 9: Hide preloader overlay
       .set(preloaderRef.current, { display: "none" })
-      // Animate hero elements in
+
+      // ── Step 10: Grand Hero Entrance ──
+      // Nav slides down
       .from(`.${styles.navContainer}`, {
-        y: -20,
+        y: -40,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+      }, "-=0.5")
+
+      // "I'M KISHORE BALAJI" intro text rises up
+      .from(`.${styles.heroIntro}`, {
+        y: 30,
         opacity: 0,
         duration: 0.8,
         ease: "power3.out",
-      }, "-=0.5")
-      .from(`.${styles.heroIntro}`, {
-        y: 15,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-      }, "-=0.5")
-      // heroTextRef intentionally NOT animated here — preserving original scroll animation
-      .from(heroOrbitRef.current, {
-        scale: 0.5,
-        opacity: 0,
-        rotation: -90,
-        duration: 1.2,
-        ease: "power3.out",
-      }, "-=0.8")
-      .from(`.${styles.scrollIndicator}`, {
-        y: 10,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power3.out",
-      }, "-=0.4");
+      }, "-=0.6")
 
-      // RESTORED HELLO WORLD ANIMATION (untouched by preloader timeline)
+      // "HELLO WORLD." wrapper — dramatic scale + blur entrance
+      // (Targets the WRAPPER, not the h1, to avoid conflict with the scroll trigger on h1)
+      .from(`.${styles.heroTextWrapper}`, {
+        scale: 0.3,
+        opacity: 0,
+        y: 60,
+        filter: 'blur(20px)',
+        duration: 1.4,
+        ease: "expo.out",
+        clearProps: "filter",
+      }, "-=0.5")
+
+      // Corner marks expand outward from center
+      .from(`.${styles.cornerMark}`, {
+        scale: 0,
+        opacity: 0,
+        duration: 0.8,
+        ease: "back.out(2)",
+        stagger: 0.08,
+      }, "-=1.0")
+
+      // Orbit ring spins in
+      .from(heroOrbitRef.current, {
+        scale: 0,
+        opacity: 0,
+        rotation: -180,
+        duration: 1.4,
+        ease: "power3.out",
+      }, "-=1.2")
+
+      // Scroll indicator bounces in
+      .from(`.${styles.scrollIndicator}`, {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "back.out(1.7)",
+      }, "-=0.6");
+
+      // ── Scroll-based parallax on HELLO WORLD (retained) ──
       gsap.to(heroTextRef.current, {
         scrollTrigger: { trigger: document.body, start: "top top", end: "100vh top", scrub: 1 },
         y: -150, opacity: 0, scale: 1.1
@@ -660,11 +740,50 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className={styles.main}>
-      {/* Preloader */}
+      {/* Preloader — Lokal-Inspired Curtain + K Logo Reveal */}
       <div ref={preloaderRef} className={styles.preloader}>
-        <div className={styles.preloaderScramble}>
-          <span className={styles.scrambleText}>{scrambleText}</span>
-          <div className={styles.scrambleLine}></div>
+        <div className={styles.curtainColumns}>
+          <div className={styles.curtainCol}></div>
+          <div className={styles.curtainCol}></div>
+          <div className={styles.curtainCol}></div>
+          <div className={styles.curtainCol}></div>
+          <div className={styles.curtainCol}></div>
+          <div className={styles.curtainCol}></div>
+        </div>
+        {/* Geometric "K" Logo — 3 path segments for staggered stroke-draw */}
+        <div ref={logoContainerRef} className={styles.preloaderLogo}>
+          <svg
+            ref={logoSvgRef}
+            className={styles.kLogoSvg}
+            viewBox="0 0 200 200"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            {/* Vertical bar of K */}
+            <path
+              className="k-path"
+              d="M 50 20 L 50 180 L 75 180 L 75 20 Z"
+              stroke="#00f3ff"
+              strokeWidth="2"
+              fill="none"
+            />
+            {/* Upper diagonal arm of K */}
+            <path
+              className="k-path"
+              d="M 75 100 L 150 20 L 170 20 L 170 40 L 100 110 Z"
+              stroke="#00f3ff"
+              strokeWidth="2"
+              fill="none"
+            />
+            {/* Lower diagonal arm of K */}
+            <path
+              className="k-path"
+              d="M 85 115 L 170 180 L 150 180 L 75 105 Z"
+              stroke="#bd00ff"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
         </div>
       </div>
 
