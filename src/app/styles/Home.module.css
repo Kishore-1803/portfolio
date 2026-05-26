@@ -12,47 +12,67 @@
 }
 
 /* ═══════════════════════════════════════
-   PRELOADER — Text Scramble / Decode
+   PRELOADER — Lokal-Inspired Curtain + K Logo Reveal
    ═══════════════════════════════════════ */
 .preloader {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #050505;
+  pointer-events: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.preloaderScramble {
+/* Container for the 6 vertical curtain columns */
+.curtainColumns {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+}
+
+.curtainCol {
+  flex: 1;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  will-change: transform;
+}
+
+/* Portfolio-matching dark palette — deep navy to midnight */
+.curtainCol:nth-child(1) { background: #0a1628; }  /* Deep Navy */
+.curtainCol:nth-child(2) { background: #0d1f3c; }  /* Dark Blue */
+.curtainCol:nth-child(3) { background: #0f1a35; }  /* Midnight Indigo */
+.curtainCol:nth-child(4) { background: #12102b; }  /* Dark Purple */
+.curtainCol:nth-child(5) { background: #0b0f1e; }  /* Deep Midnight */
+.curtainCol:nth-child(6) { background: #060810; }  /* Near Black */
+
+/* SVG K Logo — centered on top of curtain */
+.preloaderLogo {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  opacity: 0;
 }
 
-.scrambleText {
-  font-family: 'Space Grotesk', monospace;
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: var(--accent-cyan);
-  white-space: pre;
-  text-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 40px rgba(0, 243, 255, 0.15);
+.kLogoSvg {
+  width: clamp(120px, 20vw, 220px);
+  height: clamp(120px, 20vw, 220px);
+  filter: drop-shadow(0 0 0px rgba(0, 243, 255, 0));
+  transition: filter 0.3s ease;
 }
 
-.scrambleLine {
-  width: 60px;
-  height: 2px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px var(--accent-cyan);
-  animation: scrambleLinePulse 1s ease-in-out infinite alternate;
+/* Glow class toggled on by GSAP */
+.kLogoGlow {
+  filter: drop-shadow(0 0 25px rgba(0, 243, 255, 0.6))
+          drop-shadow(0 0 60px rgba(189, 0, 255, 0.3));
 }
 
-@keyframes scrambleLinePulse {
-  from { opacity: 0.4; width: 40px; }
-  to   { opacity: 1; width: 80px; }
-}
 
 /* ═══════════════════════════════════════
    NAV SCROLL — Wipe Line
