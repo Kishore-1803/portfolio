@@ -15,8 +15,11 @@ export default function Home() {
   const [swipeDir, setSwipeDir] = useState<'left' | 'right' | null>(null);
   const [tappedAchieve, setTappedAchieve] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrambleText, setScrambleText] = useState('');
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const preloaderRef = useRef<HTMLDivElement>(null);
+  const heroOrbitRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorOutlineRef = useRef<HTMLDivElement>(null);
   const heroTextRef = useRef<HTMLHeadingElement>(null);
@@ -338,23 +341,24 @@ export default function Home() {
 
   const bookColors = theme === "light"
     ? [
-      "#627D98", "#829AB1", "#9FB3C8", "#BCCCDC", "#546E7A",
-      "#78909C", "#90A4AE", "#6C8EBF", "#84A1C4", "#A8C0D4",
-      "#6D8B74", "#8DA399", "#A5B5A5", "#7E97A6", "#93A8B5",
-      "#A6B9C7", "#8FA89B", "#7A9A95", "#8E9CA8", "#B4C5D4"
+      "#627D98", "#7B8F9E", "#9FB3C8", "#8C9DAD", "#546E7A",
+      "#6C8EBF", "#7A9A95", "#A08B7E", "#84A1C4", "#8D7B6C",
+      "#6D8B74", "#957B8D", "#7E97A6", "#A5957D", "#8B7E9A",
+      "#93A8B5", "#8C7D68", "#7A8F8B", "#6B7F94", "#A09080"
     ]
     : [
-      "#2C3E50", "#1F2937", "#334155", "#4A5568", "#2D3748",
-      "#1E3A5F", "#3B4252", "#44546A", "#374151", "#4C566A",
-      "#2E4057", "#37474F", "#1A202C", "#233242", "#2F3E46",
-      "#354F52", "#2C3539", "#202C39", "#2D3A4A", "#1D2A3A"
+      "#2C3E50", "#1B3A4B", "#3D5A80", "#4A5568", "#2D3748",
+      "#1E3A5F", "#4A6670", "#44546A", "#2F4858", "#5C6B73",
+      "#2E4057", "#37474F", "#3C4F65", "#2D4059", "#354F52",
+      "#4A7C8F", "#3A506B", "#3E3B5C", "#2D3A4A", "#4B5D6E"
     ];
 
   const skillsData = [
-    { category: "AI & ML", items: ["PyTorch", "TensorFlow", "LLMs & RAG", "Computer Vision", "NumPy", "Pandas"] },
-    { category: "Web Dev", items: ["Next.js", "React", "FastAPI", "Flask", "Express.js"] },
-    { category: "Cloud & Ops", items: ["AWS", "Azure", "Docker", "Kafka", "Git"] },
-    { category: "Languages", items: ["Python", "C++"] }
+    { category: "Languages", items: ["Python", "C++", "JavaScript"] },
+    { category: "AI & ML", items: ["PyTorch", "TensorFlow", "HuggingFace Transformers", "RAG", "LLM Fine-tuning", "NLP", "Computer Vision", "Pandas", "NumPy"] },
+    { category: "Backend & Web", items: ["FastAPI", "Flask", "Express.js", "Next.js", "React"] },
+    { category: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Pinecone", "Supabase"] },
+    { category: "Infrastructure", items: ["Apache Kafka", "Docker", "AWS", "Azure", "CI/CD", "Git"] }
   ];
 
  const experience = [
@@ -419,6 +423,71 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      // --- Preloader: Text Scramble / Decode Effect ---
+      const targetName = 'KISHORE BALAJI';
+      const glitchChars = '!@#$%^&*()_+{}|:<>?/\\=01';
+      const totalDuration = 2.0; // total scramble time in seconds
+      const scrambleObj = { progress: 0 };
+
+      // Initialize with all glitch chars
+      setScrambleText(targetName.split('').map(c => c === ' ' ? ' ' : glitchChars[Math.floor(Math.random() * glitchChars.length)]).join(''));
+
+      const tl = gsap.timeline();
+
+      tl.to(scrambleObj, {
+        progress: 1,
+        duration: totalDuration,
+        ease: "power2.in",
+        onUpdate: () => {
+          const p = scrambleObj.progress;
+          const lockedCount = Math.floor(p * targetName.length);
+          const result = targetName.split('').map((char, i) => {
+            if (char === ' ') return ' ';
+            if (i < lockedCount) return char;
+            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
+          }).join('');
+          setScrambleText(result);
+        },
+        onComplete: () => setScrambleText(targetName),
+      })
+      // Pause to let the decoded name breathe
+      .to({}, { duration: 0.5 })
+      // Slide entire preloader up
+      .to(preloaderRef.current, {
+        yPercent: -100,
+        duration: 1,
+        ease: "power4.inOut",
+      })
+      .set(preloaderRef.current, { display: "none" })
+      // Animate hero elements in
+      .from(`.${styles.navContainer}`, {
+        y: -20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+      }, "-=0.5")
+      .from(`.${styles.heroIntro}`, {
+        y: 15,
+        opacity: 0,
+        duration: 0.7,
+        ease: "power3.out",
+      }, "-=0.5")
+      // heroTextRef intentionally NOT animated here — preserving original scroll animation
+      .from(heroOrbitRef.current, {
+        scale: 0.5,
+        opacity: 0,
+        rotation: -90,
+        duration: 1.2,
+        ease: "power3.out",
+      }, "-=0.8")
+      .from(`.${styles.scrollIndicator}`, {
+        y: 10,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power3.out",
+      }, "-=0.4");
+
+      // RESTORED HELLO WORLD ANIMATION (untouched by preloader timeline)
       gsap.to(heroTextRef.current, {
         scrollTrigger: { trigger: document.body, start: "top top", end: "100vh top", scrub: 1 },
         y: -150, opacity: 0, scale: 1.1
@@ -553,6 +622,14 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className={styles.main}>
+      {/* Preloader */}
+      <div ref={preloaderRef} className={styles.preloader}>
+        <div className={styles.preloaderScramble}>
+          <span className={styles.scrambleText}>{scrambleText}</span>
+          <div className={styles.scrambleLine}></div>
+        </div>
+      </div>
+
       <div className={styles.bgGlow}></div>
       <div className={styles.bgGrain}></div>
       <div ref={cursorDotRef} className="cursor-dot"></div>
@@ -622,9 +699,23 @@ export default function Home() {
       <header className={styles.heroSection}>
         <div className={styles.heroContent}>
           <p className={styles.heroIntro}>I'M KISHORE BALAJI</p>
-          <h1 ref={heroTextRef} className={styles.hugeText}>
-            HELLO<br />WORLD.
-          </h1>
+          <div className={styles.heroTextWrapper}>
+            {/* Orbit ring behind the text */}
+            <div ref={heroOrbitRef} className={styles.heroOrbit}>
+              <div className={styles.orbitDot} style={{ '--orbit-angle': '0deg' } as React.CSSProperties}></div>
+              <div className={styles.orbitDot} style={{ '--orbit-angle': '90deg' } as React.CSSProperties}></div>
+              <div className={styles.orbitDot} style={{ '--orbit-angle': '180deg' } as React.CSSProperties}></div>
+              <div className={styles.orbitDot} style={{ '--orbit-angle': '270deg' } as React.CSSProperties}></div>
+            </div>
+            {/* Decorative corner marks */}
+            <div className={`${styles.cornerMark} ${styles.cornerTL}`}></div>
+            <div className={`${styles.cornerMark} ${styles.cornerTR}`}></div>
+            <div className={`${styles.cornerMark} ${styles.cornerBL}`}></div>
+            <div className={`${styles.cornerMark} ${styles.cornerBR}`}></div>
+            <h1 ref={heroTextRef} className={styles.hugeText}>
+              HELLO<br />WORLD.
+            </h1>
+          </div>
           <div className={styles.scrollIndicator}>SCROLL TO EXPLORE</div>
         </div>
       </header>
@@ -645,8 +736,8 @@ export default function Home() {
         <div className={styles.statsGrid}>
           <div className={styles.statItem}><span className={styles.statNum}>4th</span><span className={styles.statLabel}>Year Student</span></div>
           <div className={styles.statItem}><span className={styles.statNum}>15+</span><span className={styles.statLabel}>Projects</span></div>
-          <div className={styles.statItem}><span className={styles.statNum}>100%</span><span className={styles.statLabel}>Dedication</span></div>
-          <div className={styles.statItem}><span className={styles.statNum}>∞</span><span className={styles.statLabel}>Passion</span></div>
+          <div className={styles.statItem}><span className={styles.statNum}>2</span><span className={styles.statLabel}>Internships</span></div>
+          <div className={styles.statItem}><span className={styles.statNum}>8.26</span><span className={styles.statLabel}>CGPA</span></div>
         </div>
       </section>
 
