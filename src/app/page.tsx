@@ -3,6 +3,7 @@
 import { useEffect, useRef, useLayoutEffect, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import Lenis from "@studio-freight/lenis";
 import { FiSun, FiMoon, FiGithub, FiExternalLink } from "react-icons/fi";
 import styles from "./styles/Home.module.css";
@@ -25,6 +26,7 @@ export default function Home() {
   const heroTextRef = useRef<HTMLHeadingElement>(null);
   const toggleRef = useRef<HTMLDivElement>(null);
   const bookshelfRef = useRef<HTMLDivElement>(null);
+  const wipeLineRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
@@ -58,6 +60,49 @@ export default function Home() {
       setOpenBook(null);
       setIsClosing(false);
     }, 600); // 600ms match cover flip animation duration
+  }, []);
+
+  // --- Smooth scroll with screen wipe line ---
+  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    const wipeLine = wipeLineRef.current;
+    const offset = target.getBoundingClientRect().top + window.scrollY - 80;
+    const scrollingDown = offset > window.scrollY;
+
+    // Wipe line animation: sweeps across viewport during scroll
+    if (wipeLine) {
+      const startY = scrollingDown ? '-2px' : 'calc(100vh + 2px)';
+      const endY = scrollingDown ? 'calc(100vh + 2px)' : '-2px';
+
+      gsap.set(wipeLine, { top: startY, opacity: 1, scaleX: 0 });
+      gsap.timeline()
+        .to(wipeLine, {
+          scaleX: 1,
+          duration: 0.15,
+          ease: 'power2.out',
+        })
+        .to(wipeLine, {
+          top: endY,
+          duration: 1.0,
+          ease: 'power3.inOut',
+        }, 0.05)
+        .to(wipeLine, {
+          opacity: 0,
+          scaleX: 0,
+          duration: 0.3,
+          ease: 'power2.in',
+        }, '-=0.3');
+    }
+
+    // Smooth scroll
+    gsap.to(window, {
+      scrollTo: { y: offset, autoKill: false },
+      duration: 1.2,
+      ease: "power3.inOut",
+    });
   }, []);
 
   // --- PROJECT DATA with tech stacks ---
@@ -396,13 +441,6 @@ export default function Home() {
   // THEME EFFECT
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    if (toggleRef.current) {
-      gsap.to(toggleRef.current, {
-        x: theme === 'dark' ? 0 : 30,
-        duration: 0.4,
-        ease: "power2.out"
-      });
-    }
   }, [theme]);
 
   useLayoutEffect(() => {
@@ -420,7 +458,7 @@ export default function Home() {
     };
     requestAnimationFrame(raf);
 
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     const ctx = gsap.context(() => {
       // --- Preloader: Text Scramble / Decode Effect ---
@@ -632,6 +670,7 @@ export default function Home() {
 
       <div className={styles.bgGlow}></div>
       <div className={styles.bgGrain}></div>
+      <div ref={wipeLineRef} className={styles.navWipeLine}></div>
       <div ref={cursorDotRef} className="cursor-dot"></div>
       <div ref={cursorOutlineRef} className="cursor-outline"></div>
 
@@ -643,14 +682,15 @@ export default function Home() {
 
         {/* Desktop nav links */}
         <div className={styles.navLinks}>
-          <a href="#about" className={styles.navLink}>About</a>
-          <a href="#skills" className={styles.navLink}>Stack</a>
-          <a href="#experience" className={styles.navLink}>Exp</a>
-          <a href="#work" className={styles.navLink}>Work</a>
-          <a href="#contact" className={styles.navLink}>Contact</a>
+          <a href="#" className={styles.navLink} onClick={(e) => { e.preventDefault(); gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' }); const wl = wipeLineRef.current; if (wl) { gsap.set(wl, { top: 'calc(100vh + 2px)', opacity: 1, scaleX: 0 }); gsap.timeline().to(wl, { scaleX: 1, duration: 0.15, ease: 'power2.out' }).to(wl, { top: '-2px', duration: 1.0, ease: 'power3.inOut' }, 0.05).to(wl, { opacity: 0, scaleX: 0, duration: 0.3, ease: 'power2.in' }, '-=0.3'); } }}>Home</a>
+          <a href="#about" className={styles.navLink} onClick={(e) => handleNavClick(e, 'about')}>About</a>
+          <a href="#skills" className={styles.navLink} onClick={(e) => handleNavClick(e, 'skills')}>Stack</a>
+          <a href="#experience" className={styles.navLink} onClick={(e) => handleNavClick(e, 'experience')}>Exp</a>
+          <a href="#work" className={styles.navLink} onClick={(e) => handleNavClick(e, 'work')}>Work</a>
+          <a href="#contact" className={styles.navLink} onClick={(e) => handleNavClick(e, 'contact')}>Contact</a>
           <a href="/Resume.pdf" target="_blank" className={styles.navLink}>Resume</a>
           <div className={styles.themeToggle} onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}>
-            <div ref={toggleRef} className={styles.toggleKnob}>
+            <div className={styles.toggleKnob} style={{ transform: `translateX(${theme === 'dark' ? 0 : 30}px)` }}>
               {theme === "dark" ? <FiMoon className={styles.toggleIcon} /> : <FiSun className={styles.toggleIcon} />}
             </div>
           </div>
@@ -669,8 +709,9 @@ export default function Home() {
       {/* Mobile fullscreen overlay menu */}
       <div className={`${styles.mobileOverlay} ${mobileMenuOpen ? styles.mobileOverlayOpen : ''}`}>
         <div className={styles.overlayContent}>
-          {['About', 'Stack', 'Exp', 'Work', 'Contact', 'Resume'].map((item, i) => {
-            const href = item === 'Resume' ? '/Resume.pdf' : `#${item === 'Stack' ? 'skills' : item === 'Exp' ? 'experience' : item.toLowerCase()}`;
+          {['Home', 'About', 'Stack', 'Exp', 'Work', 'Contact', 'Resume'].map((item, i) => {
+            const isHome = item === 'Home';
+            const href = item === 'Resume' ? '/Resume.pdf' : isHome ? '#' : `#${item === 'Stack' ? 'skills' : item === 'Exp' ? 'experience' : item.toLowerCase()}`;
             const isExternal = item === 'Resume';
             return (
               <a
@@ -679,7 +720,16 @@ export default function Home() {
                 target={isExternal ? '_blank' : undefined}
                 className={styles.overlayLink}
                 style={{ animationDelay: `${i * 0.08}s` }}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  if (isHome) {
+                    e.preventDefault();
+                    gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' });
+                  } else if (!isExternal) {
+                    const targetId = item === 'Stack' ? 'skills' : item === 'Exp' ? 'experience' : item.toLowerCase();
+                    handleNavClick(e as any, targetId);
+                  }
+                }}
               >
                 <span className={styles.overlayLinkIndex}>{String(i + 1).padStart(2, '0')}</span>
                 <span className={styles.overlayLinkText}>{item}</span>
@@ -688,7 +738,7 @@ export default function Home() {
           })}
           <div className={styles.overlayTheme}>
             <div className={styles.themeToggle} onClick={() => setTheme(prev => prev === "dark" ? "light" : "dark")}>
-              <div ref={toggleRef} className={styles.toggleKnob}>
+              <div className={styles.toggleKnob} style={{ transform: `translateX(${theme === 'dark' ? 0 : 30}px)` }}>
                 {theme === "dark" ? <FiMoon className={styles.toggleIcon} /> : <FiSun className={styles.toggleIcon} />}
               </div>
             </div>
