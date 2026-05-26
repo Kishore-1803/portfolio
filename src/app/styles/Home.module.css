@@ -11,6 +11,49 @@
   transition: background 0.4s ease, color 0.4s ease;
 }
 
+/* ═══════════════════════════════════════
+   PRELOADER — Text Scramble / Decode
+   ═══════════════════════════════════════ */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preloaderScramble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.scrambleText {
+  font-family: 'Space Grotesk', monospace;
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--accent-cyan);
+  white-space: pre;
+  text-shadow: 0 0 20px rgba(0, 243, 255, 0.4), 0 0 40px rgba(0, 243, 255, 0.15);
+}
+
+.scrambleLine {
+  width: 60px;
+  height: 2px;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+  animation: scrambleLinePulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes scrambleLinePulse {
+  from { opacity: 0.4; width: 40px; }
+  to   { opacity: 1; width: 80px; }
+}
+
 /* BACKGROUND EFFECTS */
 .bgGlow {
   position: fixed;
@@ -319,6 +362,113 @@
 }
 
 
+/* ═══════════════════════════════════════
+   HERO DECORATIVE ELEMENTS
+   ═══════════════════════════════════════ */
+.heroTextWrapper {
+  position: relative;
+  display: inline-block;
+  padding: 3vw 5vw;
+}
+
+/* Slowly rotating orbit ring */
+.heroOrbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 115%;
+  height: 140%;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in srgb, var(--accent-cyan) 12%, transparent);
+  border-radius: 50%;
+  animation: orbitSpin 25s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Small glowing dots on the orbit ring */
+.orbitDot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-cyan), 0 0 20px color-mix(in srgb, var(--accent-cyan) 30%, transparent);
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--orbit-angle)) translateX(min(28vw, 350px)) translate(-50%, -50%);
+}
+
+@keyframes orbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Corner bracket marks */
+.cornerMark {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cornerMark::before,
+.cornerMark::after {
+  content: '';
+  position: absolute;
+  background: color-mix(in srgb, var(--accent-cyan) 30%, transparent);
+}
+
+.cornerMark::before {
+  width: 100%;
+  height: 1px;
+}
+
+.cornerMark::after {
+  width: 1px;
+  height: 100%;
+}
+
+.cornerTL { top: 0; left: 0; }
+.cornerTL::before { top: 0; left: 0; }
+.cornerTL::after  { top: 0; left: 0; }
+
+.cornerTR { top: 0; right: 0; }
+.cornerTR::before { top: 0; right: 0; }
+.cornerTR::after  { top: 0; right: 0; }
+
+.cornerBL { bottom: 0; left: 0; }
+.cornerBL::before { bottom: 0; left: 0; }
+.cornerBL::after  { bottom: 0; left: 0; }
+
+.cornerBR { bottom: 0; right: 0; }
+.cornerBR::before { bottom: 0; right: 0; }
+.cornerBR::after  { bottom: 0; right: 0; }
+
+/* Subtle horizontal lines extending from hero text */
+.heroTextWrapper::before,
+.heroTextWrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  height: 1px;
+  width: 15vw;
+  pointer-events: none;
+}
+
+.heroTextWrapper::before {
+  right: 100%;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--accent-cyan) 15%, transparent));
+}
+
+.heroTextWrapper::after {
+  left: 100%;
+  background: linear-gradient(270deg, transparent, color-mix(in srgb, var(--accent-cyan) 15%, transparent));
+}
+
+
+
 /* EXPERIMENTAL ABOUT SECTION */
 .aboutSection {
   min-height: 100vh;
@@ -348,8 +498,8 @@
 }
 
 .bioText {
-  font-size: 1.1rem;
-  line-height: 1.8;
+  font-size: 1.2rem;
+  line-height: 1.9;
   color: var(--text-muted);
   margin-bottom: 2rem;
   max-width: 600px;
@@ -376,6 +526,8 @@
 .statItem:hover {
   background: var(--border-dim);
   transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-left-color: var(--accent-cyan);
 }
 
 .statNum {
@@ -405,7 +557,7 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--border-dim);
   padding-bottom: 2rem;
-  margin-bottom: 15vh;
+  margin-bottom: 6vh;
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -746,6 +898,7 @@
   box-shadow: 0 240px 0 var(--spine-line);
 }
 
+
 .bookSpineTitle {
   writing-mode: vertical-rl;
   text-orientation: mixed;
@@ -772,7 +925,6 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   transform: rotate(180deg);
-  opacity: 0.85;
 }
 
 /* Thin "front cover" edge visible in 3D */
