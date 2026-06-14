@@ -26,8 +26,10 @@ export default function Home() {
   const toggleRef = useRef<HTMLDivElement>(null);
   const bookshelfRef = useRef<HTMLDivElement>(null);
   const wipeLineRef = useRef<HTMLDivElement>(null);
-  const logoContainerRef = useRef<HTMLDivElement>(null);
-  const logoSvgRef = useRef<SVGSVGElement>(null);
+  const qrCardRef = useRef<HTMLDivElement>(null);
+  const qrCodeRef = useRef<HTMLDivElement>(null);
+  const scanLineRef = useRef<HTMLDivElement>(null);
+  const nameRevealRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
 
@@ -462,92 +464,143 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     const ctx = gsap.context(() => {
-      // --- Preloader: Lokal-Inspired Curtain + K Logo Reveal ---
-      const curtainCols = gsap.utils.toArray(`.${styles.curtainCol}`);
-      const logoWrap = logoContainerRef.current;
-      const logoPaths = logoSvgRef.current?.querySelectorAll('.k-path');
+      // --- Preloader: QR Business Card Intro ---
+      const qrCard = qrCardRef.current;
+      const qrCode = qrCodeRef.current;
+      const scanLine = scanLineRef.current;
+      const nameReveal = nameRevealRef.current;
+      const qrModules = gsap.utils.toArray(`.${styles.qrModule}`);
+      const nameLetters = gsap.utils.toArray(`.${styles.nameLetter}`);
 
-      // Prepare SVG paths: set strokeDasharray = total length, offset = full (hidden)
-      if (logoPaths) {
-        logoPaths.forEach((path: any) => {
-          const len = path.getTotalLength();
-          gsap.set(path, {
-            strokeDasharray: len,
-            strokeDashoffset: len,
-            fill: 'none',
-          });
-        });
-      }
+      // Initial states
+      gsap.set(qrCard, { opacity: 0, scale: 0.7, rotateX: 15, rotateY: -5 });
+      gsap.set(scanLine, { top: '0%', opacity: 0 });
+      gsap.set(qrCode, { xPercent: -50, yPercent: -50, transformPerspective: 1200 });
+      gsap.set(nameReveal, { opacity: 0 });
+      gsap.set(nameLetters, { opacity: 0, y: 30, scale: 0.5 });
+      gsap.set(qrModules, { opacity: 0 });
 
       const tl = gsap.timeline();
 
-      // Step 1: Staggered curtain columns drop from top
-      tl.to(curtainCols, {
-        scaleY: 1,
+      // Step 1: Card materializes — slides in with premium 3D rotation
+      tl.to(qrCard, {
+        opacity: 1,
+        scale: 1,
+        rotateX: 0,
+        rotateY: 0,
+        duration: 1.2,
+        ease: "power3.out",
+      }, 0.5)
+
+      // Step 2: QR code modules populate in a wave pattern
+      .to(qrModules, {
+        opacity: 1,
+        duration: 0.03,
+        stagger: {
+          each: 0.008,
+          from: "center",
+          grid: "auto",
+        },
+        ease: "none",
+      }, "-=0.4")
+
+      // Step 3: Scan line sweeps down the QR code
+      .to(scanLine, {
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.out",
+      }, "-=0.1")
+      .to(scanLine, {
+        top: '100%',
+        duration: 1.2,
+        ease: "power2.inOut",
+      })
+      .to(scanLine, {
+        top: '0%',
         duration: 0.8,
-        ease: "power4.inOut",
-        stagger: 0.1,
+        ease: "power2.inOut",
+      })
+      .to(scanLine, {
+        opacity: 0,
+        duration: 0.3,
       })
 
-      // Step 2: Fade in the logo container
-      .to(logoWrap, {
-        opacity: 1,
+      // Step 4: Card edges glow on "scan complete"
+      .to(qrCard, {
+        boxShadow: '0 0 40px rgba(0, 243, 255, 0.5), 0 0 80px rgba(0, 243, 255, 0.2), inset 0 0 30px rgba(0, 243, 255, 0.05)',
+        borderColor: 'rgba(0, 243, 255, 0.6)',
         duration: 0.5,
-        ease: "power3.out",
-      }, "-=0.3")
-
-      // Step 3: Draw stroke outlines — staggered per path
-      .to(logoPaths ? Array.from(logoPaths) : [], {
-        strokeDashoffset: 0,
-        duration: 1.4,
-        ease: "power2.inOut",
-        stagger: 0.25,
+        ease: "power2.out",
       }, "-=0.2")
 
-      // Step 4: Breathe — short pause with outline visible
-      .to({}, { duration: 0.3 })
-
-      // Step 5: Fill paths with portfolio colors — staggered
-      .to(logoPaths ? logoPaths[0] : {}, {
-        fill: '#00f3ff',
+      // Step 4b: QR wrapper also glows to match
+      .to(qrCode, {
+        boxShadow: '0 0 30px rgba(0, 243, 255, 0.4), 0 0 60px rgba(0, 243, 255, 0.15)',
+        borderColor: 'rgba(0, 243, 255, 0.5)',
         duration: 0.5,
-        ease: "power2.inOut",
+        ease: "power2.out",
+      }, "<")
+
+      // Step 5: Brief pause — scan is complete
+      .to({}, { duration: 0.4 })
+
+      // Step 6a: Card fades out behind
+      .to(qrCard, {
+        opacity: 0,
+        scale: 0.85,
+        duration: 0.8,
+        ease: "power2.in",
       })
-      .to(logoPaths ? logoPaths[1] : {}, {
-        fill: '#00c8d6',
-        duration: 0.5,
-        ease: "power2.inOut",
-      }, "-=0.35")
-      .to(logoPaths ? logoPaths[2] : {}, {
-        fill: '#bd00ff',
-        duration: 0.5,
-        ease: "power2.inOut",
-      }, "-=0.35")
 
-      // Step 6: Add neon glow to the logo
-      .to(logoSvgRef.current, {
-        filter: 'drop-shadow(0 0 25px rgba(0, 243, 255, 0.6)) drop-shadow(0 0 60px rgba(189, 0, 255, 0.3))',
+      // Step 6b: QR code ALONE jumps forward in 3D and zooms in
+      .to(qrCode, {
+        scale: 15,
+        z: 800,
+        rotateX: -5,
+        opacity: 0,
+        duration: 1.8,
+        ease: "power2.in",
+      }, "-=0.6")
+
+      // Step 7: Name reveal — show the name container
+      .to(nameReveal, {
+        opacity: 1,
+        duration: 0.01,
+      }, "-=0.6")
+
+      // Step 8: Letters appear from center outward
+      .to(nameLetters, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.6,
+        stagger: {
+          each: 0.06,
+          from: "center",
+        },
+        ease: "back.out(1.7)",
+      }, "-=0.5")
+
+      // Step 9: Name glows with portfolio accent
+      .to(nameReveal, {
+        textShadow: '0 0 30px rgba(0, 243, 255, 0.6), 0 0 60px rgba(0, 243, 255, 0.3)',
         duration: 0.6,
         ease: "power2.out",
-      }, "-=0.3")
+      })
 
-      // Step 7: Scale up the logo and fade out (diving into the K)
-      .to(logoWrap, {
-        scale: 5,
+      // Step 10: Hold the name visible
+      .to({}, { duration: 0.5 })
+
+      // Step 11: Name scales up and fades — we "enter" the portfolio
+      .to(nameReveal, {
+        scale: 3,
         opacity: 0,
-        duration: 0.9,
+        filter: 'blur(20px)',
+        duration: 1,
         ease: "power3.in",
       })
 
-      // Step 8: Staggered curtain columns retract upward
-      .to(curtainCols, {
-        scaleY: 0,
-        duration: 0.8,
-        ease: "power4.inOut",
-        stagger: 0.1,
-      }, "-=0.6")
-
-      // Step 9: Hide preloader overlay
+      // Step 12: Hide preloader overlay
       .set(preloaderRef.current, { display: "none" })
 
       // ── Step 10: Grand Hero Entrance ──
@@ -740,50 +793,106 @@ export default function Home() {
 
   return (
     <div ref={containerRef} className={styles.main}>
-      {/* Preloader — Lokal-Inspired Curtain + K Logo Reveal */}
+      {/* Preloader — QR Business Card Intro */}
       <div ref={preloaderRef} className={styles.preloader}>
-        <div className={styles.curtainColumns}>
-          <div className={styles.curtainCol}></div>
-          <div className={styles.curtainCol}></div>
-          <div className={styles.curtainCol}></div>
-          <div className={styles.curtainCol}></div>
-          <div className={styles.curtainCol}></div>
-          <div className={styles.curtainCol}></div>
+        {/* The Business Card (text + border only, no QR inside) */}
+        <div ref={qrCardRef} className={styles.qrCard}>
+          {/* Card top: Name */}
+          <div className={styles.qrCardName}>KISHORE BALAJI</div>
+
+          {/* Spacer where QR sits visually */}
+          <div className={styles.qrPlaceholder}></div>
+
+          {/* Card bottom tagline */}
+          <div className={styles.qrCardTagline}>PORTFOLIO</div>
         </div>
-        {/* Geometric "K" Logo — 3 path segments for staggered stroke-draw */}
-        <div ref={logoContainerRef} className={styles.preloaderLogo}>
-          <svg
-            ref={logoSvgRef}
-            className={styles.kLogoSvg}
-            viewBox="0 0 200 200"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Vertical bar of K */}
-            <path
-              className="k-path"
-              d="M 50 20 L 50 180 L 75 180 L 75 20 Z"
-              stroke="#00f3ff"
-              strokeWidth="2"
-              fill="none"
-            />
-            {/* Upper diagonal arm of K */}
-            <path
-              className="k-path"
-              d="M 75 100 L 150 20 L 170 20 L 170 40 L 100 110 Z"
-              stroke="#00f3ff"
-              strokeWidth="2"
-              fill="none"
-            />
-            {/* Lower diagonal arm of K */}
-            <path
-              className="k-path"
-              d="M 85 115 L 170 180 L 150 180 L 75 105 Z"
-              stroke="#bd00ff"
-              strokeWidth="2"
-              fill="none"
-            />
-          </svg>
+
+        {/* QR Code — positioned as sibling, overlapping the card center */}
+        <div ref={qrCodeRef} className={styles.qrCodeWrapper}>
+          {/* Scan line overlay */}
+          <div ref={scanLineRef} className={styles.qrScanLine}></div>
+
+          {/* QR code pattern — rendered as a CSS grid of small modules */}
+          <div className={styles.qrGrid}>
+            {(() => {
+              // Generate a realistic-looking QR code pattern
+              const size = 25;
+              const grid: boolean[][] = Array.from({ length: size }, () =>
+                Array.from({ length: size }, () => false)
+              );
+
+              // Helper to fill a finder pattern at (r,c)
+              const fillFinder = (r: number, c: number) => {
+                for (let i = 0; i < 7; i++) {
+                  for (let j = 0; j < 7; j++) {
+                    if (i === 0 || i === 6 || j === 0 || j === 6) grid[r + i][c + j] = true;
+                    else if (i >= 2 && i <= 4 && j >= 2 && j <= 4) grid[r + i][c + j] = true;
+                    else grid[r + i][c + j] = false;
+                  }
+                }
+              };
+
+              fillFinder(0, 0);       // Top-left
+              fillFinder(0, size - 7); // Top-right
+              fillFinder(size - 7, 0); // Bottom-left
+
+              // Timing patterns
+              for (let i = 8; i < size - 8; i++) {
+                grid[6][i] = i % 2 === 0;
+                grid[i][6] = i % 2 === 0;
+              }
+
+              // Fill random data modules (avoiding finder areas)
+              const isFinderArea = (r: number, c: number) =>
+                (r < 9 && c < 9) || (r < 9 && c >= size - 8) || (r >= size - 8 && c < 9);
+
+              // Seed-based pseudo-random for deterministic pattern
+              let seed = 42;
+              const rand = () => { seed = (seed * 16807 + 0) % 2147483647; return seed / 2147483647; };
+
+              for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                  if (!isFinderArea(r, c) && !(r === 6 || c === 6)) {
+                    grid[r][c] = rand() > 0.5;
+                  }
+                }
+              }
+
+              // Alignment pattern at (size-9, size-9)
+              const ar = size - 9; const ac = size - 9;
+              for (let i = -2; i <= 2; i++) {
+                for (let j = -2; j <= 2; j++) {
+                  const rr = ar + i; const cc = ac + j;
+                  if (rr >= 0 && rr < size && cc >= 0 && cc < size) {
+                    if (Math.abs(i) === 2 || Math.abs(j) === 2 || (i === 0 && j === 0)) grid[rr][cc] = true;
+                    else grid[rr][cc] = false;
+                  }
+                }
+              }
+
+              return grid.flatMap((row, ri) =>
+                row.map((filled, ci) => (
+                  <div
+                    key={`${ri}-${ci}`}
+                    className={`${styles.qrModule} ${filled ? styles.qrModuleFilled : ''}`}
+                  />
+                ))
+              );
+            })()}
+          </div>
+        </div>
+
+        {/* Name reveal — appears after QR zoom */}
+        <div ref={nameRevealRef} className={styles.nameRevealContainer}>
+          {'KISHORE BALAJI'.split('').map((letter, i) => (
+            <span
+              key={i}
+              className={styles.nameLetter}
+              style={letter === ' ' ? { width: '0.3em' } : {}}
+            >
+              {letter === ' ' ? '\u00A0' : letter}
+            </span>
+          ))}
         </div>
       </div>
 
