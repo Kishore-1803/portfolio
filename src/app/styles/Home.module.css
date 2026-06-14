@@ -12,66 +12,178 @@
 }
 
 /* ═══════════════════════════════════════
-   PRELOADER — Lokal-Inspired Curtain + K Logo Reveal
+   PRELOADER — QR Business Card Intro
    ═══════════════════════════════════════ */
 .preloader {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  pointer-events: none;
+  background: #030303;
   display: flex;
   align-items: center;
   justify-content: center;
+  perspective: 1200px;
 }
 
-/* Container for the 6 vertical curtain columns */
-.curtainColumns {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: row;
-  z-index: 1;
-}
-
-.curtainCol {
-  flex: 1;
-  height: 100%;
-  transform: scaleY(0);
-  transform-origin: 50% 0%;
-  will-change: transform;
-}
-
-/* Portfolio-matching dark palette — deep navy to midnight */
-.curtainCol:nth-child(1) { background: #0a1628; }  /* Deep Navy */
-.curtainCol:nth-child(2) { background: #0d1f3c; }  /* Dark Blue */
-.curtainCol:nth-child(3) { background: #0f1a35; }  /* Midnight Indigo */
-.curtainCol:nth-child(4) { background: #12102b; }  /* Dark Purple */
-.curtainCol:nth-child(5) { background: #0b0f1e; }  /* Deep Midnight */
-.curtainCol:nth-child(6) { background: #060810; }  /* Near Black */
-
-/* SVG K Logo — centered on top of curtain */
-.preloaderLogo {
-  position: relative;
-  z-index: 2;
+/* ── The Business Card ── */
+.qrCard {
+  width: clamp(300px, 50vw, 480px);
+  aspect-ratio: 1.6 / 1;
+  background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 40%, #111111 100%);
+  border: 1px solid rgba(200, 170, 100, 0.2);
+  border-radius: 12px;
+  padding: clamp(20px, 4vw, 36px);
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: visible;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(200, 170, 100, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform-style: preserve-3d;
+}
+
+/* Metallic brushed texture overlay */
+.qrCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.008) 2px,
+      rgba(255, 255, 255, 0.008) 4px
+    );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Subtle edge highlight */
+.qrCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(200, 170, 100, 0.08) 0%, transparent 50%, rgba(200, 170, 100, 0.04) 100%);
+  pointer-events: none;
+}
+
+.qrCardName {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #c8aa64;
+  text-transform: uppercase;
+  text-shadow: 0 0 15px rgba(200, 170, 100, 0.3);
+  z-index: 1;
+}
+
+.qrCardRole {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.5rem, 1.2vw, 0.7rem);
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: rgba(200, 170, 100, 0.5);
+  text-transform: uppercase;
+  margin-top: -2px;
+  z-index: 1;
+}
+
+/* ── QR Code Area — positioned absolutely over preloader center ── */
+.qrCodeWrapper {
+  position: absolute;
+  width: clamp(100px, 20vw, 160px);
+  height: clamp(100px, 20vw, 160px);
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(200, 170, 100, 0.15);
+  border-radius: 6px;
+  z-index: 5;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  /* Center it exactly where the card's QR placeholder is */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Spacer inside the card to reserve QR space */
+.qrPlaceholder {
+  width: clamp(100px, 20vw, 160px);
+  height: clamp(100px, 20vw, 160px);
+}
+
+/* Scan line — sweeps vertically across QR */
+.qrScanLine {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #00f3ff 20%, #00f3ff 80%, transparent 100%);
+  box-shadow: 0 0 15px #00f3ff, 0 0 40px rgba(0, 243, 255, 0.4);
+  z-index: 10;
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+/* QR Grid — 25x25 CSS grid */
+.qrGrid {
+  display: grid;
+  grid-template-columns: repeat(25, 1fr);
+  grid-template-rows: repeat(25, 1fr);
+  width: 100%;
+  height: 100%;
+  gap: 1px;
+}
+
+.qrModule {
+  border-radius: 1px;
+  background: transparent;
+  transition: background 0.1s ease;
+}
+
+.qrModuleFilled {
+  background: #c8aa64;
+  box-shadow: 0 0 2px rgba(200, 170, 100, 0.3);
+}
+
+.qrCardTagline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(0.6rem, 1.4vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  color: rgba(200, 170, 100, 0.6);
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+/* ── Name Reveal (after QR zoom) ── */
+.nameRevealContainer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
 }
 
-.kLogoSvg {
-  width: clamp(120px, 20vw, 220px);
-  height: clamp(120px, 20vw, 220px);
-  filter: drop-shadow(0 0 0px rgba(0, 243, 255, 0));
-  transition: filter 0.3s ease;
+.nameLetter {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-weight: 800;
+  color: #EAEAEA;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-block;
 }
 
-/* Glow class toggled on by GSAP */
-.kLogoGlow {
-  filter: drop-shadow(0 0 25px rgba(0, 243, 255, 0.6))
-          drop-shadow(0 0 60px rgba(189, 0, 255, 0.3));
-}
 
 
 /* ═══════════════════════════════════════
@@ -1843,6 +1955,26 @@
   /* GLOBAL */
   .main {
     overflow-x: hidden;
+  }
+
+  /* QR Card — Mobile sizing */
+  .qrCard {
+    width: clamp(260px, 80vw, 380px);
+    padding: clamp(16px, 5vw, 28px);
+  }
+
+  .qrCodeWrapper {
+    width: clamp(80px, 25vw, 120px);
+    height: clamp(80px, 25vw, 120px);
+  }
+
+  .qrPlaceholder {
+    width: clamp(80px, 25vw, 120px);
+    height: clamp(80px, 25vw, 120px);
+  }
+
+  .nameLetter {
+    font-size: clamp(2rem, 10vw, 3.5rem);
   }
 
   .cursor-dot,
