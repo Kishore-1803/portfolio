@@ -789,7 +789,8 @@ export default function Home() {
   );
 
   // Active project for modal
-  const activeProject = openBook !== null ? allProjects[openBook] : null;
+  const combinedProjects = [...aiProjects, ...systemsProjects];
+  const activeProject = openBook !== null ? combinedProjects[openBook] : null;
 
   return (
     <div ref={containerRef} className={styles.main}>
@@ -1328,7 +1329,7 @@ export default function Home() {
             {/* The 3D front cover (rotates open) */}
             <div className={styles.largeBookCoverGroup}>
               {/* Outside of the cover */}
-              <div className={styles.largeBookCoverOutside} style={{ '--book-color': bookColors[openBook as number] } as React.CSSProperties}>
+              <div className={styles.largeBookCoverOutside} style={{ '--book-color': bookColors[(openBook as number) % bookColors.length] } as React.CSSProperties}>
                 <div className={styles.largeBookCoverContent}>
                   <span className={styles.bookCoverDeco}></span>
                   <span className={styles.bookCoverTitle}>{activeProject.title}</span>
