@@ -403,7 +403,7 @@ export default function Home() {
 
   const skillsData = [
     { category: "Languages", items: ["Python", "C++", "JavaScript"] },
-    { category: "AI & ML", items: ["PyTorch", "TensorFlow", "HuggingFace Transformers", "RAG", "LLM Fine-tuning", "NLP", "Computer Vision", "Pandas", "NumPy"] },
+    { category: "AI & ML", items: ["PyTorch", "TensorFlow", "HuggingFace Transformers", "RAG", "LLM Fine-tuning", "NLP", "Computer Vision", "Pandas", "NumPy","LangChain"] },
     { category: "Backend & Web", items: ["FastAPI", "Flask", "Express.js", "Next.js", "React"] },
     { category: "Databases", items: ["PostgreSQL", "MySQL", "MongoDB", "Pinecone", "Supabase"] },
     { category: "Infrastructure", items: ["Apache Kafka", "Docker", "AWS", "Azure", "CI/CD", "Git"] }
