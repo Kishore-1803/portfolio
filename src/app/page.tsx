@@ -435,6 +435,7 @@ export default function Home() {
 ];
 
   const achievements = [
+    { year: "2026", name: "PEC HACKS 4.0", desc: "Top 10", accent: "#00f3ff" },
     { year: "2026", name: "INNOVATEFINLIT", desc: "Finalist", accent: "#facc15" },
     { year: "2025", name: "SUPERHACK", desc: "Runner Up", accent: "#60a5fa" },
     { year: "2025", name: "BUILD WITH INDIA", desc: "Top 20%", accent: "#34d399" },
