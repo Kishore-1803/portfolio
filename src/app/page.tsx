@@ -410,6 +410,18 @@ export default function Home() {
   ];
 
  const experience = [
+   {
+  year: "2026",
+  role: "AI Intern",
+  company: "DigiSignals",
+  desc: [
+    "Developed core components of a PDLC AI platform with hybrid LLM routing, activity logging, and automated enterprise write-back workflows.",
+    "Built an AI gateway with complexity-based model routing, confidence scoring, SLM-to-LLM escalation, and cost-aware inference optimization.",
+    "Implemented event-driven activity pipelines using Kafka, correlation tracking, and append-only storage for agent observability and auditability.",
+    "Developed automated write-back workflows integrating Azure DevOps APIs with HTML formatting, state transitions, attachments, and idempotent processing.",
+    "Improved AI agent reliability through structured telemetry, failure handling, provider abstraction, and feedback propagation across autonomous workflows."
+  ]
+},
   {
     year: "2026",
     role: "Software Engineer Intern",
