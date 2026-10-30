@@ -237,6 +237,20 @@ export default function Home() {
       tech: ["Python", "OpenEnv", "Docker", "Groq AI"],
       link: "https://github.com/Kishore-1803/CloudDeploy-RL"
     },
+    {
+      id: "18", title: "POLYP XAI",
+      fullName: "Explainable Polyp Segmentation with Attention U-Net",
+      category: "Medical Vision / XAI",
+      desc: "A replication study of Attention-Guided U-Net with Grad-CAM, reproducing in-domain results, diagnosing cross-dataset failure, and improving robustness with targeted architectural changes.",
+      features: [
+        "Attention-guided U-Net segmentation",
+        "Grad-CAM explainability for model decisions",
+        "Cross-dataset diagnosis and gap analysis",
+        "Targeted improvements for segmentation reliability"
+      ],
+      tech: ["Python", "PyTorch", "OpenCV", "Grad-CAM", "Medical Imaging"],
+      link: "https://github.com/Kishore-1803/Explainable-Polyp-Segmentation-Using-Attention-U-Net"
+    },
   ];
 
   // Shelf 2: Systems / Web / Tools
@@ -353,10 +367,24 @@ export default function Home() {
       tech: ["React Native", "Expo", "Redux Toolkit", "TypeScript"],
       link: "https://github.com/Kishore-1803/Sakhis-Ledger"
     },
+    {
+      id: "19", title: "FOREX PIPE",
+      fullName: "Forex Distributed Data Engineering",
+      category: "Data Engineering",
+      desc: "Production-grade distributed big data ETL and feature engineering pipeline for multi-year historical Foreign Exchange OHLCV data built with PySpark, Apache Spark SQL, Parquet, and Apache Airflow.",
+      features: [
+        "Distributed ETL on multi-year OHLCV market data",
+        "PySpark + Spark SQL transformation pipelines",
+        "Parquet storage and feature engineering",
+        "Airflow orchestration with data quality checks"
+      ],
+      tech: ["PySpark", "Apache Spark SQL", "Parquet", "Apache Airflow", "Python"],
+      link: "https://github.com/Kishore-1803/Forex-Distributed-Data-Engineering"
+    },
   ];
 
   // Custom ranking logic to surface the most complex/impressive projects first on mobile
-  const mobileRank = ["01", "12", "17", "14", "05", "16", "15", "11", "10", "06", "02", "04", "03", "13", "08", "09", "07"];
+  const mobileRank = ["01", "12", "17", "18", "19", "14", "05", "16", "15", "11", "10", "06", "02", "04", "03", "13", "08", "09", "07"];
   const allProjects = [...aiProjects, ...systemsProjects].sort((a, b) => mobileRank.indexOf(a.id) - mobileRank.indexOf(b.id));
 
   // Vibrant gradient pairs for mobile carousel cards
@@ -410,7 +438,7 @@ export default function Home() {
   ];
 
  const experience = [
-   {
+    {
   year: "2026",
   role: "AI Intern",
   company: "DigiSignals",
@@ -924,7 +952,7 @@ export default function Home() {
 
         {/* Desktop nav links */}
         <div className={styles.navLinks}>
-          <a href="#" className={styles.navLink} onClick={(e) => { e.preventDefault(); gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' }); const wl = wipeLineRef.current; if (wl) { gsap.set(wl, { top: 'calc(100vh + 2px)', opacity: 1, scaleX: 0 }); gsap.timeline().to(wl, { scaleX: 1, duration: 0.15, ease: 'power2.out' }).to(wl, { top: '-2px', duration: 1.0, ease: 'power3.inOut' }, 0.05).to(wl, { opacity: 0, scaleX: 0, duration: 0.3, ease: 'power2.in' }, '-=0.3'); } }}>Home</a>
+          <a href="#" className={styles.navLink} onClick={(e) => { e.preventDefault(); gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' }); const wl = wipeLineRef.current; if (wl) { gsap.set(wl,{top:'-2px', opacity:1, scaleX:0}); gsap.timeline().to(wl,{scaleX:1,duration:0.15,ease:'power2.out'}).to(wl,{top:'calc(100vh + 2px)', duration:1.0,ease:'power3.inOut'},0.05).to(wl,{opacity:0,scaleX:0,duration:0.3,ease:'power2.in'},'-=0.3'); }} }>Home</a>
           <a href="#about" className={styles.navLink} onClick={(e) => handleNavClick(e, 'about')}>About</a>
           <a href="#skills" className={styles.navLink} onClick={(e) => handleNavClick(e, 'skills')}>Stack</a>
           <a href="#experience" className={styles.navLink} onClick={(e) => handleNavClick(e, 'experience')}>Exp</a>
