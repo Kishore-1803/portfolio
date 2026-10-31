@@ -368,18 +368,18 @@ export default function Home() {
       link: "https://github.com/Kishore-1803/Sakhis-Ledger"
     },
     {
-      id: "19", title: "FOREX PIPE",
-      fullName: "Forex Distributed Data Engineering",
+      id: "19", title: "FX DATA",
+      fullName: "FX-Data-Platform",
       category: "Data Engineering",
-      desc: "Production-grade distributed big data ETL and feature engineering pipeline for multi-year historical Foreign Exchange OHLCV data built with PySpark, Apache Spark SQL, Parquet, and Apache Airflow.",
+      desc: "An automated Forex historical data platform with an incremental batch pipeline, automated data quality gate, PostgreSQL storage, point-in-time technical feature store, and a 24-hour multi-horizon hourly forecasting layer.",
       features: [
-        "Distributed ETL on multi-year OHLCV market data",
-        "PySpark + Spark SQL transformation pipelines",
-        "Parquet storage and feature engineering",
-        "Airflow orchestration with data quality checks"
+        "Incremental Forex historical data ingestion pipeline",
+        "Automated data quality validation and gate checks",
+        "PostgreSQL-backed feature store and storage layer",
+        "24-hour multi-horizon hourly forecasting workflow"
       ],
-      tech: ["PySpark", "Apache Spark SQL", "Parquet", "Apache Airflow", "Python"],
-      link: "https://github.com/Kishore-1803/Forex-Distributed-Data-Engineering"
+      tech: ["Python", "PostgreSQL", "Batch ETL", "Forecasting"],
+      link: "https://github.com/Kishore-1803/FX-Data-Platform"
     },
   ];
 
@@ -952,7 +952,7 @@ export default function Home() {
 
         {/* Desktop nav links */}
         <div className={styles.navLinks}>
-          <a href="#" className={styles.navLink} onClick={(e) => { e.preventDefault(); gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' }); const wl = wipeLineRef.current; if (wl) { gsap.set(wl,{top:'-2px', opacity:1, scaleX:0}); gsap.timeline().to(wl,{scaleX:1,duration:0.15,ease:'power2.out'}).to(wl,{top:'calc(100vh + 2px)', duration:1.0,ease:'power3.inOut'},0.05).to(wl,{opacity:0,scaleX:0,duration:0.3,ease:'power2.in'},'-=0.3'); }} }>Home</a>
+          <a href="#" className={styles.navLink} onClick={(e) => { e.preventDefault(); gsap.to(window, { scrollTo: { y: 0, autoKill: false }, duration: 1.2, ease: 'power3.inOut' }); const wl = wipeLineRef.current; if (wl) { gsap.set(wl, { top: '-2px', opacity: 1, scaleX: 0 }); gsap.timeline().to(wl,{ scaleX:1,duration:0.15,ease:'power2.out'}).to(wl,{ top:'calc(100vh + 2px)',duration:1,ease:'power3.inOut' },0.05).to(wl,{ opacity:0, scaleX:0, duration:0.3,ease:'power2.in'},'-=0.3'); } }}>Home</a>
           <a href="#about" className={styles.navLink} onClick={(e) => handleNavClick(e, 'about')}>About</a>
           <a href="#skills" className={styles.navLink} onClick={(e) => handleNavClick(e, 'skills')}>Stack</a>
           <a href="#experience" className={styles.navLink} onClick={(e) => handleNavClick(e, 'experience')}>Exp</a>
